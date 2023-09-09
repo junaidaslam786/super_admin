@@ -1,0 +1,81 @@
+.timeZone {
+    display: flex;
+    flex-direction: column;
+    margin-top: 4vh;
+    background-color: white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    padding: 3vh;
+    width: 100%;
+}
+
+.timeZoneHeading h3 {
+    letter-spacing: 1px;
+    margin-top: 0;
+    font-size: 3vmin;
+}
+
+.timeZoneHeading p {
+    color: #737791;
+    font-size: 1.5vmin;
+    margin-top: -2vh;
+}
+
+.timeZoneLabel select {
+    width: 100%;
+    margin-top: 3vh;
+    height: 8vmin;
+    padding-left: 2vw;
+    background-color: #FAFBFC;
+    border: 0.3vmin solid #00C800;
+    border-radius: 0.3vmin;
+    font-size: 2vmin;
+}
+
+.timeZoneButton {
+    width: 20vmin;
+    height: 6vmin;
+    color: #00C800;
+    border: 0.3vmin solid #00C800;
+    margin-top: 3vh;
+    background-color: #FAFBFC;
+    border-radius: 0.3vmin;
+    font-size: 2vmin;
+}
+
+.timeZoneButton:hover {
+    background-color: #00C800;
+    color: white;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 375px) {
+   .timeZoneHeading p {
+        margin-top: 0.1vmin;
+   }
+}
+
+@media screen and (min-width: 376px) and (max-width: 425px) {
+    
+}
+
+@media screen and (min-width: 426px) and (max-width: 768px) {
+    
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .timeZoneButton, .timeZoneLabel select {
+        border: 0.2vmin solid #00C800;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+    .timeZoneButton, .timeZoneLabel select {
+        border: 0.2vmin solid #00C800;
+    }
+}
+
+@media screen and (min-width: 1441px) {
+    .timeZoneButton, .timeZoneLabel select {
+        border: 0.2vmin solid #00C800;
+    }
+}

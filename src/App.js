@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { Box } from "@mui/material";
+
+import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./middleware/ProtectedRoutes";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import LoginPage from "./pages/login/LoginPage";
+import Dashboard from "./pages/dashboard/Dashboard";
+import ProfilePage from "./pages/profile/profile-page/profilePage";
+import AllUsersPage from "./pages/user-management/AllUsersPage";
+import AllCustomersPage from "./pages/user-management/AllCustomersPage";
+import AllTradersPage from "./pages/user-management/AllTradersPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box>
+      <ToastContainer />
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard" element={<ProtectedRoute />}>
+          <Route index element={<Dashboard />} />
+        </Route>
+        <Route path="/profile" element={<ProtectedRoute />}>
+          <Route index element={<ProfilePage />} />
+        </Route>
+        <Route path="/all-users" element={<AllUsersPage />} />
+        <Route path="/all-customers" element={<AllCustomersPage />} />
+        <Route path="/all-traders" element={<AllTradersPage />} />
+      </Routes>
+    </Box>
   );
 }
 
