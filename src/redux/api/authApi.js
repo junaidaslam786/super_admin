@@ -63,13 +63,36 @@ const authApi = createApi({
     }),
     changeSuperAdminPassword: builder.mutation({
       query({ id, oldPassword, newPassword, confirmNewPassword }) {
-        const token = localStorage.getItem("token")
+        const token = localStorage.getItem("token");
         return {
-          url: 'superadmin/auth/change-password',
+          url: "superadmin/auth/change-password",
           method: "PUT",
           body: { id, oldPassword, newPassword, confirmNewPassword, token },
           credentials: "include",
         };
+      },
+    }),
+    refreshToken: builder.mutation({
+      query(refreshToken) {
+        return {
+          url: "superadmin/auth/refresh",
+          method: "POST",
+          body: { refreshToken },
+          credentials: "include",
+        };
+      },
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          let responseData = await queryFulfilled.then((result) => result.data);
+          localStorage.setItem("token", responseData.token);
+        } catch (error) {
+          console.error("Error during token refresh:", error);
+          // If refresh fails, remove user data and token from local storage
+          localStorage.removeItem("userData");
+          localStorage.removeItem("token");
+          // Optionally, redirect the user to the login page
+          // window.location.href = "/login";
+        }
       },
     }),
   }),
@@ -82,6 +105,7 @@ const {
   useVerifyEmailMutation,
   useForgotPasswordMutation,
   useChangeSuperAdminPasswordMutation,
+  useRefreshTokenMutation,
 } = authApi;
 
 export {
@@ -92,4 +116,5 @@ export {
   useVerifyEmailMutation,
   useForgotPasswordMutation,
   useChangeSuperAdminPasswordMutation,
+  useRefreshTokenMutation,
 };

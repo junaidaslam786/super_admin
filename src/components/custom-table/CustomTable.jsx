@@ -59,20 +59,8 @@ const CustomTable = ({
   return (
     <Container maxWidth="lg" sx={{ marginLeft: "10vw" }}>
       <Grid container spacing={3} className="mb-3">
-        <Grid item sm={6}>
+        <Grid item sm={6} sx={{display:'flex', flexDirection:'row', alignItems:'center', marginBottom:'2vh', width:'100%'}}>
           <Grid container></Grid>
-          <Grid item sm={6} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-            <TextField
-              label="Search"
-              variant="outlined"
-              size="small"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1); // Reset currentPage when search query changes
-              }}
-            />
-          </Grid>
           <FormControl variant="standard" style={{ margin: 8, minWidth: 120 }}>
             <InputLabel>Show</InputLabel>
             <Select
@@ -90,6 +78,21 @@ const CustomTable = ({
             </Select>
           </FormControl>
           entries
+          <Grid item sm={6} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", marginLeft:'40vw' }}>
+            <TextField
+              label="Search"
+              variant="outlined"
+              size="medium"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1); // Reset currentPage when search query changes
+              }}
+              sx={{
+                width:'10vw',
+              }}
+            />
+          </Grid>
         </Grid>
       </Grid>
       <Grid container>

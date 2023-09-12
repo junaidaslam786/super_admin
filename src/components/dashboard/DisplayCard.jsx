@@ -22,7 +22,7 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/' }) =
   return (
     <Box
       sx={{
-        width: isXs || isSm ? "100vw" : "79vw",
+        width: isXs || isSm ? "100vw" : "15vw",
         display: "flex",
         flexDirection: "column",
         alignItems: isXs || isSm ? "center" : "initial",
@@ -63,7 +63,6 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/' }) =
                 fontFamily: "roboto, sans-serif",
                 fontWeight: 500,
                 letterSpacing: "1px",
-                marginTop: "-1vmin",
               }}
             >
               {count}
@@ -72,7 +71,6 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/' }) =
               sx={{
                 fontFamily: "roboto, sans-serif",
                 fontSize: "2vmin",
-                marginTop: "-5vmin",
               }}
             >
               {title}
@@ -96,8 +94,11 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/' }) =
               backgroundColor: "#00C800",
               borderRadius: "0 0 1vmin 1vmin",
               height: "3vmin",
-              fontFamily: "roboto, sans-serif",
+              fontFamily: "helvetica",
               color: "white",
+              fontSize:'1vmin',
+              fontWeight:'500',
+              '&:hover': {backgroundColor: '#00C800'}
             }}
           >
             See more

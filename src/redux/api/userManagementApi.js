@@ -24,9 +24,22 @@ const userManagementApi = createApi({
         console.log("After dispatching setUsers");
       },
     }),
+
+    getUserById: builder.query({
+      query: (id) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `superadmin/user/${id}`,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
-const { useGetAllUsersExceptSuperAdminQuery } = userManagementApi;
+const { useGetAllUsersExceptSuperAdminQuery, useGetUserByIdQuery } = userManagementApi;
 
-export { userManagementApi, useGetAllUsersExceptSuperAdminQuery };
+export { userManagementApi, useGetAllUsersExceptSuperAdminQuery, useGetUserByIdQuery };

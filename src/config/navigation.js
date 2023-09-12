@@ -44,7 +44,7 @@ const navigationConfig = [
         title: "Create User",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        navLink: "/user/create-admin"
+        navLink: "/create-user"
       },
       {
         id: "listingUser",
@@ -85,6 +85,14 @@ const navigationConfig = [
         icon: <Icon.Circle size={12} />,
         permissions: ["admin"],
         navLink: "/property/property-list"
+      },
+      {
+        id: "propertylisting",
+        title: "Add Property",
+        type: "item",
+        icon: <Icon.Circle size={12} />,
+        permissions: ["admin"],
+        navLink: "/add-property"
       },
       // {
       //   id: "propertyRemoveRequest",

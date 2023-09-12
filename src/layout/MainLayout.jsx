@@ -1,6 +1,8 @@
 import React from "react";
 import { Breadcrumbs, Link } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import MiniVariantDrawer from "../components/drawr-menu/MiniVariantDrawer";
 
 const MainLayout = ({ navigationItems, children }) => {
@@ -15,6 +17,8 @@ const MainLayout = ({ navigationItems, children }) => {
   //     </Link>
   //   ));
   // };
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('lg'));
 
   const generateBreadcrumbs = (path) => {
     const parts = path.split("/").filter(Boolean);
@@ -41,7 +45,7 @@ const MainLayout = ({ navigationItems, children }) => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex"}}>
       <MiniVariantDrawer navigationItems={navigationItems} />
       <main style={{ flexGrow: 1, paddingTop: "64px" }}>
         {/* Breadcrumb section */}
@@ -51,11 +55,13 @@ const MainLayout = ({ navigationItems, children }) => {
           sx={{
             color: "white",
             backgroundColor: "#171B2A",
-            height: "5vmin",
+            height: "4vmin",
+            width: matches ? '100%' : "120%" ,
             fontSize: "1.5vmin",
             textAlign: "center",
             padding: "1vmin 0",
             paddingLeft: "2vw",
+            marginTop: matches ? "2%" : "0"
           }}
         >
           {generateBreadcrumbs(location.pathname)}

@@ -115,10 +115,15 @@ function AccountDetails() {
         justifyContent="space-between"
       >
         <Grid item>
-          <Typography variant="p" fontWeight="600" letterSpacing="0.5px" sx={{fontSize:'3vmin'}}>
+          <Typography
+            variant="p"
+            fontWeight="600"
+            letterSpacing="0.5px"
+            sx={{ fontSize: "3vmin" }}
+          >
             Account Details
           </Typography>
-          <Typography color="#737791" sx={{fontSize:'1.5vmin'}} >
+          <Typography color="#737791" sx={{ fontSize: "1.5vmin" }}>
             Edit Profile
           </Typography>
         </Grid>
@@ -131,7 +136,14 @@ function AccountDetails() {
             }}
           >
             <Avatar
-              src={profileImage}
+              src={
+                profileImage ||
+                `${process.env.REACT_APP_SERVER_ENDPOINT}/${
+                  userState?.user?.imageUrl?.imageUrl
+                    ? userState?.user?.imageUrl?.imageUrl
+                    : userState?.user?.profileImage
+                }?${Date.now()}`
+              }
               sx={{ width: "10vmin", height: "10vmin", borderRadius: "50%" }}
             />
           </Box>
@@ -147,9 +159,10 @@ function AccountDetails() {
             fullWidth
             sx={{ marginBottom: "2vh" }}
             InputLabelProps={{
-              style:{
-                color:'#00C800',
-              }
+              style: {
+                color: "#00C800",
+              },
+              shrink: true,
             }}
           />
           <TextField
@@ -158,11 +171,12 @@ function AccountDetails() {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             fullWidth
-            sx={{marginBottom: "2vh"}}
+            sx={{ marginBottom: "2vh" }}
             InputLabelProps={{
-              style:{
-                color:'#00C800',
-              }
+              style: {
+                color: "#00C800",
+              },
+              shrink: true,
             }}
           />
           <TextField
@@ -173,9 +187,10 @@ function AccountDetails() {
             fullWidth
             sx={{ marginBottom: "2vh" }}
             InputLabelProps={{
-              style:{
-                color:'#00C800',
-              }
+              style: {
+                color: "#00C800",
+              },
+              shrink: true,
             }}
           />
           <TextField
@@ -187,9 +202,10 @@ function AccountDetails() {
             fullWidth
             sx={{ marginBottom: "2vh" }}
             InputLabelProps={{
-              style:{
-                color:'#00C800',
-              }
+              style: {
+                color: "#00C800",
+              },
+              shrink: true,
             }}
           />
           <Grid container spacing={2}>
@@ -202,10 +218,14 @@ function AccountDetails() {
                 sx={{
                   border: "0.1vmin solid #00C800",
                   color: "#00C800",
-                  fontSize:'1vmin',
-                  width:'15vmin',
-                  height:'5vmin',
-                  '&:hover':{backgroundColor:'#00C800', color:'white', border:'0.1vmin solid #00C800'}
+                  fontSize: "1vmin",
+                  width: "15vmin",
+                  height: "5vmin",
+                  "&:hover": {
+                    backgroundColor: "#00C800",
+                    color: "white",
+                    border: "0.1vmin solid #00C800",
+                  },
                 }}
               >
                 Save Changes
@@ -219,10 +239,14 @@ function AccountDetails() {
                 sx={{
                   border: "0.1vmin solid red",
                   color: "red",
-                  fontSize:'1vmin',
-                  width:'15vmin',
-                  height:'5vmin',
-                  '&:hover':{backgroundColor:'red', color:'white', border:'0.1vmin solid red'}
+                  fontSize: "1vmin",
+                  width: "15vmin",
+                  height: "5vmin",
+                  "&:hover": {
+                    backgroundColor: "red",
+                    color: "white",
+                    border: "0.1vmin solid red",
+                  },
                 }}
               >
                 Discard
@@ -239,10 +263,14 @@ function AccountDetails() {
                 sx={{
                   border: "0.1vmin solid #00C800",
                   color: "#00C800",
-                  fontSize:'1vmin',
-                  width:'15vmin',
-                  height:'5vmin',
-                  '&:hover':{backgroundColor:'#00C800', color:'white', border:'0.1vmin solid #00C800'}
+                  fontSize: "1vmin",
+                  width: "15vmin",
+                  height: "5vmin",
+                  "&:hover": {
+                    backgroundColor: "#00C800",
+                    color: "white",
+                    border: "0.1vmin solid #00C800",
+                  },
                 }}
               >
                 Choose File

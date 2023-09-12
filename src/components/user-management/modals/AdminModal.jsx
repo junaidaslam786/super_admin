@@ -15,7 +15,7 @@ const AdminModal = ({open, onClose}) => {
  
   return (
     <Modal open={open} onClose={onClose} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Box style={{ display: 'flex', flexDirection: 'column', padding: '24px', width: '80vw', maxWidth: '600px', backgroundColor: 'white', position: 'relative' }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', padding: '24px', width: '80vw', maxWidth: '80vw', height:'80vh', backgroundColor: 'white', position: 'relative' }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom="16px">
           <p>Admin View</p>
           <IconButton onClick={onClose}>
@@ -34,7 +34,7 @@ const AdminModal = ({open, onClose}) => {
           <TextField label="State" fullWidth variant="outlined" />
           <TextField label="Country" fullWidth variant="outlined" />
           <Box display="flex" justifyContent="center" alignItems="center" marginTop="16px">
-            <img src={image} alt="Profile" style={{ width: isXs ? '50%' : isSm ? '70%' : '100%', borderRadius: '50%' }} />
+            <img src={image} alt="Profile" style={{ width: isXs ? '5%' : isSm ? '10%' : '20%', borderRadius: '50%' }} />
           </Box>
           <Button onClick={onClose} variant="contained" color="primary" style={{ marginTop: '20px' }}>
             Close

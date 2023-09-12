@@ -38,3 +38,7 @@ export const selectTotalAdmins = createSelector(
   [selectAllAdmins],
   (admins) => admins.length
 );
+
+// Selector to retrieve the selected user from the userManagement slice
+export const selectSelectedUser = (state) => state.userManagement.selectedUser;
+

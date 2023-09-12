@@ -12,6 +12,8 @@ import ProfilePage from "./pages/profile/profile-page/profilePage";
 import AllUsersPage from "./pages/user-management/AllUsersPage";
 import AllCustomersPage from "./pages/user-management/AllCustomersPage";
 import AllTradersPage from "./pages/user-management/AllTradersPage";
+import AddPropertyPage from "./pages/property/AddPropertyPage";
+import CreateUserPage from "./pages/user/CreateUserPage";
 
 function App() {
   return (
@@ -26,9 +28,24 @@ function App() {
         <Route path="/profile" element={<ProtectedRoute />}>
           <Route index element={<ProfilePage />} />
         </Route>
-        <Route path="/all-users" element={<AllUsersPage />} />
+        <Route path="/all-users" element={<ProtectedRoute />}>
+          <Route index element={<AllUsersPage />} />
+        </Route>
+        <Route path="/all-customers" element={<ProtectedRoute />}>
+          <Route index element={<AllCustomersPage />} />
+        </Route>
+        <Route path="/all-traders" element={<ProtectedRoute />}>
+          <Route index element={<AllTradersPage />} />
+        </Route>
+        <Route path="/add-property" element={<ProtectedRoute />}>
+          <Route index element={<AddPropertyPage />} />
+        </Route>
+        <Route path="/create-user" element={<ProtectedRoute />}>
+          <Route index element={<CreateUserPage />} />
+        </Route>
+        {/* <Route path="/all-users" element={<AllUsersPage />} />
         <Route path="/all-customers" element={<AllCustomersPage />} />
-        <Route path="/all-traders" element={<AllTradersPage />} />
+        <Route path="/all-traders" element={<AllTradersPage />} /> */}
       </Routes>
     </Box>
   );

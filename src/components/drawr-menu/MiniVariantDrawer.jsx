@@ -20,14 +20,17 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Badge from "@mui/material/Badge";
 import InputBase from "@mui/material/InputBase";
 
-import navigationConfig from "../../config/navigation"; // Update path if necessary
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/features/userSlice";
+
+import { useAppSelector } from "../../redux/store";
+
+import navigationConfig from "../../config/navigation";
+import { Link, useNavigate } from "react-router-dom";
 
 const drawerWidth = 260;
 const Search = styled("div")(({ theme }) => ({
@@ -135,6 +138,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
+
+  const userState = useAppSelector((state) => state.userState);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openSubmenuId, setOpenSubmenuId] = React.useState(null);
@@ -163,7 +172,7 @@ export default function MiniDrawer() {
         open={open}
         sx={{ boxShadow: "0px 0px 1px black" }}
       >
-        <Toolbar sx={{ backgroundColor: "white" }}>
+        <Toolbar sx={{ backgroundColor: "white", height: "8vmin" }}>
           <IconButton
             color="#00C800"
             aria-label="open drawer"
@@ -174,7 +183,7 @@ export default function MiniDrawer() {
               ...(open && { display: "none" }),
             }}
           >
-            <MenuIcon sx={{ color: "#00C800" }} />
+            <MenuIcon sx={{ color: "#00C800", fontSize: "3vmin" }} />
           </IconButton>
 
           <Typography
@@ -183,75 +192,118 @@ export default function MiniDrawer() {
             component="div"
             sx={{
               display: { xs: "none", sm: "block", color: "#171B2A" },
-              fontSize: "2vmin",
+              fontSize: "3vmin",
               fontWeight: "600",
+              marginLeft: "1vw",
             }}
           >
             Dashboard
           </Typography>
-          <Search sx={{ backgroundColor: "#FAFBFC", left: "25vw" }}>
+          <Search sx={{ backgroundColor: "#FAFBFC", left: "15vw" }}>
             <SearchIconWrapper>
-              <SearchIcon sx={{ color: "#00C800" }} />
+              <SearchIcon
+                sx={{
+                  color: "#00C800",
+                  fontSize: "2.5vmin",
+                  marginLeft: "0.5vw",
+                }}
+              />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
-              sx={{ color: "#171B2A", width: "20vw", paddingLeft: "2vw" }}
+              sx={{
+                color: "#171B2A",
+                width: "20vw",
+                paddingLeft: "2vw",
+                height: "4vmin",
+                borderRadius: "1vmin",
+                fontSize: "1.5vmin",
+                fontWeight: "600",
+              }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
-              color="#00C800"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
               aria-label="show 17 new notifications"
               color="#00C800"
+              sx={{ marginRight: "2vw" }}
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <NotificationsIcon
+                  sx={{ fontSize: "2.5vmin", fill: "#00C800" }}
+                />
               </Badge>
             </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              //   aria-controls={menuId}
-              aria-haspopup="true"
-              //   onClick={handleProfileMenuOpen}
-              color="#00C800"
-            >
-              <AccountCircle />
-            </IconButton>
+            <img
+              src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${
+                userState?.user?.imageUrl?.imageUrl
+                  ? userState?.user?.imageUrl?.imageUrl
+                  : userState?.user?.profileImage
+              }?${Date.now()}`}
+              alt="userImage"
+              style={{ width: "6vmin", height: "6vmin" }}
+            />
+            <Box sx={{ marginLeft: "1vw", marginRight: "2vw" }}>
+              <Typography
+                sx={{
+                  color: "#171B2A",
+                  fontSize: "1.5vmin",
+                  fontWeight: "600",
+                  fontFamily: "helvetica",
+                  margin: "0",
+                  marginTop: "1vmin",
+                }}
+              >
+                {userState?.user?.firstName || "Guest"}
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#737791",
+                  fontSize: "1vmin",
+                  fontWeight: "600",
+                  fontFamily: "helvetica",
+                }}
+              >
+                Super Admin
+              </Typography>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
+        <DrawerHeader sx={{ height: "8vmin" }}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
             ) : (
-              <ChevronLeftIcon />
+              <ChevronLeftIcon sx={{ color: "#00C800", fontSize: "3vmin" }} />
             )}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          <img src={logo} alt="Logo" style={{ width: "100%" }} />
+        <List
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginTop: "3vmin",
+          }}
+        >
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: "3vmin", height: "3vmin", marginBottom: "2vh" }}
+          />
           {navigationConfig.map((item) => (
             <React.Fragment key={item.id}>
               <ListItem
-                disablePadding
                 sx={{
-                  padding: open ? "1vh 0" : "1vh 1vw",
+                  padding: open ? "0.5vh 0" : "0.5vh 1vw",
+                  margin: "0 1vw",
+                  borderRadius: "1vmin",
                   fill: "#171B2A",
                   color: "#171B2A",
                   display: "block",
@@ -264,30 +316,37 @@ export default function MiniDrawer() {
               >
                 {/* Check if the menu item has a navLink and doesn't have a submenu */}
                 {item.navLink && !item.children ? (
-                  <Link to={item.navLink}>
+                  <Link to={item.navLink} style={{ textDecoration: "none" }}>
                     <ListItemButton
                       sx={{
                         minHeight: 48,
                         justifyContent: open ? "initial" : "center",
                         px: 2,
-                        "&:hover": { backgroundColor: "#00C800" },
+                        borderRadius: "1vmin",
+                        "&:hover": {
+                          backgroundColor: "#00C800",
+                          fill: "white",
+                          color: "white",
+                        },
                       }}
                     >
                       <ListItemIcon
                         sx={{
-                          minWidth: 0,
+                          width: "4vmin",
                           mr: open ? 3 : "auto",
                           justifyContent: "center",
                         }}
                       >
                         {item.icon}
                       </ListItemIcon>
-                      <ListItemText
-                        primary={item.title}
+                      <Typography
                         sx={{
-                          opacity: open ? 1 : 0,
+                          display: open ? "block" : "none",
+                          color: "black",
                         }}
-                      />
+                      >
+                        {item.title}
+                      </Typography>
                     </ListItemButton>
                   </Link>
                 ) : (
@@ -296,13 +355,16 @@ export default function MiniDrawer() {
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2,
-                      "&:hover": { backgroundColor: "#00C800" },
+                      "&:hover": {
+                        backgroundColor: "#00C800",
+                        borderRadius: "2vmin",
+                      },
                     }}
                     onClick={() => toggleSubmenu(item.id)}
                   >
                     <ListItemIcon
                       sx={{
-                        minWidth: 0,
+                        width: "4vmin",
                         mr: open ? 3 : "auto",
                         justifyContent: "center",
                       }}
@@ -326,7 +388,10 @@ export default function MiniDrawer() {
                     disablePadding
                     sx={{ display: "block", marginLeft: 2 }}
                   >
-                    <Link to={child.navLink}>
+                    <Link
+                      to={child.navLink}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
                       <ListItemButton
                         sx={{
                           minHeight: 48,
@@ -353,11 +418,30 @@ export default function MiniDrawer() {
                 ))}
             </React.Fragment>
           ))}
-          <ListItemButton>
+          <ListItemButton
+          onClick={() => {
+            dispatch(logout());
+            navigate("/login")
+          }}
+            sx={{
+              padding: open ? "0 1vw" : "0 0",
+              height: "4vmin",
+              borderRadius: "1vmin",
+              marginTop: "5vh",
+              backgroundColor: "#171B2A",
+              color: "white",
+              "&:hover": { backgroundColor: "#171B2A", opacity: "95%" },
+            }}
+          >
             <ListItemIcon>
-              <LogoutIcon />
+              <LogoutIcon
+                sx={{ fill: "white", marginLeft: open ? "0" : "0.5vw" }}
+              />
             </ListItemIcon>
-            <ListItemText primary="Sign Out" />
+            <ListItemText
+              primary="Sign Out"
+              sx={{ display: open ? "block" : "none" }}
+            />
           </ListItemButton>
         </List>
       </Drawer>

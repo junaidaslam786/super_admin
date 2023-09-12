@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
 import CustomTable from "../custom-table/CustomTable";
 import { useGetAllUsersExceptSuperAdminQuery } from "../../redux/api/userManagementApi";
-import { CircularProgress, Typography, Box } from "@mui/material";
+import { CircularProgress, Typography, Box, Modal } from "@mui/material";
 import { Edit, Delete, Visibility } from "@mui/icons-material";
 
+import { selectSelectedUser } from "../../redux/selectors/userSelectors";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setUsers } from "../../redux/features/userManagementSlice";
+import { setUsers, selectUser } from "../../redux/features/userManagementSlice";
 
-import CustomerModal from "./modals/CustomerModal";
-import AgentModal from "./modals/AgentModal";
-import AdminModal from "./modals/AdminModal";
+import CustomerDetailsModal from "./modals/CustomerDetailsModal";
+import AgentDetailsModal from "./modals/AgentDetailsModal";
+import AdminDetailsModal from "./modals/AdminDetailsModal";
 
 const AllUserData = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [userType, setUserType] = useState(null);
 
   const dispatch = useDispatch();
+
+  const selectedUser = useSelector(selectSelectedUser);
+  console.log(selectUser);
 
   const handleModalOpen = (userType) => {
     setModalOpen(true);
@@ -29,21 +34,11 @@ const AllUserData = () => {
     isError,
   } = useGetAllUsersExceptSuperAdminQuery();
 
-  // console.log(users)
-
   useEffect(() => {
     if (users) {
       dispatch(setUsers(users));
     }
   }, [users, dispatch]);
-
-  // if (isLoading) {
-  //     return <YourLoadingComponent />;
-  // }
-
-  // if (isError) {
-  //     return <YourErrorComponent />;
-  // }
 
   if (isLoading)
     return (
@@ -67,15 +62,14 @@ const AllUserData = () => {
     {
       icon: Visibility,
       callback: (row) => {
-        // Check if "userType" property exists on the row
         if (row.hasOwnProperty("userType")) {
+          dispatch(selectUser(row)); // Update the selectedUser in the Redux store
           handleModalOpen(row.userType);
         } else {
           console.warn("Row does not have a 'userType' property.");
         }
       },
     },
-
     {
       icon: Edit,
       // callback: (row) => history.push(`/editUser/${row.id}`),
@@ -88,17 +82,24 @@ const AllUserData = () => {
 
   let modalContent = null;
   if (userType === "admin") {
-    modalContent = <AdminModal open={modalOpen} onClose={handleModalClose} />;
+    modalContent = <AdminDetailsModal userData={selectedUser} open={modalOpen} onClose={handleModalClose} />;
   } else if (userType === "customer") {
     modalContent = (
-      <CustomerModal open={modalOpen} onClose={handleModalClose} />
+      <CustomerDetailsModal userData={selectedUser} open={modalOpen} onClose={handleModalClose} />
     );
   } else if (userType === "agent") {
-    modalContent = <AgentModal open={modalOpen} onClose={handleModalClose} />;
+    modalContent = <AgentDetailsModal userData={selectedUser} open={modalOpen} onClose={handleModalClose} />;
   }
-
+  console.log("Selected User:", selectedUser);
   return (
     <Box sx={{ width: "90vw", marginTop: "10vh" }}>
+      {/* {selectedUser && (
+        <UserDetailModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          userData={selectedUser}
+        />
+      )} */}
       {modalContent}
 
       <CustomTable
