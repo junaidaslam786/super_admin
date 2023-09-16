@@ -44,7 +44,7 @@ const PropertyDesciption = () => {
             <TextField
               label="Property Type*"
               placeholder="Home"
-              value=""
+              // value=""
               fullWidth
               sx={{ marginBottom: "2vh" }}
               InputLabelProps={{
@@ -68,7 +68,7 @@ const PropertyDesciption = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value=""
+                // value=""
                 // onChange={handleChange}
                 label="Choose an Option"
               >
@@ -95,7 +95,7 @@ const PropertyDesciption = () => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value=""
+              // value=""
               // onChange={handleChange}
               label="Property Category"
             >
@@ -107,7 +107,7 @@ const PropertyDesciption = () => {
           <TextField
             label="Property Name*"
             placeholder=""
-            value=""
+            // value=""
             fullWidth
             sx={{ marginBottom: "2vh" }}
             InputLabelProps={{
@@ -122,7 +122,7 @@ const PropertyDesciption = () => {
             rows={10}
             variant="outlined"
             fullWidth
-            value=""
+            // value=""
             // onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter your description here..."
             sx={{
@@ -138,7 +138,7 @@ const PropertyDesciption = () => {
             <TextField
               label="Price Type*"
               placeholder=""
-              value=""
+              // value=""
               fullWidth
               sx={{ marginBottom: "2vh", marginRight: "2vw" }}
               InputLabelProps={{
@@ -150,7 +150,7 @@ const PropertyDesciption = () => {
             <TextField
               label="Price"
               placeholder="500000"
-              value=""
+              // value=""
               fullWidth
               sx={{ marginBottom: "2vh" }}
               InputLabelProps={{
@@ -178,7 +178,7 @@ const PropertyDesciption = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value=""
+                // value=""
                 // onChange={handleChange}
                 label="No. of Bedrooms"
               >
@@ -190,7 +190,7 @@ const PropertyDesciption = () => {
             <TextField
               label="Area*"
               placeholder="7500"
-              value=""
+              // value=""
               fullWidth
               sx={{ marginBottom: "2vh", marginRight: "2vw" }}
               InputLabelProps={{
@@ -216,7 +216,7 @@ const PropertyDesciption = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value=""
+                // value=""
                 // onChange={handleChange}
                 label="Unit"
               >

@@ -1,6 +1,7 @@
-
 import React from "react";
 import { Card, CardContent, Typography, Modal, Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -15,52 +16,221 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const AgentDetailsModal = ({ userData, open, onClose }) => {
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("xs"));
   return (
     <Modal
       open={open}
       onClose={onClose}
       aria-labelledby="user-details-modal"
       aria-describedby="modal-to-view-user-details"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
       <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '80%',
-          maxWidth: 600,
-          bgcolor: 'background.paper',
-          borderRadius: '10px',
-          boxShadow: 24,
-          p: 4,
-        }}
+        padding="24px"
+        width={isXs ? "90vw" : "80vw"}
+        maxWidth="600px"
+        bgcolor="background.paper"
+        borderRadius={2}
+        boxShadow={3}
       >
-        <StyledCard>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Company Name: {userData?.companyName}
+        <StyledCard
+          sx={{
+            backgroundColor: "#00C800",
+          }}
+        >
+          <CardContent
+            sx={{
+              backgroundColor: "#00C800",
+            }}
+          >
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Company Name:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.companyName}
+              </Typography>
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              Company Position: {userData?.companyPosition}
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Company Position:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.companyPosition}
+              </Typography>
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              First Name: {userData?.firstName}
+            <Typography
+              variant="p"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              First Name:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.firstName}{" "}
+              </Typography>
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              Last Name: {userData?.lastName}
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Last Name:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.lastName}
+              </Typography>
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              Email: {userData?.email}
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Email:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.email}
+              </Typography>
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              Phone Number: {userData?.phoneNumber}
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Phone Number:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.phoneNumber}
+              </Typography>
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              Company Registration#: {userData?.registrationNumber}
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Company Registration#:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.registrationNumber}
+              </Typography>
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              Assigned Role: {userData?.assignedRole}
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Assigned Role:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                {userData?.assignedRole}
+              </Typography>
             </Typography>
           </CardContent>
         </StyledCard>

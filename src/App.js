@@ -1,3 +1,4 @@
+import 'devextreme/dist/css/dx.light.css';
 import { Box } from "@mui/material";
 
 import { Route, Routes } from "react-router-dom";
@@ -14,6 +15,7 @@ import AllCustomersPage from "./pages/user-management/AllCustomersPage";
 import AllTradersPage from "./pages/user-management/AllTradersPage";
 import AddPropertyPage from "./pages/property/AddPropertyPage";
 import CreateUserPage from "./pages/user/CreateUserPage";
+import PropertyListPage from "./pages/property/PropertyListPage";
 
 function App() {
   return (
@@ -37,15 +39,16 @@ function App() {
         <Route path="/all-traders" element={<ProtectedRoute />}>
           <Route index element={<AllTradersPage />} />
         </Route>
-        <Route path="/add-property" element={<ProtectedRoute />}>
-          <Route index element={<AddPropertyPage />} />
-        </Route>
         <Route path="/create-user" element={<ProtectedRoute />}>
           <Route index element={<CreateUserPage />} />
         </Route>
-        {/* <Route path="/all-users" element={<AllUsersPage />} />
-        <Route path="/all-customers" element={<AllCustomersPage />} />
-        <Route path="/all-traders" element={<AllTradersPage />} /> */}
+        <Route path="/add-property" element={<ProtectedRoute />}>
+          <Route index element={<AddPropertyPage />} />
+        </Route>
+        <Route path="/property-list" element={<ProtectedRoute />}>
+          <Route index element={<PropertyListPage />} />
+        </Route>
+        
       </Routes>
     </Box>
   );

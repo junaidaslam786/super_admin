@@ -25,12 +25,22 @@ const userManagementSlice = createSlice({
         setError: (state, action) => {
             state.error = action.payload;
         },
-        // ... You can add more reducers as needed (like editUser, deleteUser, etc.)
+        updateUser: (state, action) => {
+            const updatedUser = action.payload;
+            const userIndex = state.users.findIndex(user => user.id === updatedUser.id);
+            if (userIndex !== -1) {
+                state.users[userIndex] = updatedUser;
+            }
+        },
+        deleteUser: (state, action) => {
+            const userId = action.payload;
+            state.users = state.users.filter(user => user.id !== userId);
+        },
     }
 });
 
 // Export the reducer to be combined in the store
 export default userManagementSlice.reducer;
 // Export the actions for dispatching
-export const { setUsers, selectUser, setStatus, setError } = userManagementSlice.actions;
+export const { setUsers, selectUser, setStatus, setError, updateUser, deleteUser } = userManagementSlice.actions;
 

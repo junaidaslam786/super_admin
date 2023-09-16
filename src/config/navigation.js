@@ -84,7 +84,7 @@ const navigationConfig = [
         type: "item",
         icon: <Icon.Circle size={12} />,
         permissions: ["admin"],
-        navLink: "/property/property-list"
+        navLink: "/property-list"
       },
       {
         id: "propertylisting",

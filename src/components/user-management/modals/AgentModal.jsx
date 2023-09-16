@@ -1,27 +1,33 @@
 import React from "react";
 import {
-  Modal,
-  TextField,
-  useMediaQuery,
-  IconButton,
   Box,
+  Typography,
+  TextField,
+  Modal,
+  Select,
+  MenuItem,
+  Switch,
   Button,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import image from "../../../assets/loginimg.png";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const AgentModal = ({open, onClose}) => {
-  // const [open, setOpen] = React.useState(true);
+const customTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#00C800", // Your custom primary color
+    },
+  },
+});
 
-  // Define breakpoints using the useMediaQuery hook
+const AgentModal = ({ open, onClose, userData }) => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("xs"));
   const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const isMd = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   return (
     <Modal
@@ -34,15 +40,14 @@ const AgentModal = ({open, onClose}) => {
       }}
     >
       <Box
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: "24px",
-          width: "80vw",
-          maxWidth: "600px",
-          backgroundColor: "white",
-          position: "relative",
-        }}
+        display="flex"
+        flexDirection="column"
+        padding="24px"
+        width={isXs ? "90vw" : "80vw"}
+        maxWidth="600px"
+        bgcolor="background.paper"
+        borderRadius={2}
+        boxShadow={3}
       >
         <Box
           display="flex"
@@ -50,48 +55,93 @@ const AgentModal = ({open, onClose}) => {
           alignItems="center"
           marginBottom="16px"
         >
-          <p>AgentModal</p>
+          <Typography variant="h5">Edit Agent</Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
-        <Box display="flex" flexDirection="column" gap="16px">
-          <Box
-            display="flex"
-            flexDirection={isXs ? "column" : "row"}
-            gap="16px"
+
+        {/* Fields for Editing Agent Details */}
+        <Box mb={2}>
+          <Typography variant="subtitle1">First Name</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            defaultValue={userData?.firstName}
+          />
+        </Box>
+
+        <Box mb={2}>
+          <Typography variant="subtitle1">Last Name</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            defaultValue={userData?.lastName}
+          />
+        </Box>
+
+        <Box mb={2}>
+          <Typography variant="subtitle1">Phone Number</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            defaultValue={userData?.phoneNumber}
+          />
+        </Box>
+
+        <Box mb={2}>
+          <Typography variant="subtitle1">Email</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            defaultValue={userData?.email}
+          />
+        </Box>
+
+        <Box mb={2}>
+          <Typography variant="subtitle1">City</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            defaultValue={userData?.cityName}
+          />
+        </Box>
+
+        <Box mb={2}>
+          <Typography variant="subtitle1">Timezone</Typography>
+          <Select
+            fullWidth
+            defaultValue={userData?.timezone}
+            variant="outlined"
           >
-            <TextField label="First Name" fullWidth variant="outlined" />
-            <TextField label="Last Name" fullWidth variant="outlined" />
-          </Box>
-          <TextField label="Email" fullWidth variant="outlined" />
-          <TextField label="Phone" fullWidth variant="outlined" />
-          <TextField label="Address" fullWidth variant="outlined" />
-          <TextField label="City" fullWidth variant="outlined" />
-          <TextField label="State" fullWidth variant="outlined" />
-          <TextField label="Country" fullWidth variant="outlined" />
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            marginTop="16px"
-          >
-            <img
-              src={image}
-              alt="Profile"
-              style={{
-                width: isXs ? "50%" : isSm ? "70%" : "100%",
-                borderRadius: "50%",
-              }}
-            />
-          </Box>
-          <Button
-            onClick={onClose}
-            variant="contained"
-            color="primary"
-            style={{ marginTop: "20px" }}
-          >
-            Close
+            <MenuItem value="UTC+1">UTC+1</MenuItem>
+            <MenuItem value="UTC+2">UTC+2</MenuItem>
+            <MenuItem value="UTC+3">UTC+3</MenuItem>
+            {/* ... more timezones can be added */}
+          </Select>
+        </Box>
+
+        <Box mb={2} display="flex" alignItems="center">
+          <Typography variant="subtitle1" mr={2}>
+            Status (Active)
+          </Typography>
+          <ThemeProvider theme={customTheme}>
+            <Switch defaultChecked={userData?.status} color="primary" />
+          </ThemeProvider>
+        </Box>
+
+        <Box mb={2}>
+          <Typography variant="subtitle1">Profile Image URL</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            defaultValue={userData?.profileImage}
+          />
+        </Box>
+
+        <Box mt={3}>
+          <Button variant="contained" sx={{ backgroundColor: "#00C800", "&:hover": {backgroundColor:'#00C800'} }}>
+            Save Changes
           </Button>
         </Box>
       </Box>

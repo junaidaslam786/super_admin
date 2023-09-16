@@ -2,17 +2,13 @@ import React from "react";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 
-const PaginationControls = ({ currentPage, totalPages, onNext, onPrevious }) => {
+const PaginationControls = ({ currentPage, totalPage, onPageChange }) => {
   return (
     <Pagination
-      count={totalPages}
+      count={totalPage}
       page={currentPage}
       onChange={(event, page) => {
-        if (page > currentPage) {
-          onNext();
-        } else {
-          onPrevious();
-        }
+        onPageChange(page);
       }}
       renderItem={(item) => <PaginationItem {...item} />}
     />

@@ -1,16 +1,35 @@
 import React, { useState } from "react";
 import CustomTable from "../custom-table/CustomTable";
 import { useSelector } from "react-redux";
+import { selectSelectedUser } from "../../redux/selectors/userSelectors";
 import {  selectAllAgents } from "../../redux/selectors/userSelectors";  // Assuming the selectors are in this file
 import { CircularProgress, Typography, Box } from "@mui/material";
 import { Edit, Delete, Visibility } from "@mui/icons-material";
 import AgentModal from "./modals/AgentModal";
+import { useDispatch } from "react-redux";
+import { selectUser } from "../../redux/features/userManagementSlice";
+import AgentDetailsModal from "./modals/AgentDetailsModal";
 
 const TradersData = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentModal, setCurrentModal] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  const handleModalOpen = () => setModalOpen(true);
+  const dispatch = useDispatch();
+  const selectedUser = useSelector(selectSelectedUser);
+
+  const handleModalOpen = (modalType) => {
+    setCurrentModal(modalType);
+    setModalOpen(true);
+  };
   const handleModalClose = () => setModalOpen(false);
+
+  // Handler to update the page
+  const handlePageChange = (newPage) => {
+    console.log(newPage);
+    setCurrentPage(newPage);
+  };
 
   const customers = useSelector(selectAllAgents);
 
@@ -29,10 +48,17 @@ const TradersData = () => {
   const actionsConfig = [
     {
       icon: Visibility,
-      callback: (row) => handleModalOpen(),
+      callback: (row) => {
+        handleModalOpen('view')
+        dispatch(selectUser(row));
+      }
     },
     {
       icon: Edit,
+      callback: (row) => {
+        handleModalOpen('edit')
+        dispatch(selectUser(row));
+      }
       // callback: (row) => history.push(`/editCustomer/${row.id}`),
     },
     {
@@ -49,6 +75,8 @@ return (
       
       <CustomTable
         data={customers}
+        onPageChange={handlePageChange}
+        totalPage={Math.ceil(customers.length / itemsPerPage)}
         columnsToDisplay={[
           "firstName",
           "lastName",
@@ -59,7 +87,8 @@ return (
         ]}
         actionsConfig={actionsConfig}
       />
-       <AgentModal open={modalOpen} onClose={handleModalClose} />
+       {currentModal === 'edit' && <AgentModal open={modalOpen} onClose={handleModalClose} userData={selectedUser} />}
+       {currentModal === 'view' && <AgentDetailsModal open={modalOpen} onClose={handleModalClose} userData={selectedUser} />}
     </Box>
   );
 };

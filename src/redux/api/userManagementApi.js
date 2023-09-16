@@ -1,6 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase";
-import { setUsers } from "../features/userManagementSlice";
+import {
+  setUsers,
+  updateUser,
+  deleteUser,
+} from "../features/userManagementSlice";
 
 const userManagementApi = createApi({
   reducerPath: "userManagementApi",
@@ -37,9 +41,61 @@ const userManagementApi = createApi({
         };
       },
     }),
+
+    updateUser: builder.mutation({
+      query: (user) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `superadmin/user/${user.id}`,
+          method: "PUT",
+          body: user,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+      },
+      onSuccess: (data, arg, thunkAPI) => {
+        thunkAPI.dispatch(updateUser(data));
+      },
+    }),
+
+    deleteUser: builder.mutation({
+      query: (id) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `superadmin/user/${id}`,
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+      onSuccess: (data, arg, thunkAPI) => {
+        thunkAPI.dispatch(deleteUser(data.id));
+        thunkAPI.dispatch(
+          userManagementApi.util.invalidateTags([
+            { type: "UserManagement", id: "getAllUsersExceptSuperAdmin" },
+          ])
+        );
+      },
+    }),
   }),
 });
 
-const { useGetAllUsersExceptSuperAdminQuery, useGetUserByIdQuery } = userManagementApi;
+const {
+  useGetAllUsersExceptSuperAdminQuery,
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} = userManagementApi;
 
-export { userManagementApi, useGetAllUsersExceptSuperAdminQuery, useGetUserByIdQuery };
+export {
+  userManagementApi,
+  useGetAllUsersExceptSuperAdminQuery,
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+};

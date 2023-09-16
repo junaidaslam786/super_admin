@@ -1,6 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase";
+import { userManagementApi } from "./userManagementApi";
 import { userApi } from "./userApi";
+import { setUsers } from "../features/userManagementSlice";
 
 const authApi = createApi({
   reducerPath: "authApi",
@@ -95,6 +97,23 @@ const authApi = createApi({
         }
       },
     }),
+    registerUnifiedUser: builder.mutation({
+      async onQueryCompleted(args, { dispatch }) {
+        const updatedUsersResponse = await dispatch(
+          userManagementApi.endpoints.getAllUsersExceptSuperAdmin.initiate()
+        );
+        if (updatedUsersResponse && updatedUsersResponse.data) {
+          dispatch(setUsers(updatedUsersResponse.data));
+        }
+      },
+      query(data) {
+        return {
+          url: "superadmin/auth/register-user",
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
   }),
 });
 
@@ -106,6 +125,7 @@ const {
   useForgotPasswordMutation,
   useChangeSuperAdminPasswordMutation,
   useRefreshTokenMutation,
+  useRegisterUnifiedUserMutation,
 } = authApi;
 
 export {
@@ -117,4 +137,5 @@ export {
   useForgotPasswordMutation,
   useChangeSuperAdminPasswordMutation,
   useRefreshTokenMutation,
+  useRegisterUnifiedUserMutation,
 };

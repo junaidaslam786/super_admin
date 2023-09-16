@@ -5,8 +5,12 @@ import { combineReducers } from "redux";
 import { authApi } from "./api/authApi";
 import { userApi } from "./api/userApi";
 import { userManagementApi } from "./api/userManagementApi";
+import { propertyManagementApi } from "./api/propertyManagementApi";
+
+
 
 import userManagementReducer from "./features/userManagementSlice";
+import proprtyManagementReducer from "./features/propertyManagementSlice";
 import userReducer from "./features/userSlice";
 
 import { persistStore, persistReducer } from "redux-persist";
@@ -18,15 +22,17 @@ import { CustomErrorMessage } from "../utils/CustomErrorMessage";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["userState", "userManagement", userManagementApi.reducerPath], // only userState will be persisted
+  whitelist: ["userState", "userManagement", "propertyManagement", userManagementApi.reducerPath, propertyManagementApi.reducerPath], // only userState will be persisted
 };
 
 const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [userManagementApi.reducerPath]: userManagementApi.reducer,
+  [propertyManagementApi.reducerPath]: propertyManagementApi.reducer,
   userState: userReducer,
   userManagement: userManagementReducer,
+  propertyManagement: proprtyManagementReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -52,7 +58,7 @@ const store = configureStore({
         ignoredActions: ["persist/PERSIST"],
         ignoredPaths: ["register"],
       },
-    }).concat([authApi.middleware, userApi.middleware, userManagementApi.middleware, toastNotificationsMiddleware]),
+    }).concat([authApi.middleware, userApi.middleware, userManagementApi.middleware, propertyManagementApi.middleware, toastNotificationsMiddleware]),
 });
 
 let persistor = persistStore(store);

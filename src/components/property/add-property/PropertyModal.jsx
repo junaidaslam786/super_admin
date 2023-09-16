@@ -15,7 +15,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   fontFamily: "'Poppins', sans-serif",
 }));
 
-const CustomerDetailsModal = ({ userData, open, onClose }) => {
+const PropertyModal = ({ open, onClose }) => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("xs"));
   return (
@@ -59,7 +59,7 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                 alignItems: "center",
               }}
             >
-              First Name:
+              Property Title:{" "}
               <Typography
                 sx={{
                   marginLeft: "1vw",
@@ -67,7 +67,8 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                   fontSize: "1.5vmin",
                 }}
               >
-                {userData?.firstName}
+                {" "}
+                Bahria Town
               </Typography>
             </Typography>
             <Typography
@@ -81,7 +82,7 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                 alignItems: "center",
               }}
             >
-              Last Name:
+              Agent Name:{" "}
               <Typography
                 sx={{
                   marginLeft: "1vw",
@@ -89,7 +90,31 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                   fontSize: "1.5vmin",
                 }}
               >
-                {userData?.lastName}
+                {" "}
+                Malik Ryaz
+              </Typography>
+            </Typography>
+            <Typography
+              variant="p"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              City:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                Mai Di Chuggi
               </Typography>
             </Typography>
             <Typography
@@ -103,7 +128,7 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                 alignItems: "center",
               }}
             >
-              Email Address:
+              Price:{" "}
               <Typography
                 sx={{
                   marginLeft: "1vw",
@@ -111,7 +136,8 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                   fontSize: "1.5vmin",
                 }}
               >
-                {userData?.email}
+                {" "}
+                19.98pkr
               </Typography>
             </Typography>
             <Typography
@@ -125,7 +151,7 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                 alignItems: "center",
               }}
             >
-              Phone no#:
+              Reason:{" "}
               <Typography
                 sx={{
                   marginLeft: "1vw",
@@ -133,7 +159,31 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
                   fontSize: "1.5vmin",
                 }}
               >
-                {userData?.phoneNumber}
+                {" "}
+                Ainwain
+              </Typography>
+            </Typography>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                fontWeight: "600",
+                fontSize: "1.5vmin",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              Added on:{" "}
+              <Typography
+                sx={{
+                  marginLeft: "1vw",
+                  fontWeight: "500",
+                  fontSize: "1.5vmin",
+                }}
+              >
+                {" "}
+                14 August 1947
               </Typography>
             </Typography>
           </CardContent>
@@ -143,4 +193,4 @@ const CustomerDetailsModal = ({ userData, open, onClose }) => {
   );
 };
 
-export default CustomerDetailsModal;
+export default PropertyModal;

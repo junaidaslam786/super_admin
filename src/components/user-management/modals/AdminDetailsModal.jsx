@@ -1,8 +1,9 @@
-
 import React from "react";
 import { Card, CardContent, Typography, Modal, Box } from "@mui/material";
-// import { useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { styled } from "@mui/material/styles";
+import proImage from "../../../assets/Profile.svg";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   minWidth: 275,
@@ -16,49 +17,102 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const AdminDetailsModal = ({ userData, open, onClose }) => {
-  // const theme = useTheme();
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("xs"));
+
   return (
     <Modal
       open={open}
       onClose={onClose}
       aria-labelledby="user-details-modal"
       aria-describedby="modal-to-view-user-details"
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center'
+      }}
     >
       <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '80%',
-          maxWidth: 600,
-          bgcolor: 'background.paper',
-          borderRadius: '10px',
-          boxShadow: 24,
-          p: 4,
-        }}
+        padding="24px"
+        width={isXs ? "90vw" : "80vw"}
+        maxWidth="600px"
+        bgcolor="background.paper"
+        borderRadius={2}
+        boxShadow={3}
       >
-        <StyledCard>
-          <CardContent>
+        <StyledCard
+        sx={{
+          backgroundColor:'#00C800'
+        }}
+        >
+          <CardContent
+          sx={{
+            backgroundColor: "#00C800",
+          }}
+          >
+            <Typography
+              variant="h5"
+              gutterBottom
+              style={{paddingBottom: "5px" }}
+            >
+              Admin Details
+            </Typography>
+            <hr />
             <Typography variant="h6" gutterBottom>
-              First Name: {userData?.firstName}
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>
+                First Name:
+              </span>{" "}
+              {userData?.firstName}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Last Name: {userData?.lastName}
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>
+                Last Name:
+              </span>{" "}
+              {userData?.lastName}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Email: {userData?.email}
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>
+                Email:
+              </span>{" "}
+              {userData?.email}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Phone Number: {userData?.phoneNumber}
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>
+                Phone Number:
+              </span>{" "}
+              {userData?.phoneNumber}
             </Typography>
             {userData?.profileImage && (
               <img
-                src={userData.profileImage}
+                src={proImage || userData.profileImage}
                 alt="Admin Profile"
-                style={{ width: "100%", marginTop: 10 }}
+                style={{
+                  width: "60%",
+                  display: "block",
+                  margin: "20px auto",
+                  borderRadius: "10px",
+                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+                }}
               />
             )}
+            <Typography variant="h6" gutterBottom>
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>
+                City:
+              </span>{" "}
+              {userData?.cityName}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>
+                Timezone:
+              </span>{" "}
+              {userData?.timezone}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>
+                Status:
+              </span>{" "}
+              {userData?.status ? "Active" : "Inactive"}
+            </Typography>
           </CardContent>
         </StyledCard>
       </Box>
