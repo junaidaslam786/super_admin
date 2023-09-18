@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Initial state for the userManagementApi slice
+
 const initialState = {
-  properties: [], // All users (excluding super admins)
+  properties: [], 
   selectedProperty: null, // Currently selected user (for view/edit)
   status: "idle", // idle, loading, succeeded, failed
   error: null, // error message
@@ -25,12 +25,22 @@ const propertyManagementSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    // ... You can add more reducers as needed (like editUser, deleteUser, etc.)
+    updateProperty: (state, action) => {
+        const updatedProperty = action.payload;
+        const propertyIndex = state.properties.findIndex(property => property.id === updatedProperty.id);
+        if (propertyIndex !== -1) {
+            state.properties[propertyIndex] = updatedProperty;
+        }
+    },
+    deleteProperty: (state, action) => {
+        const propertyId = action.payload;
+        state.properties = state.properties.filter(property => property.id !== propertyId);
+    }
   },
 });
 
 // Export the reducer to be combined in the store
 export default propertyManagementSlice.reducer;
 // Export the actions for dispatching
-export const { setProperties, selectProperty, setStatus, setError } =
+export const { setProperties, selectProperty, setStatus, setError, updateProperty, deleteProperty } =
   propertyManagementSlice.actions;

@@ -1,15 +1,15 @@
 import React from "react";
 import { Box, Typography, Button, Grid } from "@mui/material";
 
-const FeaturedImage = () => {
+const FeaturedImage = ({ updateImage }) => {
   return (
     <Box
       sx={{
         backgroundColor: "white",
         padding: "3vh",
         width: "100%",
-        marginTop:'5vmin',
-        boxShadow: '0px 1px 4px black'
+        marginTop: "5vmin",
+        boxShadow: "0px 1px 4px black",
       }}
     >
       <Typography
@@ -32,10 +32,7 @@ const FeaturedImage = () => {
         <Button
           variant="outlined"
           color="primary"
-          //   onClick={() => {
-          //     const fileInput = document.getElementById("hiddenFileInput");
-          //     fileInput.click();
-          //   }}
+          onClick={() => document.getElementById("hiddenFileInput").click()}
           sx={{
             border: "0.1vmin solid #00C800",
             color: "#00C800",
@@ -56,13 +53,10 @@ const FeaturedImage = () => {
           type="file"
           id="hiddenFileInput"
           style={{ display: "none" }}
-          //   onChange={(e) => {
-          //     const file = e.target.files[0];
-          //     if (file) {
-          //       setProfileImage(URL.createObjectURL(file));
-          //       setSelectedImageFile(file);
-          //     }
-          //   }}
+          onChange={(e) => {
+            const file = e.target.files[0];
+            updateImage(URL.createObjectURL(file));
+          }}
         />
       </Grid>
     </Box>

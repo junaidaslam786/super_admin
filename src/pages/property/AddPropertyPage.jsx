@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Grid, Box, Button } from "@mui/material";
 import PropertyDesciption from "../../components/property/add-property/PropertyDesciption";
 import FeaturedImage from "../../components/property/add-property/FeaturedImage";
@@ -7,8 +7,38 @@ import ListingLocation from "../../components/property/add-property/ListingLocat
 import AddMoreImages from "../../components/property/add-property/AddMoreImages";
 import AddDocuments from "../../components/property/add-property/AddDocuments";
 import MainLayout from "../../layout/MainLayout";
+import { useAddPropertyMutation } from "../../redux/api/propertyManagementApi";
+import { useNavigate } from "react-router-dom";
+import { useGetAllPropertiesQuery } from "../../redux/api/propertyManagementApi";
+import { setProperties } from "../../redux/features/propertyManagementSlice";
+import { useDispatch } from "react-redux";
 
 const AddPropertyPage = () => {
+
+  const [propertyCreate, setPropertyCreated] = useState(false);
+   // State for each child component's data
+   const [propertyDescription, setPropertyDescription] = useState({});
+   const [featuredImage, setFeaturedImage] = useState(null);
+   //  const [vrTour, setVRTour] = useState({});
+   const [listingLocation, setListingLocation] = useState({});
+   //  const [moreImages, setMoreImages] = useState([]);
+   //  const [documents, setDocuments] = useState([]);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [addProperty, { isLoading, isError, error, isSuccess }] =
+    useAddPropertyMutation({
+      onSuccess: () => {
+        setPropertyCreated(true);
+      },
+    });
+
+  const {data: properties, refetch} = useGetAllPropertiesQuery();
+  
+
+
+ 
+
   const refs = {
     propertyDesciption: useRef(null),
     featuredImage: useRef(null),
@@ -18,42 +48,86 @@ const AddPropertyPage = () => {
     addDocuments: useRef(null),
   };
 
+  const handleSubmit = () => {
+    const rawUserState = localStorage.getItem("userState");
+    let userId;
+    if (rawUserState) {
+      const userState = JSON.parse(rawUserState);
+      const user = userState.user;
+      userId = user.userId; // Adjust this key as needed
+    }
+    const propertyData = {
+      userId: userId,
+      title: propertyDescription.title, // Map propertyName to title
+      address: listingLocation.address,
+      city: listingLocation.city,
+      region: listingLocation.region,
+      price: propertyDescription.price,
+      description: propertyDescription.description, // If there's a separate description field
+      image: featuredImage,
+      latitude: listingLocation.latitude, // Add the latitude
+      longitude: listingLocation.longitude, // Add the longitude
+      // vrTour: vrTour,
+      // images: moreImages,
+      // docs: documents
+    };
+    addProperty(propertyData);
+    // Use your builder.mutation function or other methods to send propertyData to the backend
+    navigate("/property-list");
+  };
+  
+  useEffect(() => {
+    if(propertyCreate) {
+      dispatch(setProperties(properties))
+      refetch();
+      setPropertyCreated(false)
+    }
+  }, [propertyCreate, refetch, properties])
+  
+
   const sections = [
     {
       id: "propertyDescription",
       label: "Property Description",
-      component: <PropertyDesciption />,
+      component: (
+        <PropertyDesciption updateDescription={setPropertyDescription} />
+      ),
     },
     {
       id: "featuredImage",
       label: "Featured Image",
-      component: <FeaturedImage />,
+      component: <FeaturedImage updateImage={setFeaturedImage} />,
     },
     {
       id: "uploadVRTour",
       label: "Upload VR Tour",
       component: <UploadVRTour />,
+      // component: <UploadVRTour updateVrTour={setVRTour}/>,
     },
     {
       id: "listingLocation",
       label: "Listing Location",
-      component: <ListingLocation />,
+      component: <ListingLocation updateListingLocation={setListingLocation} />,
     },
     {
       id: "addMoreImages",
       label: "Add More Images",
       component: <AddMoreImages />,
+      // component: <AddMoreImages updateImages={setMoreImages}/>,
     },
     {
       id: "addDocuments",
       label: "Add Documents",
       component: <AddDocuments />,
+      // component: <AddDocuments updateDocuments={setDocuments}/>,
     },
   ];
 
   const scrollToRef = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth" });
   };
+
+ 
 
   return (
     <MainLayout>
@@ -125,6 +199,7 @@ const AddPropertyPage = () => {
           <Button
             variant="outlined"
             color="primary"
+            onClick={handleSubmit}
             sx={{
               border: "0.1vmin solid #00C800",
               color: "#00C800",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Typography,
@@ -11,10 +11,24 @@ import {
   Button,
 } from "@mui/material";
 import { useRegisterUnifiedUserMutation } from "../../redux/api/authApi";
+import { useGetAllUsersExceptSuperAdminQuery } from "../../redux/api/userManagementApi";
+import { setUsers } from "../../redux/features/userManagementSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const CreateUser = () => {
+  const [userCreated, setUserCreated] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [registerUnifiedUser, { isLoading, isError, isSuccess, data }] =
-    useRegisterUnifiedUserMutation();
+    useRegisterUnifiedUserMutation({
+      onSuccess: () => {
+        setUserCreated(true);
+      },
+    });
+  const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
 
   // Local state for form fields
   const [firstName, setFirstName] = useState("");
@@ -35,7 +49,16 @@ const CreateUser = () => {
       userType,
     };
     await registerUnifiedUser(formData);
+    navigate('/all-users')
   };
+
+  useEffect(() => {
+    if (userCreated) {
+      dispatch(setUsers(users));
+      refetch();
+      setUserCreated(false); // Reset for the next user creation
+    }
+  }, [userCreated, refetch, users]);
   return (
     <Box
       sx={{

@@ -23,9 +23,8 @@ const userManagementApi = createApi({
         };
       },
       onSuccess: (data, arg, thunkAPI) => {
-        console.log("Before dispatching setUsers with data:", data);
         thunkAPI.dispatch(setUsers(data));
-        console.log("After dispatching setUsers");
+
       },
     }),
 
@@ -46,7 +45,7 @@ const userManagementApi = createApi({
       query: (user) => {
         const token = localStorage.getItem("token");
         return {
-          url: `superadmin/user/${user.id}`,
+          url: `superadmin/user/update`,
           method: "PUT",
           body: user,
           credentials: "include",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   TextField,
   Typography,
@@ -11,9 +11,51 @@ import {
   Card,
   CardMedia,
 } from "@mui/material";
-import Image from "../../../assets/UserImage.png";
+import {
+  GoogleMap,
+  LoadScript,
+  StandaloneSearchBox,
+} from "@react-google-maps/api";
 
-const ListingLocation = () => {
+const ListingLocation = ({ updateListingLocation }) => {
+  // State management for address, city, postal code, and region
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [region, setRegion] = useState("");
+  const [mapCenter, setMapCenter] = useState({ lat: 51.505, lng: -0.09 });
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  const searchBoxRef = useRef();
+  const onLoad = (ref) => {
+    searchBoxRef.current = ref;
+  };
+
+  const onPlacesChanged = () => {
+    const place = searchBoxRef.current.getPlaces()[0];
+    const location = place.geometry.location;
+    setAddress(place.formatted_address);
+    setLatitude(location.lat());
+    setLongitude(location.lng());
+    setMapCenter({ lat: location.lat(), lng: location.lng() });
+    updateListingData();
+};
+
+
+const updateListingData = () => {
+  const data = {
+      address: searchBoxRef.current?.getPlaces()[0]?.formatted_address,
+      city: city, 
+      postalCode: postalCode,
+      region: region,
+      latitude: latitude,
+      longitude: longitude
+  };
+  updateListingLocation(data);
+};
+
+
   return (
     <Box
       sx={{
@@ -26,7 +68,7 @@ const ListingLocation = () => {
     >
       <Grid item sx={{ marginBottom: "2vmin" }}>
         <Typography
-          variant="p"
+          variant="h6"
           fontWeight="600"
           letterSpacing="0.5px"
           sx={{ fontSize: "3vmin" }}
@@ -34,31 +76,27 @@ const ListingLocation = () => {
           Listing Location
         </Typography>
       </Grid>
-      <TextField
-        label="Address*"
-        placeholder="624 Queens Rd, Gainesville, FL 32607, USA"
-        value=""
-        fullWidth
-        sx={{ marginBottom: "2vh" }}
-        InputLabelProps={{
-          style: {
-            color: "#00C800",
-            marginRight: "2vw",
-          },
-        }}
-        style={{ marginRight: "2vw" }}
-      />
-      <Card>
-        <CardMedia
-          component="img"
-          fullWidth
-          image={Image}
-          alt="Image Description"
-          sx={{
-            height: "50vmin",
-          }}
+
+      <LoadScript
+        googleMapsApiKey="AIzaSyCiIUKO-RSjk304mIlR7bq8h4xqbxXrG58&libraries=places,drawing"
+        libraries={["places"]}
+      >
+        <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged}>
+          <TextField
+            label="Address*"
+            placeholder="624 Queens Rd, Gainesville, FL 32607, USA"
+            // value={address}
+            fullWidth
+            sx={{ marginBottom: "2vh" }}
+          />
+        </StandaloneSearchBox>
+
+        <GoogleMap
+          center={mapCenter}
+          zoom={13}
+          mapContainerStyle={{ width: "100%", height: "400px" }}
         />
-      </Card>
+      </LoadScript>
       <Box
         sx={{
           display: "flex",
@@ -67,7 +105,11 @@ const ListingLocation = () => {
       >
         <TextField
           label="City"
-          value=""
+          value={city}
+          onChange={(e) => {
+            setCity(e.target.value);
+            updateListingData();
+          }}
           fullWidth
           sx={{ marginBottom: "2vh", marginTop: "5vh" }}
           InputLabelProps={{
@@ -78,9 +120,14 @@ const ListingLocation = () => {
           }}
           style={{ marginRight: "2vw" }}
         />
+
         <TextField
           label="Postal Code"
-          value=""
+          value={postalCode}
+          onChange={(e) => {
+            setPostalCode(e.target.value);
+            updateListingData();
+          }}
           fullWidth
           sx={{ marginBottom: "2vh", marginTop: "5vh" }}
           InputLabelProps={{
@@ -91,9 +138,14 @@ const ListingLocation = () => {
           }}
           style={{ marginRight: "2vw" }}
         />
+
         <TextField
           label="Region"
-          value=""
+          value={region}
+          onChange={(e) => {
+            setRegion(e.target.value);
+            updateListingData();
+          }}
           fullWidth
           sx={{ marginBottom: "2vh", marginTop: "5vh" }}
           InputLabelProps={{
@@ -104,28 +156,6 @@ const ListingLocation = () => {
           }}
         />
       </Box>
-      <FormControl fullWidth variant="outlined">
-        <InputLabel
-          id=""
-          sx={{
-            color: "#00C800",
-            "&.MuiInputLabel-shrink": { color: "#00C800" },
-          }}
-        >
-          Alloted To
-        </InputLabel>
-        <Select
-          labelId=""
-          id="demo-simple-select"
-          value=""
-          // onChange={handleChange}
-          label="Choose an Option"
-        >
-          <MenuItem value={10}>Option 1</MenuItem>
-          <MenuItem value={20}>Option 2</MenuItem>
-          <MenuItem value={30}>Option 3</MenuItem>
-        </Select>
-      </FormControl>
     </Box>
   );
 };

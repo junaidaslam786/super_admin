@@ -1,39 +1,42 @@
-import React, { useState, useEffect } from "react";
-import CustomTable from "../custom-table/CustomTable";
-import { useGetAllPropertiesQuery } from "../../redux/api/propertyManagementApi";
+import React, { useEffect } from "react";
+import { useDeletePropertyMutation, useGetAllPropertiesQuery, useUpdatePropertyMutation } from "../../redux/api/propertyManagementApi";
 import { CircularProgress, Typography, Box } from "@mui/material";
-import { Edit, Delete, Visibility } from "@mui/icons-material";
 import { setProperties } from "../../redux/features/propertyManagementSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import PropertyModal from "./add-property/PropertyModal";
-import PropertyEditModal from "../../pages/property/PropertyEditModal";
+
+// DevExtreme imports
+import DataGrid, {
+  Paging,
+  Pager,
+  FilterRow,
+  Column,
+  Editing,
+} from "devextreme-react/data-grid";
+import { toast } from "react-toastify";
 
 const PropertyList = () => {
-  
-
   const dispatch = useDispatch();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [currentModal, setCurrentModal] = useState(null);
+  
 
-  // Fetch properties using the current page
-  const { data: properties, isLoading, isError } = useGetAllPropertiesQuery(currentPage);
+  const {
+    data: properties,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetAllPropertiesQuery();
+  const [deleteProperty] = useDeletePropertyMutation();
+  const [updateProperty] = useUpdatePropertyMutation();
 
-  const handleModalOpen = (modalType) => {
-    setCurrentModal(modalType);
-    setModalOpen(true);
-  };
-  const handleModalClose = () => setModalOpen(false);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  }
 
   useEffect(() => {
     if (properties) {
-      dispatch(setProperties(properties));
+      // Append new properties to the existing list
+      dispatch(
+        setProperties(properties) 
+      );
     }
   }, [properties, dispatch]);
 
@@ -55,46 +58,66 @@ const PropertyList = () => {
       </Typography>
     );
 
-    const actionsConfig = [
-      {
-        icon: Visibility,
-        callback: (row) => {
-          handleModalOpen('view')
-          // dispatch(selectUser(row));
-        }
-      },
-      {
-        icon: Edit,
-        callback: (row) => {
-          handleModalOpen('edit')
-          // dispatch(selectUser(row));
-        }
-      },
-      {
-        icon: Delete,
-       
-      },
-    ];
-
   return (
-    <Box sx={{ width: "90vw", marginTop: "10vh" }}>
-      <CustomTable
-        data={properties.data}
-        onPageChange={handlePageChange}
-        totalPage={properties.totalPage}
-        columnsToDisplay={[
-          "title",
-          "user_id",
-          "address",
-          "price",
-          "status",
-        ]}
-        actionsConfig={actionsConfig}
-      />
-      {currentModal === 'view' && <PropertyModal open={modalOpen} onClose={handleModalClose} />}
-      {currentModal === 'edit' && <PropertyEditModal open={modalOpen} onClose={handleModalClose} />}
-    </Box>
-  )
-}
+    <Box sx={{ width: "96vw" }}>
+      
 
-export default PropertyList
+      <DataGrid
+        dataSource={properties ? JSON.parse(JSON.stringify(properties)) : []}
+        showBorders={true}
+        onRowRemoving={async (e) => {
+          try {
+            await deleteProperty(e.data.id);
+            toast.success("Property successfully deleted!", "success");
+            refetch();
+          } catch (error) {
+            toast.error("Error deleting property. Please try again.", "error");
+          }
+        }}
+        onRowUpdating={async (e) => {
+          try {
+            // Merge old and new data
+            const updatedData = { ...e.oldData, ...e.newData };
+
+            // Assuming the API expects the full updated data of the user
+            await updateProperty(updatedData);
+
+            toast.success("Property successfully updated!", "success");
+            refetch(); // To fetch the latest data
+          } catch (error) {
+            toast.error("Error updating property. Please try again.", "error");
+            console.error(error);
+          }
+        }}
+      >
+        <Column dataField="title" caption="Title" />
+        <Column dataField="description" caption="Description" />
+        <Column dataField="address" caption="Address" />
+        <Column dataField="price" caption="Price" />
+        <Column dataField="status" caption="Status" />
+
+        <Paging defaultPageSize={20} />
+        <Pager
+          showPageSizeSelector={true}
+          allowedPageSizes={[5, 10, 15, 20]}
+          showNavigationButtons={true}
+        />
+        <FilterRow visible={true} />
+
+        <Editing
+          mode="popup"
+          allowUpdating={true}
+          allowDeleting={true}
+          popup={{
+            title: "Edit Property",
+            showTitle: true,
+            width: 700,
+            height: 525,
+          }}
+        />
+      </DataGrid>
+    </Box>
+  );
+};
+
+export default PropertyList;

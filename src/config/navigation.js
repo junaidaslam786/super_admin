@@ -94,31 +94,7 @@ const navigationConfig = [
         permissions: ["admin"],
         navLink: "/add-property"
       },
-      // {
-      //   id: "propertyRemoveRequest",
-      //   title: "Property Remove Request",
-      //   type: "item",
-      //   icon: <Icon.Circle size={12} />,
-      //   permissions: ["admin"],
-      //   navLink: "/property/property-remove-request"
-      // },
-
-      // {
-      //   id: "removedProperty",
-      //   title: "Removed Property",
-      //   type: "item",
-      //   icon: <Icon.Circle size={12} />,
-      //   permissions: ["admin"],
-      //   navLink: "/property/removed-property"
-      // },
-      // {
-      //   id: "propertyTypedList",
-      //   title: "Property Typed List",
-      //   type: "item",
-      //   icon: <Icon.Home size={20} />,
-      //   permissions: ["admin"],
-      //   navLink: "/property/property-typed-list"
-      // },
+      
     ],
   },
   {
@@ -135,13 +111,7 @@ const navigationConfig = [
         icon: <Icon.Circle size={12} />,
         navLink: "/appointments/all-appointments"
       },
-      // {
-      //   id: "upcoming-appointments",
-      //   title: "Upcoming Appointments",
-      //   type: "item",
-      //   icon: <Icon.Circle size={12} />,
-      //   navLink: "/appointments/upcoming-appointments"
-      // }
+      
     ]
   },
   {
@@ -211,57 +181,57 @@ const navigationConfig = [
     ]
   },
 
-  {
-    id: "customers",
-    title: "Customers",
-    type: "collapse",
-    icon: <Users className={styles.icon} />,
-    children: [
-      {
-        id: "add-customer",
-        title: "Add Customer",
-        type: "item",
-        icon: <Icon.Circle size={12} />,
-        navLink: "/customer/add-customer"
-      },
-      {
-        id: "customer-listing",
-        title: "Customer Listing",
-        type: "item",
-        icon: <Icon.Circle size={12} />,
-        navLink: "/customer/customer-listing"
-      },
-    ]
-  },
-  {
-    id: "traders",
-    title: "Traders",
-    type: "collapse",
-    icon: <Traders className={styles.icon} />,
-    children: [
-      {
-        id: "add-trader",
-        title: "Add Trader",
-        type: "item",
-        icon: <Icon.Circle size={12} />,
-        navLink: "/trader/add-trader"
-      },
-      {
-        id: "traders-listing",
-        title: "Traders Listing",
-        type: "item",
-        icon: <Icon.Circle size={12} />,
-        navLink: "/trader/trader-listing"
-      },
-      {
-        id: "blocked-traders",
-        title: "Blocked Traders",
-        type: "item",
-        icon: <Icon.Circle size={12} />,
-        navLink: "/trader/blocked-traders"
-      }
-    ]
-  },
+  // {
+  //   id: "customers",
+  //   title: "Customers",
+  //   type: "collapse",
+  //   icon: <Users className={styles.icon} />,
+  //   children: [
+  //     {
+  //       id: "add-customer",
+  //       title: "Add Customer",
+  //       type: "item",
+  //       icon: <Icon.Circle size={12} />,
+  //       navLink: "/customer/add-customer"
+  //     },
+  //     {
+  //       id: "customer-listing",
+  //       title: "Customer Listing",
+  //       type: "item",
+  //       icon: <Icon.Circle size={12} />,
+  //       navLink: "/customer/customer-listing"
+  //     },
+  //   ]
+  // },
+  // {
+  //   id: "traders",
+  //   title: "Traders",
+  //   type: "collapse",
+  //   icon: <Traders className={styles.icon} />,
+  //   children: [
+  //     {
+  //       id: "add-trader",
+  //       title: "Add Trader",
+  //       type: "item",
+  //       icon: <Icon.Circle size={12} />,
+  //       navLink: "/trader/add-trader"
+  //     },
+  //     {
+  //       id: "traders-listing",
+  //       title: "Traders Listing",
+  //       type: "item",
+  //       icon: <Icon.Circle size={12} />,
+  //       navLink: "/trader/trader-listing"
+  //     },
+  //     {
+  //       id: "blocked-traders",
+  //       title: "Blocked Traders",
+  //       type: "item",
+  //       icon: <Icon.Circle size={12} />,
+  //       navLink: "/trader/blocked-traders"
+  //     }
+  //   ]
+  // },
   
 
 ]

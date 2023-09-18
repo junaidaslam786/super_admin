@@ -10,7 +10,7 @@ import { propertyManagementApi } from "./api/propertyManagementApi";
 
 
 import userManagementReducer from "./features/userManagementSlice";
-import proprtyManagementReducer from "./features/propertyManagementSlice";
+import propertyManagementReducer from "./features/propertyManagementSlice";
 import userReducer from "./features/userSlice";
 
 import { persistStore, persistReducer } from "redux-persist";
@@ -32,7 +32,7 @@ const rootReducer = combineReducers({
   [propertyManagementApi.reducerPath]: propertyManagementApi.reducer,
   userState: userReducer,
   userManagement: userManagementReducer,
-  propertyManagement: proprtyManagementReducer,
+  propertyManagement: propertyManagementReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

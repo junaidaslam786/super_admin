@@ -113,6 +113,16 @@ const authApi = createApi({
           body: data,
         };
       },
+      onSuccess: async (data, arg, thunkAPI) => {
+        thunkAPI.dispatch(
+          userManagementApi.util.invalidateTags([
+            { type: "UserManagement", id: "getAllUsersExceptSuperAdmin" },
+          ])
+        );
+        await thunkAPI.dispatch(
+          userManagementApi.endpoints.getAllUsersExceptSuperAdmin.initiate()
+        );
+      },
     }),
   }),
 });

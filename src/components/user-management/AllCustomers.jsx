@@ -1,18 +1,43 @@
-import React, { useState } from "react";
-import CustomTable from "../custom-table/CustomTable";
+import React, { useEffect } from "react";
+
 import { useSelector } from "react-redux";
-import { selectAllCustomers } from "../../redux/selectors/userSelectors";  // Assuming the selectors are in this file
-import { CircularProgress, Typography, Box } from "@mui/material";
-import { Edit, Delete, Visibility } from "@mui/icons-material";
-import CustomerModal from "./modals/CustomerModal";
+import { selectAllCustomers } from "../../redux/selectors/userSelectors"; // Assuming the selectors are in this file
+import { CircularProgress, Box } from "@mui/material";
+import {
+  useGetAllUsersExceptSuperAdminQuery,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
+} from "../../redux/api/userManagementApi";
+import { setUsers } from "../../redux/features/userManagementSlice";
+import { useDispatch } from "react-redux";
+// DevExtreme imports
+import DataGrid, {
+  Paging,
+  Pager,
+  FilterRow,
+  Column,
+  Editing,
+} from "devextreme-react/data-grid";
+import { toast } from "react-toastify";
 
 const CustomerData = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
+ 
+  const dispatch = useDispatch();
 
   const customers = useSelector(selectAllCustomers);
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
+  const {
+    data: users,
+    refetch,
+  } = useGetAllUsersExceptSuperAdminQuery();
+
+  useEffect(() => {
+    if (users) {
+      dispatch(setUsers(users));
+    }
+  }, [users, dispatch]);
+
 
   if (!customers)
     return (
@@ -26,40 +51,61 @@ const CustomerData = () => {
       </Box>
     );
 
-  const actionsConfig = [
-    {
-      icon: Visibility,
-      callback: (row) => handleModalOpen(),
-    },
-    {
-      icon: Edit,
-      // callback: (row) => history.push(`/editCustomer/${row.id}`),
-    },
-    {
-      icon: Delete,
-      // callback: (row) => console.log("Deleting", row),
-    },
-  ];
-
-
-
 return (
-    <Box sx={{ width: "90vw", marginTop: "10vh" }}>
+    <Box sx={{ width: "96vw" }}>
       
       
-      <CustomTable
-        data={customers}
-        columnsToDisplay={[
-          "firstName",
-          "lastName",
-          "phoneNumber",
-          "email",
-          "userType",
-          "status",
-        ]}
-        actionsConfig={actionsConfig}
-      />
-       <CustomerModal open={modalOpen} onClose={handleModalClose} />
+      <DataGrid
+        dataSource={customers ? JSON.parse(JSON.stringify(customers)) : []}
+        showBorders={true}
+        onRowRemoving={async (e) => {
+          try {
+            await deleteUser(e.data.id);
+            toast.success("User successfully deleted!", "success");
+            refetch();
+          } catch (error) {
+            toast.error("Error deleting user. Please try again.", "error");
+          }
+        }}
+        onRowUpdating={async (e) => {
+          try {
+            // Merge old and new data
+            const updatedData = { ...e.oldData, ...e.newData };
+
+            // Assuming the API expects the full updated data of the user
+            await updateUser(updatedData);
+
+            toast.success("User successfully updated!", "success");
+            refetch(); // To fetch the latest data
+          } catch (error) {
+            toast.error("Error updating user. Please try again.", "error");
+            console.error(error);
+          }
+        }}
+      >
+        <Column dataField="firstName" caption="First Name" />
+        <Column dataField="lastName" caption="Last Name" />
+        <Column dataField="phoneNumber" caption="Phone Number" />
+        <Column dataField="email" caption="Email" />
+        <Column dataField="userType" caption="User Type" />
+        <Column dataField="status" caption="Status" />
+
+        <Paging defaultPageSize={20} />
+        <Pager showPageSizeSelector={true} allowedPageSizes={[5, 10, 15, 20]} />
+        <FilterRow visible={true} />
+
+        <Editing
+          mode="popup"
+          allowUpdating={true}
+          allowDeleting={true}
+          popup={{
+            title: "Edit User",
+            showTitle: true,
+            width: 700,
+            height: 525,
+          }}
+        />
+      </DataGrid>
     </Box>
   );
 };

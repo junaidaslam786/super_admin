@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
-
-import { useSelector } from "react-redux";
-import { selectAllAgents } from "../../redux/selectors/userSelectors"; // Assuming the selectors are in this file
-import { CircularProgress, Box } from "@mui/material";
 import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
 } from "../../redux/api/userManagementApi";
-import { setUsers } from "../../redux/features/userManagementSlice";
-
+import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { setUsers } from "../../redux/features/userManagementSlice";
 
 // DevExtreme imports
 import DataGrid, {
@@ -22,17 +18,15 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import { toast } from "react-toastify";
 
-const TradersData = () => {
+const AllUsers = () => {
   const dispatch = useDispatch();
 
-
-  const traders = useSelector(selectAllAgents);
-  const [deleteUser] = useDeleteUserMutation();
-  const [updateUser] = useUpdateUserMutation();
   const {
     data: users,
     refetch,
   } = useGetAllUsersExceptSuperAdminQuery();
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
 
   useEffect(() => {
     if (users) {
@@ -40,24 +34,10 @@ const TradersData = () => {
     }
   }, [users, dispatch]);
 
-  if (!traders)
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
-      </Box>
-    );
-
- 
-
   return (
     <Box sx={{ width: "96vw" }}>
       <DataGrid
-        dataSource={traders ? JSON.parse(JSON.stringify(traders)) : []}
+        dataSource={users ? JSON.parse(JSON.stringify(users)) : []}
         showBorders={true}
         onRowRemoving={async (e) => {
           try {
@@ -111,4 +91,4 @@ const TradersData = () => {
   );
 };
 
-export default TradersData;
+export default AllUsers;
