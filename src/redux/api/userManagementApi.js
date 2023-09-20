@@ -45,7 +45,7 @@ const userManagementApi = createApi({
       query: (user) => {
         const token = localStorage.getItem("token");
         return {
-          url: `superadmin/user/update`,
+          url: `superadmin/user/update/${user.id}`,
           method: "PUT",
           body: user,
           credentials: "include",

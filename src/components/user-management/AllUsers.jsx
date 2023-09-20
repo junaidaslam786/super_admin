@@ -21,10 +21,7 @@ import { toast } from "react-toastify";
 const AllUsers = () => {
   const dispatch = useDispatch();
 
-  const {
-    data: users,
-    refetch,
-  } = useGetAllUsersExceptSuperAdminQuery();
+  const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
 
@@ -35,7 +32,13 @@ const AllUsers = () => {
   }, [users, dispatch]);
 
   return (
-    <Box sx={{ width: "96vw" }}>
+    <Box
+      width="100%"
+      sx={{
+        marginTop: "10vmin",
+        marginLeft: "10vw",
+      }}
+    >
       <DataGrid
         dataSource={users ? JSON.parse(JSON.stringify(users)) : []}
         showBorders={true}
@@ -67,9 +70,19 @@ const AllUsers = () => {
         <Column dataField="firstName" caption="First Name" />
         <Column dataField="lastName" caption="Last Name" />
         <Column dataField="phoneNumber" caption="Phone Number" />
+        <Column dataField="cityName" caption="City Name" />
         <Column dataField="email" caption="Email" />
         <Column dataField="userType" caption="User Type" />
-        <Column dataField="status" caption="Status" />
+        <Column
+          dataField="status"
+          caption="Status"
+          calculateCellValue={(data) => (data.status ? "active" : "not active")}
+          calculateDisplayValue={(data) =>
+            data.status ? "active" : "not active"
+          }
+          cellRender={(cellData) => cellData.value}
+        />
+        
 
         <Paging defaultPageSize={20} />
         <Pager showPageSizeSelector={true} allowedPageSizes={[5, 10, 15, 20]} />

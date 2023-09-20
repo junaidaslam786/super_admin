@@ -5,6 +5,7 @@ import {
   setProperties,
   updateProperty,
 } from "../features/propertyManagementSlice";
+import { userManagementApi } from "./userManagementApi";
 
 const propertyManagementApi = createApi({
   reducerPath: "propertyManagementApi",
@@ -22,9 +23,28 @@ const propertyManagementApi = createApi({
           },
         };
       },
-      onSuccess: (data, arg, thunkAPI) => {
-        thunkAPI.dispatch(setProperties(data));
-      },
+      onSuccess: async (data, arg, thunkAPI) => {
+        // Start all fetch operations in parallel
+        const userFetchPromises = data.map(property => 
+            thunkAPI.dispatch(userManagementApi.endpoints.getUserById.initiate(property.createdBy))
+        );
+    
+        // Wait for all fetch operations to complete
+        const userResponses = await Promise.all(userFetchPromises);
+    
+        // Create updated properties array with user names
+        const updatedProperties = data.map((property, index) => {
+            const userResponse = userResponses[index];
+            return {
+                ...property,
+                createdBy: userResponse?.data?.firstName || property.createdBy
+            };
+        });
+    
+        // Update the Redux state with the updated properties
+        thunkAPI.dispatch(setProperties(updatedProperties));
+    }
+    
     }),
     // addProperty: builder.mutation({
     //   query: (property) => {
@@ -54,11 +74,11 @@ const propertyManagementApi = createApi({
     addProperty: builder.mutation({
       query: (property) => {
         const token = localStorage.getItem("token");
-        const rawUserState = localStorage.getItem('userState');
+        const rawUserState = localStorage.getItem("userState");
         let userId;
         if (rawUserState) {
-            const userState = JSON.parse(rawUserState);
-            userId = userState.user.id;  // Use .id here
+          const userState = JSON.parse(rawUserState);
+          userId = userState.user.id; // Use .id here
         }
 
         // Include the userId in the property data
@@ -86,8 +106,6 @@ const propertyManagementApi = createApi({
         );
       },
     }),
-
-
 
     updateProperty: builder.mutation({
       query: (property) => {

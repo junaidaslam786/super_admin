@@ -12,88 +12,8 @@ import {
   FormControlLabel,
   Typography,
   Link,
+  Box
 } from "@mui/material";
-import { styled } from "@mui/system";
-
-const useStyles = {
-  loginContainer: {
-    margin: "2rem",
-    padding: "2rem",
-    backgroundColor: "#171B2A",
-    width: "80%",
-    maxWidth: "600px",
-    borderRadius: "16px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-    fontFamily: "roboto",
-    "& input": {
-      color: "white",
-      backgroundColor: "#171B2A",
-      borderBottom: "3px solid #00C800",
-    },
-    "& label": {
-      color: "white",
-    },
-  },
-  welcomeText: {
-    fontFamily: "Helvetica",
-    letterSpacing: "1px",
-    fontSize: "2rem",
-    fontWeight: 600,
-    marginTop: 0,
-  },
-  loginText: {
-    marginTop: "-1rem",
-    letterSpacing: "1px",
-    color: "#00C800",
-    fontSize: "1.5rem",
-    fontWeight: 600,
-  },
-  inputField: {
-    position: "relative",
-    width: "100%",
-    marginBottom: "1rem",
-    "& p": {
-      fontSize: "1rem",
-      marginTop: "1rem",
-    },
-  },
-  rememberContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: "1rem",
-  },
-  toggleContainer: {
-    display: "flex",
-    alignItems: "center",
-  },
-  forgotLink: {
-    marginLeft: "1rem",
-    color: "white",
-    fontSize: "1rem",
-    textDecoration: "none",
-  },
-  loginButton: {
-    height: "3rem",
-    width: "100%",
-    border: "1px solid white",
-    borderRadius: "10px",
-    fontFamily: "Helvetica",
-    fontSize: "1.25rem",
-    color: "#00C800",
-    fontWeight: 600,
-    marginTop: "1.5rem",
-    backgroundColor: "transparent",
-    "&:hover": {
-      backgroundColor: "#00C800",
-      color: "white",
-    },
-  },
-};
 
 const Login = () => {
   const navigate = useNavigate();
@@ -122,11 +42,59 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" sx={useStyles.loginContainer}>
-      <Typography component="h2" variant="h5" sx={useStyles.welcomeText}>
+    <Container
+      component="main"
+      sx={{
+        margin: "5rem",
+        padding: "2rem",
+        backgroundColor: "#171B2A",
+        width: "40vw",
+        maxWidth: "600px",
+        borderRadius: "16px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        fontFamily: "roboto",
+        "& input": {
+          color: "white",
+          borderBottom: "3px solid #00C800",
+        },
+        "& label": {
+          color: "white",
+        },
+        "@media (max-width:786px)": {
+          maxWidth: "100vw",
+          width: "95vw",
+        },
+      }}
+    >
+      <Typography
+        component="h2"
+        variant="p"
+        sx={{
+          fontFamily: "Helvetica",
+          letterSpacing: "1px",
+          fontSize: "2.5rem",
+          fontWeight: 700,
+          marginTop: 0,
+        }}
+      >
         Welcome
       </Typography>
-      <Typography component="h3" variant="h6" sx={useStyles.loginText}>
+      <Typography
+        component="h3"
+        variant="p"
+        sx={{
+          marginTop: "-1rem",
+          letterSpacing: "1px",
+          color: "#00C800",
+          fontSize: "2rem",
+          fontWeight: 600,
+          marginTop: "1vmin",
+        }}
+      >
         Login
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -137,10 +105,26 @@ const Login = () => {
           name="email"
           type="email"
           variant="standard"
+          InputLabelProps={{
+            sx: {
+              fontSize: "1.5rem",
+              color:'#00C800'
+            },
+          }}
+          inputProps={{
+            sx: {
+              marginTop: "1vmin",
+            },
+          }}
           {...register("email")}
           error={!!errors.email}
           helperText={errors.email && "Error message for email"}
-          sx={useStyles.inputField}
+          sx={{
+            position: "relative",
+            width: "100%",
+            marginTop: "1vmin",
+            marginBottom: "1rem",
+          }}
         />
         <TextField
           fullWidth
@@ -149,26 +133,95 @@ const Login = () => {
           name="password"
           type="password"
           variant="standard"
+          InputLabelProps={{
+            sx: {
+              fontSize: "1.5rem",
+              color:'#00C800'
+            },
+          }}
+          inputProps={{
+            sx: {
+              marginTop: "1vmin",
+            },
+          }}
           {...register("password")}
           error={!!errors.password}
           helperText={errors.password && "Error message for password"}
-          sx={useStyles.inputField}
+          sx={{
+            position: "relative",
+            width: "100%",
+            marginTop: "1vmin",
+            marginBottom: "1rem",
+          }}
         />
-        <div style={useStyles.rememberContainer}>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "1rem",
+          }}
+        >
           <FormControlLabel
-            control={<Checkbox name="remember" color="primary" />}
+            control={
+              <Checkbox
+                name="remember"
+                color="primary"
+                sx={{
+                  color: "#00C800",
+                  "&.Mui-checked": {
+                    color: "#00C800",
+                  },
+                }}
+              />
+            }
             label="Remember me"
-            sx={useStyles.toggleContainer}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
           />
-          <Link href="/forgot-password" sx={useStyles.forgotLink}>
+          <Link
+            href="/forgot-password"
+            sx={{
+              marginLeft: "1rem",
+              color: "#00C800",
+              "&:hover": {
+                color: "#00C800",
+              },
+              "&:focus": {
+                color: "#00C800",
+              },
+              "&:visited": {
+                color: "#00C800",
+              },
+              fontSize: "1rem",
+              textDecoration: "none",
+            }}
+          >
             Forgot Password?
           </Link>
-        </div>
+        </Box>
         <Button
           type="submit"
           fullWidth
           variant="outlined"
-          sx={useStyles.loginButton}
+          sx={{
+            height: "3rem",
+            width: "100%",
+            border: "1px solid white",
+            borderRadius: "10px",
+            fontFamily: "Helvetica",
+            fontSize: "1.25rem",
+            color: "#00C800",
+            fontWeight: 600,
+            marginTop: "1.5rem",
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "#00C800",
+              color: "white",
+            },
+          }}
         >
           Login
         </Button>

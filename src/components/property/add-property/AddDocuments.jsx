@@ -16,7 +16,7 @@ const AddDocuments = () => {
         width: "100%",
         marginTop: "5vmin",
         marginBottom:'1vmin',
-        boxShadow: "0px 1px 4px black",
+        boxShadow: "0px 0px 1px black",
       }}
     >
       <Grid item>

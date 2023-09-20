@@ -1,7 +1,17 @@
-import React from "react";
-import { Box, Typography, Button, Grid, TextField, FormControlLabel, Checkbox } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
 
-const UploadVRTour = () => {
+const UploadVRTour = ({ updateVrTour }) => {
+  const [vrUrl, setVrUrl] = useState("");
+
   return (
     <Box
       sx={{
@@ -9,7 +19,7 @@ const UploadVRTour = () => {
         padding: "3vh",
         width: "100%",
         marginTop: "5vmin",
-        boxShadow: "0px 1px 4px black",
+        boxShadow: "0px 0px 1px black",
       }}
     >
       <Typography
@@ -24,10 +34,10 @@ const UploadVRTour = () => {
         <Button
           variant="outlined"
           color="primary"
-          //   onClick={() => {
-          //     const fileInput = document.getElementById("hiddenFileInput");
-          //     fileInput.click();
-          //   }}
+          onClick={() => {
+            const fileInput = document.getElementById("hiddenFileInput");
+            fileInput.click();
+          }}
           sx={{
             border: "0.1vmin solid #00C800",
             color: "#00C800",
@@ -48,13 +58,13 @@ const UploadVRTour = () => {
           type="file"
           id="hiddenFileInput"
           style={{ display: "none" }}
-          //   onChange={(e) => {
-          //     const file = e.target.files[0];
-          //     if (file) {
-          //       setProfileImage(URL.createObjectURL(file));
-          //       setSelectedImageFile(file);
-          //     }
-          //   }}
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              // Process the file if needed (e.g., create an object URL or read its contents)
+              updateVrTour({ type: "file", data: file }); // Send the file to the parent
+            }
+          }}
         />
       </Grid>
       <Typography
@@ -72,6 +82,11 @@ const UploadVRTour = () => {
         value=""
         fullWidth
         sx={{ marginBottom: "2vh" }}
+        onChange={(e) => {
+          const inputValue = e.target.value;
+          setVrUrl(inputValue);
+          updateVrTour({ type: "url", data: inputValue }); // Send the input value to the parent
+        }}
         InputLabelProps={{
           style: {
             color: "#00C800",
@@ -80,21 +95,21 @@ const UploadVRTour = () => {
         }}
         style={{ marginRight: "2vw" }}
       />
-      <FormControlLabel 
-      control={
-      <Checkbox 
-      sx={{
-        color:'#00C800',
-        '&.Mui-checked': {
-            color: '#00C800', 
-          }
-    }}
-      />
-      }
-      label= 'Use the images to create a video slideshow instead of virtual tour'
-      sx={{
-        color:'#737791'
-      }}
+      <FormControlLabel
+        control={
+          <Checkbox
+            sx={{
+              color: "#00C800",
+              "&.Mui-checked": {
+                color: "#00C800",
+              },
+            }}
+          />
+        }
+        label="Use the images to create a video slideshow instead of virtual tour"
+        sx={{
+          color: "#737791",
+        }}
       />
     </Box>
   );

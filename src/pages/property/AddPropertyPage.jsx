@@ -14,15 +14,16 @@ import { setProperties } from "../../redux/features/propertyManagementSlice";
 import { useDispatch } from "react-redux";
 
 const AddPropertyPage = () => {
-
   const [propertyCreate, setPropertyCreated] = useState(false);
-   // State for each child component's data
-   const [propertyDescription, setPropertyDescription] = useState({});
-   const [featuredImage, setFeaturedImage] = useState(null);
-   //  const [vrTour, setVRTour] = useState({});
-   const [listingLocation, setListingLocation] = useState({});
-   //  const [moreImages, setMoreImages] = useState([]);
-   //  const [documents, setDocuments] = useState([]);
+  // State for each child component's data
+  const [propertyDescription, setPropertyDescription] = useState({});
+  const [featuredImage, setFeaturedImage] = useState(null);
+  const [vrTour, setVRTour] = useState({});
+  const [vrData, setVrData] = useState({ type: null, data: null });
+
+  const [listingLocation, setListingLocation] = useState({});
+  //  const [moreImages, setMoreImages] = useState([]);
+  //  const [documents, setDocuments] = useState([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,14 +34,10 @@ const AddPropertyPage = () => {
       },
     });
 
-  const {data: properties, refetch} = useGetAllPropertiesQuery();
-  
-
-
- 
+  const { data: properties, refetch } = useGetAllPropertiesQuery();
 
   const refs = {
-    propertyDesciption: useRef(null),
+    propertyDescription: useRef(null),
     featuredImage: useRef(null),
     uploadVRTour: useRef(null),
     listingLocation: useRef(null),
@@ -48,42 +45,63 @@ const AddPropertyPage = () => {
     addDocuments: useRef(null),
   };
 
+  const handleVRTourData = (receivedData) => {
+    setVrData(receivedData);  // Store the received data in the state
+  
+    // Differentiate and handle based on the type
+    if (receivedData.type === "file") {
+      // Handle the received file
+      console.log("Received a file:", receivedData.data);
+    } else if (receivedData.type === "url") {
+      // Handle the received URL
+      console.log("Received a URL:", receivedData.data);
+    }
+  };
+  
+
   const handleSubmit = () => {
     const rawUserState = localStorage.getItem("userState");
     let userId;
     if (rawUserState) {
       const userState = JSON.parse(rawUserState);
       const user = userState.user;
-      userId = user.userId; // Adjust this key as needed
+      userId = user.userId; 
     }
+    
     const propertyData = {
       userId: userId,
-      title: propertyDescription.title, // Map propertyName to title
+      title: propertyDescription.title, 
       address: listingLocation.address,
       city: listingLocation.city,
       region: listingLocation.region,
       price: propertyDescription.price,
-      description: propertyDescription.description, // If there's a separate description field
+      description: propertyDescription.description,
       image: featuredImage,
-      latitude: listingLocation.latitude, // Add the latitude
-      longitude: listingLocation.longitude, // Add the longitude
-      // vrTour: vrTour,
-      // images: moreImages,
-      // docs: documents
+      latitude: listingLocation.latitude,
+      longitude: listingLocation.longitude,
+      // ... (other existing fields)
     };
-    addProperty(propertyData);
-    // Use your builder.mutation function or other methods to send propertyData to the backend
-    navigate("/property-list");
-  };
-  
-  useEffect(() => {
-    if(propertyCreate) {
-      dispatch(setProperties(properties))
-      refetch();
-      setPropertyCreated(false)
+
+    // Integrate VR data
+    if (vrData.type === "file") {
+      propertyData.vrFile = vrData.data;  // Add the file data to the propertyData
+      // Note: Depending on your backend, you might need to handle the file data differently, such as converting it to a specific format or uploading separately.
+    } else if (vrData.type === "url") {
+      propertyData.vrUrl = vrData.data;  // Add the URL to the propertyData
     }
-  }, [propertyCreate, refetch, properties])
-  
+
+    addProperty(propertyData);
+    navigate("/property-list");
+};
+
+
+  useEffect(() => {
+    if (propertyCreate) {
+      dispatch(setProperties(properties));
+      refetch();
+      setPropertyCreated(false);
+    }
+  }, [propertyCreate, refetch, properties]);
 
   const sections = [
     {
@@ -101,8 +119,8 @@ const AddPropertyPage = () => {
     {
       id: "uploadVRTour",
       label: "Upload VR Tour",
-      component: <UploadVRTour />,
-      // component: <UploadVRTour updateVrTour={setVRTour}/>,
+      // component: <UploadVRTour />,
+      component: <UploadVRTour updateVrTour={handleVRTourData} />,
     },
     {
       id: "listingLocation",
@@ -126,8 +144,6 @@ const AddPropertyPage = () => {
   const scrollToRef = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth" });
   };
-
- 
 
   return (
     <MainLayout>

@@ -1,0 +1,41 @@
+.dx-datagrid .dx-header-row {
+  background-color: #191b2a;
+  color: white;
+  border: 0.1vmin solid #00C800;
+  height: 3vmin;
+}
+
+.dx-datagrid-rowsview .dx-row {
+    border-left: 0.1vmin solid #00C800;
+    border-right: 0.1vmin solid #00C800;
+    height: 3vmin;
+}
+
+.dx-datagrid .dx-row > td, 
+.dx-datagrid .dx-header-row > td {
+    border: 0.1vmin solid #00C800;
+}
+
+.dx-datagrid .dx-page {
+    color: #171B2A; 
+    background-color: #FAFBFC; 
+}
+
+.dx-datagrid .dx-page.dx-selection {
+    color: white; 
+    background-color: #00C800;
+}
+
+.dx-datagrid .dx-prev-button, 
+.dx-datagrid .dx-next-button {
+    color: #00C800;
+}
+
+.dx-datagrid .dx-page-size.dx-selection {
+    background-color: #00C800;
+    color: #fff;
+}
+
+.dx-datagrid .dx-page.dx-selection {
+    border: none;
+}

@@ -145,7 +145,7 @@ export default function MiniDrawer() {
   const dispatch = useDispatch();
 
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [openSubmenuId, setOpenSubmenuId] = React.useState(null);
 
   const handleDrawerOpen = () => {
@@ -295,7 +295,7 @@ export default function MiniDrawer() {
           <img
             src={logo}
             alt="Logo"
-            style={{ width: "3vmin", height: "3vmin", marginBottom: "2vh" }}
+            style={{ width: open ? "5vmin" : '3vmin', height: open ? "5vmin" : '3vmin', marginBottom: "2vh" }}
           />
           {navigationConfig.map((item) => (
             <React.Fragment key={item.id}>

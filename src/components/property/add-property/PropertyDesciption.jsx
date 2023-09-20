@@ -58,7 +58,7 @@ const PropertyDesciption = ({ updateDescription }) => {
         backgroundColor: "white",
         padding: "3vh",
         width: "100%",
-        boxShadow: "0px 1px 4px black",
+        boxShadow: "0px 0px 1px black",
       }}
     >
       <Grid item>

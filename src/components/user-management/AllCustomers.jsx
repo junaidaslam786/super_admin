@@ -21,23 +21,18 @@ import DataGrid, {
 import { toast } from "react-toastify";
 
 const CustomerData = () => {
- 
   const dispatch = useDispatch();
 
   const customers = useSelector(selectAllCustomers);
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
-  const {
-    data: users,
-    refetch,
-  } = useGetAllUsersExceptSuperAdminQuery();
+  const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
 
   useEffect(() => {
     if (users) {
       dispatch(setUsers(users));
     }
   }, [users, dispatch]);
-
 
   if (!customers)
     return (
@@ -51,10 +46,14 @@ const CustomerData = () => {
       </Box>
     );
 
-return (
-    <Box sx={{ width: "96vw" }}>
-      
-      
+  return (
+    <Box
+      width="100%"
+      sx={{
+        marginTop: "10vmin",
+        marginLeft: "10vw",
+      }}
+    >
       <DataGrid
         dataSource={customers ? JSON.parse(JSON.stringify(customers)) : []}
         showBorders={true}
@@ -86,9 +85,18 @@ return (
         <Column dataField="firstName" caption="First Name" />
         <Column dataField="lastName" caption="Last Name" />
         <Column dataField="phoneNumber" caption="Phone Number" />
+        <Column dataField="cityName" caption="City Name" />
         <Column dataField="email" caption="Email" />
         <Column dataField="userType" caption="User Type" />
-        <Column dataField="status" caption="Status" />
+        <Column
+          dataField="status"
+          caption="Status"
+          calculateCellValue={(data) => (data.status ? "active" : "not active")}
+          calculateDisplayValue={(data) =>
+            data.status ? "active" : "not active"
+          }
+          cellRender={(cellData) => cellData.value}
+        />
 
         <Paging defaultPageSize={20} />
         <Pager showPageSizeSelector={true} allowedPageSizes={[5, 10, 15, 20]} />

@@ -1,20 +1,17 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
-
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
-
-import GroupIcon from "@mui/icons-material/Group";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
-const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/' }) => {
-  const navigate = useNavigate();
 
+const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/', icon }) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("xs"));
   const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
+  const isLg = useMediaQuery(theme.breakpoints.down('lg'))
   const handleNavigation = () => {
     navigate(route);
   };
@@ -26,11 +23,12 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/' }) =
         display: "flex",
         flexDirection: "column",
         alignItems: isXs || isSm ? "center" : "initial",
+        margin: isLg ? '0' : '0 3vw'
       }}
     >
       <Box
         sx={{
-          margin: "4vmin 0 0 2vmin",
+          marginTop: "4vmin",
           width: "26vmin",
           height: "15vmin",
           backgroundColor: "white",
@@ -76,7 +74,7 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/' }) =
               {title}
             </Typography>
           </Box>
-          <GroupIcon sx={{ color: "#00C800", fontSize: "5vmin" }} />
+          {icon}
         </Box>
         <Box
           sx={{
