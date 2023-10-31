@@ -60,6 +60,37 @@ const userManagementApi = createApi({
       },
     }),
 
+    activateUser: builder.mutation({
+      query: (id) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `superadmin/user/${id}/activate`,
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+      },
+    }),
+    
+    deactivateUser: builder.mutation({
+      query: (id) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `superadmin/user/${id}/deactivate`,
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+      },
+    }),
+    
+
     deleteUser: builder.mutation({
       query: (id) => {
         const token = localStorage.getItem("token");
@@ -89,6 +120,8 @@ const {
   useGetUserByIdQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useActivateUserMutation,
+  useDeactivateUserMutation,
 } = userManagementApi;
 
 export {
@@ -97,4 +130,6 @@ export {
   useGetUserByIdQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useActivateUserMutation,
+  useDeactivateUserMutation,
 };

@@ -168,11 +168,10 @@ export default function MiniDrawer() {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
-        position="fixed"
         open={open}
         sx={{ boxShadow: "0px 0px 1px black" }}
       >
-        <Toolbar sx={{ backgroundColor: "white", height: "8vmin" }}>
+        <Toolbar sx={{ backgroundColor: "white" }}>
           <IconButton
             color="#00C800"
             aria-label="open drawer"
@@ -274,7 +273,7 @@ export default function MiniDrawer() {
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader sx={{ height: "8vmin" }}>
+        <DrawerHeader sx={{ height: "6vmin" }}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />

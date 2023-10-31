@@ -51,17 +51,14 @@ const MainLayout = ({ navigationItems, children }) => {
         {/* Breadcrumb section */}
         <Breadcrumbs
           aria-label="breadcrumb"
-          style={{ marginBottom: "20px" }}
           sx={{
             color: "white",
             backgroundColor: "#171B2A",
-            height: "4vmin",
-            width: matches ? '100%' : "120%" ,
+            height: "6vmin",
             fontSize: "1.5vmin",
             textAlign: "center",
-            padding: "1vmin 0",
+            padding: "1.5vmin 0",
             paddingLeft: "2vw",
-            marginTop: matches ? "2%" : "0"
           }}
         >
           {generateBreadcrumbs(location.pathname)}

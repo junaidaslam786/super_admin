@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 import { selectAllAgents } from "../../redux/selectors/userSelectors"; // Assuming the selectors are in this file
@@ -7,10 +7,12 @@ import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
+  useGetUserByIdQuery,
 } from "../../redux/api/userManagementApi";
 import { setUsers } from "../../redux/features/userManagementSlice";
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // DevExtreme imports
 import DataGrid, {
@@ -24,17 +26,30 @@ import { toast } from "react-toastify";
 
 const TradersData = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const traders = useSelector(selectAllAgents);
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
+  const [selectedUserId, setSelectedUserId] = useState();
   const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
+
+  const { data: selectedUser } = useGetUserByIdQuery(selectedUserId, {
+    skip: !selectedUserId,
+  });
 
   useEffect(() => {
     if (users) {
       dispatch(setUsers(users));
     }
   }, [users, dispatch]);
+
+  useEffect(() => {
+    if (selectedUser) {
+      console.log("Selected user data:", selectedUser);
+      navigate("/trader"); // Navigate or take other actions based on the fetched data
+    }
+  }, [selectedUser, navigate]);
 
   if (!traders)
     return (
@@ -109,6 +124,19 @@ const TradersData = () => {
               {/* <button onClick={() => handleDeactivate(cellData.data)}> */}
               <button>Deactivate</button>
             </div>
+          )}
+        />
+        <Column
+          width={50}
+          cellRender={(data) => (
+            <VisibilityIcon
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                setSelectedUserId(data.data.id);
+                // console.log("Selected user data:", selectedUser);
+                // navigate("/trader"); // Navigate or take other actions based on the fetched data
+              }}
+            />
           )}
         />
 

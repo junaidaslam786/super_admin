@@ -34,6 +34,13 @@ const navigationConfig = [
     navLink: "/profile"
   },
   {
+    id: "subscriptionManagement",
+    title: "Subscription",
+    type: "collapse",
+    icon: <Subs className={styles.icon} />,
+    navLink: "/subscription-details"
+  },
+  {
     id: "userManagement",
     title: "User Management",
     type: "collapse",
