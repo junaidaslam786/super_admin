@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import Logo from "../../assets/omg.png";
 
-const Services = () => {
+const Services = ({name}) => {
   return (
     <Box
       sx={{
@@ -24,7 +24,7 @@ const Services = () => {
               fontFamily: "Helvetica, sans-serif",
             }}
           >
-            Video Call:
+            {name}
           </Typography>
         </Box>
         <Box

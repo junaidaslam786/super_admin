@@ -15,6 +15,7 @@ import {
   GoogleMap,
   LoadScript,
   StandaloneSearchBox,
+  Marker,
 } from "@react-google-maps/api";
 
 const ListingLocation = ({ updateListingLocation }) => {
@@ -40,21 +41,19 @@ const ListingLocation = ({ updateListingLocation }) => {
     setLongitude(location.lng());
     setMapCenter({ lat: location.lat(), lng: location.lng() });
     updateListingData();
-};
+  };
 
-
-const updateListingData = () => {
-  const data = {
+  const updateListingData = () => {
+    const data = {
       address: searchBoxRef.current?.getPlaces()[0]?.formatted_address,
-      city: city, 
+      city: city,
       postalCode: postalCode,
       region: region,
       latitude: latitude,
-      longitude: longitude
+      longitude: longitude,
+    };
+    updateListingLocation(data);
   };
-  updateListingLocation(data);
-};
-
 
   return (
     <Box
@@ -95,7 +94,11 @@ const updateListingData = () => {
           center={mapCenter}
           zoom={13}
           mapContainerStyle={{ width: "100%", height: "400px" }}
-        />
+        >
+          {latitude && longitude && (
+            <Marker position={{ lat: latitude, lng: longitude }} />
+          )}
+        </GoogleMap>
       </LoadScript>
       <Box
         sx={{

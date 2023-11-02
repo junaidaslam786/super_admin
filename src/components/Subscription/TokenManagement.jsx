@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, TextField, Typography, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Box, TextField, Typography, Button, Snackbar } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,8 +8,24 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-function createData(name, services, tokensBought, tokensUsed, tokensRemaining, removeTokens, addTokens) {
-  return { name, services, tokensBought, tokensUsed, tokensRemaining, removeTokens, addTokens };
+function createData(
+  name,
+  services,
+  tokensBought,
+  tokensUsed,
+  tokensRemaining,
+  removeTokens,
+  addTokens
+) {
+  return {
+    name,
+    services,
+    tokensBought,
+    tokensUsed,
+    tokensRemaining,
+    removeTokens,
+    addTokens,
+  };
 }
 
 const rows = [
@@ -70,6 +86,19 @@ const rows = [
 ];
 
 const TokenManagement = () => {
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleSave = () => {
+    // Logic to save the token price can be added here
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
   return (
     <Box
       sx={{
@@ -101,7 +130,7 @@ const TokenManagement = () => {
           Enter Token Price:
         </Typography>
         <TextField
-          label="Dollar to Tokens"
+          label="Price Per Token"
           placeholder=""
           fullWidth
           InputLabelProps={{
@@ -111,31 +140,32 @@ const TokenManagement = () => {
           }}
         />
         <Button
-            sx={{
-              width: "12vmin",
-              height: "6vmin",
-              color: "#00C800",
-              borderRadius: "1vmin",
-              backgroundColor: "white",
-              border: '0.2vmin solid #00C800',
-              "&:hover": {
-                color:'white',
-                backgroundColor:'#00C800'
-              },
-            }}
-          >
-            Save
-          </Button>
+          sx={{
+            width: "12vmin",
+            height: "6vmin",
+            color: "#00C800",
+            borderRadius: "1vmin",
+            backgroundColor: "white",
+            border: "0.2vmin solid #00C800",
+            "&:hover": {
+              color: "white",
+              backgroundColor: "#00C800",
+            },
+          }}
+          onClick={handleSave}
+        >
+          Save
+        </Button>
       </Box>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
-          alignItems:'center',
+          alignItems: "center",
           width: "90%",
           height: "80vmin",
-          marginTop:'10vmin',
+          marginTop: "10vmin",
           boxShadow: "0px 0px 2px black",
           borderRadius: "1vmin",
           padding: "2vmin",
@@ -147,152 +177,176 @@ const TokenManagement = () => {
         }}
       >
         <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems:'center',
-          justifyContent: "space-around",
-          boxShadow: "0px 0px 2px black",
-          width:'70%' ,
-          height:'8vmin',
-          borderRadius: "0.5vmin",
-          padding: "1vmin",
-          backgroundColor: "white",
-          transition: "0.3s ease",
-          "&:hover": {
-            boxShadow: "0px 0px 5px black",
-          },
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            boxShadow: "0px 0px 2px black",
+            width: "70%",
+            height: "8vmin",
+            borderRadius: "0.5vmin",
+            padding: "1vmin",
+            backgroundColor: "white",
+            transition: "0.3s ease",
+            "&:hover": {
+              boxShadow: "0px 0px 5px black",
+            },
+          }}
         >
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#737791'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#737791" }}
+          >
             Total Tokens:
           </Typography>
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#00C800'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#00C800" }}
+          >
             500
           </Typography>
         </Box>
         <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems:'center',
-          justifyContent: "space-around",
-          boxShadow: "0px 0px 2px black",
-          width:'70%' ,
-          height:'8vmin',
-          borderRadius: "0.5vmin",
-          padding: "1vmin",
-          backgroundColor: "white",
-          transition: "0.3s ease",
-          "&:hover": {
-            boxShadow: "0px 0px 5px black",
-          },
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            boxShadow: "0px 0px 2px black",
+            width: "70%",
+            height: "8vmin",
+            borderRadius: "0.5vmin",
+            padding: "1vmin",
+            backgroundColor: "white",
+            transition: "0.3s ease",
+            "&:hover": {
+              boxShadow: "0px 0px 5px black",
+            },
+          }}
         >
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#737791'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#737791" }}
+          >
             Tokens Sold:
           </Typography>
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#00C800'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#00C800" }}
+          >
             350
           </Typography>
         </Box>
         <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems:'center',
-          justifyContent: "space-around",
-          boxShadow: "0px 0px 2px black",
-          width:'70%' ,
-          height:'8vmin',
-          borderRadius: "0.5vmin",
-          padding: "1vmin",
-          backgroundColor: "white",
-          transition: "0.3s ease",
-          "&:hover": {
-            boxShadow: "0px 0px 5px black",
-          },
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            boxShadow: "0px 0px 2px black",
+            width: "70%",
+            height: "8vmin",
+            borderRadius: "0.5vmin",
+            padding: "1vmin",
+            backgroundColor: "white",
+            transition: "0.3s ease",
+            "&:hover": {
+              boxShadow: "0px 0px 5px black",
+            },
+          }}
         >
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#737791'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#737791" }}
+          >
             Tokens Remaining:
           </Typography>
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#00C800'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#00C800" }}
+          >
             150
           </Typography>
         </Box>
         <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems:'center',
-          justifyContent: "space-around",
-          boxShadow: "0px 0px 2px black",
-          width:'70%' ,
-          height:'8vmin',
-          borderRadius: "0.5vmin",
-          padding: "1vmin",
-          backgroundColor: "white",
-          transition: "0.3s ease",
-          "&:hover": {
-            boxShadow: "0px 0px 5px black",
-          },
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            boxShadow: "0px 0px 2px black",
+            width: "70%",
+            height: "8vmin",
+            borderRadius: "0.5vmin",
+            padding: "1vmin",
+            backgroundColor: "white",
+            transition: "0.3s ease",
+            "&:hover": {
+              boxShadow: "0px 0px 5px black",
+            },
+          }}
         >
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#737791'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#737791" }}
+          >
             Tokens In Use:
           </Typography>
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#00C800'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#00C800" }}
+          >
             270
           </Typography>
         </Box>
         <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems:'center',
-          justifyContent: "space-around",
-          boxShadow: "0px 0px 2px black",
-          width:'70%' ,
-          height:'8vmin',
-          borderRadius: "0.5vmin",
-          padding: "1vmin",
-          backgroundColor: "white",
-          transition: "0.3s ease",
-          "&:hover": {
-            boxShadow: "0px 0px 5px black",
-          },
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            boxShadow: "0px 0px 2px black",
+            width: "70%",
+            height: "8vmin",
+            borderRadius: "0.5vmin",
+            padding: "1vmin",
+            backgroundColor: "white",
+            transition: "0.3s ease",
+            "&:hover": {
+              boxShadow: "0px 0px 5px black",
+            },
+          }}
         >
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#737791'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#737791" }}
+          >
             Tokens Not In Use:
           </Typography>
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#00C800'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#00C800" }}
+          >
             80
           </Typography>
         </Box>
         <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems:'center',
-          justifyContent: "space-around",
-          boxShadow: "0px 0px 2px black",
-          width:'70%' ,
-          height:'8vmin',
-          borderRadius: "0.5vmin",
-          padding: "1vmin",
-          backgroundColor: "white",
-          transition: "0.3s ease",
-          "&:hover": {
-            boxShadow: "0px 0px 5px black",
-          },
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            boxShadow: "0px 0px 2px black",
+            width: "70%",
+            height: "8vmin",
+            borderRadius: "0.5vmin",
+            padding: "1vmin",
+            backgroundColor: "white",
+            transition: "0.3s ease",
+            "&:hover": {
+              boxShadow: "0px 0px 5px black",
+            },
+          }}
         >
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#737791'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#737791" }}
+          >
             Revenue Generated:
           </Typography>
-          <Typography sx={{fontSize:'2.5vmin', fontWeight:'600', color:'#00C800'}}>
+          <Typography
+            sx={{ fontSize: "2.5vmin", fontWeight: "600", color: "#00C800" }}
+          >
             $20000
           </Typography>
         </Box>
@@ -348,6 +402,17 @@ const TokenManagement = () => {
           </Table>
         </TableContainer>
       </Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message="Price has been set!"
+        action={
+          <Button color="inherit" size="small" onClick={handleCloseSnackbar}>
+            Close
+          </Button>
+        }
+      />
     </Box>
   );
 };
