@@ -187,6 +187,13 @@ const navigationConfig = [
       }
     ]
   },
+  {
+    id: "analytics",
+    title: "Analytics",
+    type: "item",
+    icon: <Community className={styles.icon} />,
+    navLink: "/analytics"
+  }
 
   // {
   //   id: "customers",

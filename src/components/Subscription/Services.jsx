@@ -34,9 +34,9 @@ const Services = ({name}) => {
             alignItems: "center",
             justifyContent: "space-around",
             width: "80%",
-            height: "30vmin",
+            height: "20vmin",
             boxShadow: "0px 0px 2px black",
-            borderRadius: "2vmin",
+            borderRadius: "0.4vmin",
             backgroundColor: "white",
             transition: "0.3s ease",
             "&:hover": {
@@ -44,10 +44,6 @@ const Services = ({name}) => {
             },
           }}
         >
-          <img
-            src={Logo}
-            style={{ width: "15vmin", height: "15vmin", borderRadius: "2vmin" }}
-          />
           <Box
             sx={{
               display: "flex",

@@ -33,7 +33,7 @@ const SubsLayout = ({ children }) => {
               backgroundColor: "white",
               display: "flex",
               flexDirection: "column",
-              borderRadius:'1vmin',
+              borderRadius:'0.4vmin',
               overflow:'hidden'
             }}
           >

@@ -163,10 +163,10 @@ const SubsConfig = ({ featureName }) => {
           flexDirection: "column",
           justifyContent: "space-between",
           width: "90%",
-          height: "40vmin",
+          height: "25vmin",
           padding: "3vmin",
           boxShadow: "0px 0px 2px black",
-          borderRadius: "2vmin",
+          borderRadius: "0.4vmin",
           backgroundColor: "white",
           transition: "0.3s ease",
           "&:hover": {
@@ -244,7 +244,7 @@ const SubsConfig = ({ featureName }) => {
             sx={{
               color: "#00C800",
               border: "0.1vmin solid #00C800",
-              width: "15vmin",
+              width: "10vmin",
               marginRight: "2vmin",
               "&:hover": {
                 color: "white",
@@ -258,7 +258,7 @@ const SubsConfig = ({ featureName }) => {
             sx={{
               color: "red",
               border: "0.1vmin solid red",
-              width: "15vmin",
+              width: "10vmin",
               "&:hover": {
                 color: "white",
                 backgroundColor: "red",
