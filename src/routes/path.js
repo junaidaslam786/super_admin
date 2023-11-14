@@ -21,6 +21,7 @@ import TradersViewPage from "../pages/user-management/TradersViewPage";
 import ServicesPage from "../pages/SubscriptionPage/ServicesPage";
 import TokenManagementPage from "../pages/SubscriptionPage/TokenManagementPage";
 import AnalyticsPage from "../pages/analytics/AnalyticsPage";
+import ReportsPage from "../pages/analytics/ReportsPage";
 // Add other required imports here ...
 
 const RoutesContent = () => {
@@ -77,6 +78,7 @@ const RoutesContent = () => {
         <Route index element={<TokenManagementPage />} />
       </Route>
       <Route path="/analytics" element={<AnalyticsPage />} />
+      <Route path="/reports" element={<ReportsPage />} />
     </Routes>
   );
 };
