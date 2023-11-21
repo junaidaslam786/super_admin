@@ -38,18 +38,24 @@ const TradersData = () => {
     skip: !selectedUserId,
   });
 
+  const handleViewClick = (userId) => {
+    // setSelectedUserId(userId); // Set the selected user ID state
+    // Navigate to TradersView and pass the selectedUserId as state
+    navigate("/trader", { state: { selectedUserId: userId } });
+  };
+
   useEffect(() => {
     if (users) {
       dispatch(setUsers(users));
     }
   }, [users, dispatch]);
 
-  useEffect(() => {
-    if (selectedUser) {
-      console.log("Selected user data:", selectedUser);
-      navigate("/trader"); // Navigate or take other actions based on the fetched data
-    }
-  }, [selectedUser, navigate]);
+  // useEffect(() => {
+  //   if (selectedUser) {
+  //     console.log("Selected user data:", selectedUser);
+  //     navigate("/trader"); // Navigate or take other actions based on the fetched data
+  //   }
+  // }, [selectedUser, navigate]);
 
   if (!traders)
     return (
@@ -131,11 +137,12 @@ const TradersData = () => {
           cellRender={(data) => (
             <VisibilityIcon
               style={{ cursor: "pointer" }}
-              onClick={() => {
-                setSelectedUserId(data.data.id);
-                // console.log("Selected user data:", selectedUser);
-                // navigate("/trader"); // Navigate or take other actions based on the fetched data
-              }}
+              // onClick={() => {
+              //   setSelectedUserId(data.data.id);
+              //   console.log("Selected user data:", selectedUser);
+              //   // navigate("/trader"); // Navigate or take other actions based on the fetched data
+              // }}
+              onClick={() => handleViewClick(data.data.id)}
             />
           )}
         />

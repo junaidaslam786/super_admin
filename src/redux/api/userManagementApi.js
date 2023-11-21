@@ -24,7 +24,6 @@ const userManagementApi = createApi({
       },
       onSuccess: (data, arg, thunkAPI) => {
         thunkAPI.dispatch(setUsers(data));
-
       },
     }),
 
@@ -74,7 +73,7 @@ const userManagementApi = createApi({
         };
       },
     }),
-    
+
     deactivateUser: builder.mutation({
       query: (id) => {
         const token = localStorage.getItem("token");
@@ -89,7 +88,6 @@ const userManagementApi = createApi({
         };
       },
     }),
-    
 
     deleteUser: builder.mutation({
       query: (id) => {
@@ -112,6 +110,22 @@ const userManagementApi = createApi({
         );
       },
     }),
+
+    
+    getAgentUser: builder.query({
+      query: (agentUserId) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `/agent/user/${agentUserId}`,
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+      // Optionally, you can add a transformResponse to handle the response data before it reaches the component
+      // transformResponse: (response) => response.data,
+    }),
   }),
 });
 
@@ -122,6 +136,7 @@ const {
   useDeleteUserMutation,
   useActivateUserMutation,
   useDeactivateUserMutation,
+  useGetAgentUserQuery,
 } = userManagementApi;
 
 export {
@@ -132,4 +147,5 @@ export {
   useDeleteUserMutation,
   useActivateUserMutation,
   useDeactivateUserMutation,
+  useGetAgentUserQuery,
 };

@@ -1,18 +1,29 @@
 import React from "react";
 import { Box, Typography, Link, Divider } from "@mui/material";
+import { useLocation } from "react-router-dom";
 import Zangi from "../../assets/Profile.svg";
 import Cover from "../../assets/doc.webp";
 import Partner from "../../assets/Profile.svg";
+import { useGetAgentUserQuery } from "../../redux/api/userManagementApi";
 
 const TradersView = () => {
+  const location = useLocation();
+  const selectedUserId = location.state?.selectedUserId;
+  console.log("Selected user ID:", selectedUserId);
+
+  const { data: selectedUser } = useGetAgentUserQuery(selectedUserId, {
+    skip: !selectedUserId,
+  });
+  console.log("Selected user data:", selectedUser);
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        backgroundColor:'#FAFBFC',
-        paddingTop:'2vmin'
+        backgroundColor: "#FAFBFC",
+        paddingTop: "2vmin",
       }}
     >
       <Box
@@ -55,7 +66,7 @@ const TradersView = () => {
                 fontWeight: "600",
               }}
             >
-              Active
+             {selectedUser?.user.active === true ? "Active" : "Inactive"}
             </Typography>
           </Box>
         </Box>
@@ -97,7 +108,7 @@ const TradersView = () => {
                 color: "#737791",
               }}
             >
-              Doe,
+              {selectedUser?.user.firstName}
             </Typography>
             <Typography
               sx={{
@@ -107,7 +118,7 @@ const TradersView = () => {
                 marginLeft: "1vmin",
               }}
             >
-              John
+              {selectedUser?.user.lastName}
             </Typography>
           </Box>
           <Divider sx={{ backgroundColor: "#00C800" }} />
@@ -145,7 +156,7 @@ const TradersView = () => {
                   marginLeft: "1vmin",
                 }}
               >
-                +0123456789
+                {selectedUser?.user.phoneNumber}
               </Typography>
             </Box>
             <Typography
@@ -156,7 +167,7 @@ const TradersView = () => {
                 marginLeft: "1vmin",
               }}
             >
-              abc@bsd.com
+              {selectedUser?.user.email}
             </Typography>
           </Box>
           <Divider sx={{ backgroundColor: "#00C800" }} />
@@ -186,80 +197,80 @@ const TradersView = () => {
                 marginLeft: "1vmin",
               }}
             >
-              Purani Haveli
+              {selectedUser?.companyAddress}
             </Typography>
           </Box>
           <Divider sx={{ backgroundColor: "#00C800" }} />
         </Box>
       </Box>
       <Box
-      sx={{
-        width:'98%',
-        margin:'0 1%'
-      }}
+        sx={{
+          width: "98%",
+          margin: "0 1%",
+        }}
       >
-      <Box
+        <Box
+          sx={{
+            width: "100%",
+            padding: "2vmin",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Typography
             sx={{
-              width: "100%",
-              padding: "2vmin",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              fontSize: "3.5vmin",
+              fontWeight: "500",
+              color: "#00C800",
             }}
           >
-            <Typography
-              sx={{
-                fontSize: "3.5vmin",
-                fontWeight: "500",
-                color: "#00C800",
-              }}
-            >
-              Company Name:
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "3vmin",
-                fontWeight: "500",
-                color: "#737791",
-                marginLeft: "1vmin",
-              }}
-            >
-              Landa Bazaar
-            </Typography>
-          </Box>
-          <Divider sx={{ backgroundColor: "#00C800" }} />
-          <Box
+            Company Name:
+          </Typography>
+          <Typography
             sx={{
-              width: "100%",
-              padding: "2vmin",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              fontSize: "3vmin",
+              fontWeight: "500",
+              color: "#737791",
+              marginLeft: "1vmin",
             }}
           >
-            <Typography
-              sx={{
-                fontSize: "3.5vmin",
-                fontWeight: "500",
-                color: "#00C800",
-              }}
-            >
-              Company Address:
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "3vmin",
-                fontWeight: "500",
-                color: "#737791",
-                marginLeft: "1vmin",
-              }}
-            >
-              Baaby da Ahaata
-            </Typography>
-          </Box>
-          <Divider sx={{ backgroundColor: "#00C800" }} />
-          <img src={Cover} style={{width:'100%'}}/>
-          <Divider sx={{ backgroundColor: "#00C800" }} />
+            {selectedUser?.companyName}
+          </Typography>
+        </Box>
+        <Divider sx={{ backgroundColor: "#00C800" }} />
+        <Box
+          sx={{
+            width: "100%",
+            padding: "2vmin",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "3.5vmin",
+              fontWeight: "500",
+              color: "#00C800",
+            }}
+          >
+            Company Address:
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "3vmin",
+              fontWeight: "500",
+              color: "#737791",
+              marginLeft: "1vmin",
+            }}
+          >
+            Baaby da Ahaata
+          </Typography>
+        </Box>
+        <Divider sx={{ backgroundColor: "#00C800" }} />
+        <img src={selectedUser?.documentUrl} style={{ width: "100%" }} />
+        <Divider sx={{ backgroundColor: "#00C800" }} />
       </Box>
     </Box>
   );

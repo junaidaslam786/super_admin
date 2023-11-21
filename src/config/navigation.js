@@ -12,6 +12,7 @@ import {ReactComponent as Appointments} from '../assets/Appointments.svg'
 import {ReactComponent as Blog} from '../assets/Blog.svg'
 import {ReactComponent as Community} from '../assets/Community.svg'
 import styles from '../config/navigationConfig.module.css'
+import { Payment } from "@mui/icons-material"
 
 
 const navigationConfig = [
@@ -34,6 +35,13 @@ const navigationConfig = [
     navLink: "/profile"
   },
   {
+    id: "payments",
+    title: "Payments",
+    icon: <Payment className={styles.icon} />,
+    badge: "warning",
+    navLink: "/payments"
+  },
+  {
     id: "subscriptionManagement",
     title: "Subscription",
     type: "collapse",
@@ -44,7 +52,7 @@ const navigationConfig = [
     id: "userManagement",
     title: "User Management",
     type: "collapse",
-    icon: <Subs className={styles.icon} />,
+    icon: <Icon.User className={styles.icon} />,
     children: [
       {
         id: "createUser",
