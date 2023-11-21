@@ -265,7 +265,7 @@ const TradersView = () => {
               marginLeft: "1vmin",
             }}
           >
-            Baaby da Ahaata
+            {selectedUser?.companyAddress}
           </Typography>
         </Box>
         <Divider sx={{ backgroundColor: "#00C800" }} />
