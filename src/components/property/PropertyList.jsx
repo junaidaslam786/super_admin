@@ -40,46 +40,7 @@ const PropertyList = () => {
   const [updateProperty] = useUpdatePropertyMutation();
 
   const userIdToNameMap = useSelector(selectUserIdToNameMap);
-  // const dispatch = useDispatch();
-  // const { data: properties } = useGetAllPropertiesQuery();
 
-  //   useEffect(() => {
-  //     if (properties) {
-  //         const fetchUserNamesAndUpdateProperties = async () => {
-  //             const userFetchPromises = properties.map(async property => {
-  //                 if (userCache[property.createdBy]) {
-  //                     // If user details are in the cache, use them
-  //                     return userCache[property.createdBy];
-  //                 } else {
-  //                     // If not in cache, make an API call
-  //                     const userResponse = await dispatch(
-  //                         userManagementApi.endpoints.getUserById.initiate(property.createdBy)
-  //                     );
-  //                     const user = userResponse?.data;
-  //                     if (user) {
-  //                         // Store user details in the cache
-  //                         userCache[property.createdBy] = user;
-  //                     }
-  //                     return user;
-  //                 }
-  //             });
-
-  //             const userResponses = await Promise.all(userFetchPromises);
-
-  //             const propertiesWithNames = properties.map((property, index) => {
-  //                 const user = userResponses[index];
-  //                 return {
-  //                     ...property,
-  //                     createdBy: user?.firstName || property.createdBy
-  //                 };
-  //             });
-
-  //             setUpdatedProperties(propertiesWithNames);
-  //         };
-
-  //         fetchUserNamesAndUpdateProperties();
-  //     }
-  // }, [properties, dispatch]);
 
   useEffect(() => {
     if (properties) {
@@ -92,32 +53,7 @@ const PropertyList = () => {
     }
   }, [properties, userIdToNameMap]);
 
-  // useEffect(() => {
-  //   if (properties) {
-  //     // Append new properties to the existing list
-  //     dispatch(setProperties(properties));
-  //   }
-  // }, [properties, dispatch]);
-
-  // useEffect(() => {
-  //   const fetchUserNamesAndUpdateProperties = async () => {
-  //     const propertiesWithNames = [];
-  //     if (Array.isArray(properties)) {
-  //       for (let property of properties) {
-  //         const userResponse =
-  //           await userManagementApi.endpoints.getUserById.initiate(
-  //             property.createdBy
-  //           );
-  //         const propertyCopy = { ...property };
-  //         propertyCopy.createdBy =
-  //           userResponse?.data?.firstName || propertyCopy.createdBy;
-  //         propertiesWithNames.push(propertyCopy);
-  //       }
-  //     }
-  //     setUpdatedProperties(propertiesWithNames);
-  //   };
-  //   fetchUserNamesAndUpdateProperties();
-  // }, [properties]);
+  
 
   if (isLoading)
     return (

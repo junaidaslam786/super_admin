@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, TextField, Typography, Button, Snackbar } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,6 +7,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import {
+  useUpdateConfigMutation,
+  useGetConfigQuery,
+  useGetAllTokensQuery,
+} from "../../redux/api/tokenManagementApi";
 
 function createData(
   name,
@@ -87,11 +92,47 @@ const rows = [
 
 const TokenManagement = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [fetchedTokenPrice, setFetchedTokenPrice] = useState("");
+  const [inputTokenPrice, setInputTokenPrice] = useState("");
+  const [updateConfig, { isLoading: isUpdating, isError: updateError }] =
+    useUpdateConfigMutation();
 
-  const handleSave = () => {
-    // Logic to save the token price can be added here
-    setOpenSnackbar(true);
+  const { data: configData } = useGetConfigQuery("tokenPrice");
+  console.log(configData)
+  // const {
+  //   data: tokensData,
+  //   isLoading: isLoadingTokens,
+  //   isError: isErrorTokens,
+  // } = useGetAllTokensQuery();
+
+  // console.log("Tokens data:", tokensData);
+
+  useEffect(() => {
+    if (configData) {
+      setFetchedTokenPrice(configData.configValue);
+      setInputTokenPrice(configData.configValue); // Initialize input with fetched value
+    }
+  }, [configData]);
+
+  
+  const handleSave = async () => {
+    try {
+      console.log("Updating config with:", inputTokenPrice);
+      const response = await updateConfig({
+        configKey: "tokenPrice",
+        configValue: inputTokenPrice,
+        stripePriceId: "", // Include if applicable
+      }).unwrap();
+  
+      console.log("Update response:", response);
+      setOpenSnackbar(true);
+      setFetchedTokenPrice(inputTokenPrice); // Update the displayed price after successful update
+    } catch (error) {
+      console.error("Error updating config:", error);
+      // Display an error message or handle the error appropriately
+    }
   };
+  
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -131,6 +172,8 @@ const TokenManagement = () => {
         </Typography>
         <TextField
           label="Price Per Token"
+          value={inputTokenPrice}
+          onChange={(e) => setInputTokenPrice(e.target.value)}
           placeholder=""
           fullWidth
           InputLabelProps={{

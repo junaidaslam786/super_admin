@@ -21,7 +21,7 @@ const featureManagementApi = createApi({
           },
         };
       },
-      invalidatesTags: [{ type: "FeatureManagement", id: "List" }], // <-- Invalidate the cache for getAllFeature
+      invalidatesTags: [{ type: "FeatureManagement", id: "List" }],
     }),
     getAllFeature: builder.query({
       query: () => {
@@ -29,23 +29,60 @@ const featureManagementApi = createApi({
         return {
           url: "superadmin/feature/list-all",
           credentials: "include",
-          header: {
+          headers: {
             Authorization: `Bearer ${token}`,
           },
         };
       },
-      providesTags: [{ type: "FeatureManagement", id: "List" }], // <-- This tag represents the cached data for getAllFeature
+      providesTags: [{ type: "FeatureManagement", id: "List" }],
       onSuccess: (data, arg, thunkAPI) => {
         thunkAPI.dispatch(setFeatures(data));
       },
     }),
+    updateTokensForFeature: builder.mutation({
+      query: ({ id, data }) => { // Corrected to include `data` as a parameter
+        const token = localStorage.getItem("token");
+        return {
+          url: `/superadmin/feature/${id}`,
+          method: "PUT",
+          body: data,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+      },
+    }),
+    getFeatureById: builder.query({
+      query: (featureId) => {
+        const token = localStorage.getItem('token');
+        return {
+          url: `/superadmin/feature/${featureId}`,
+          credentials: 'include',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+      providesTags: (result, error, featureId) => [{ type: 'FeatureManagement', id: featureId }],
+    }),
+
+    
+
   }),
 });
 
-const { useCreateFeatureMutation, useGetAllFeatureQuery } =
-  featureManagementApi;
+const {
+  useCreateFeatureMutation,
+  useGetAllFeatureQuery,
+  useUpdateTokensForFeatureMutation,
+  useGetFeatureByIdQuery
+} = featureManagementApi;
 export {
   featureManagementApi,
   useCreateFeatureMutation,
   useGetAllFeatureQuery,
+  useUpdateTokensForFeatureMutation,
+  useGetFeatureByIdQuery,
 };

@@ -1,9 +1,9 @@
 const menuItems = [
-    {
-      id: "services",
-      title: "Services",
-      navLink: "/services"
-    },
+    // {
+    //   id: "services",
+    //   title: "Services",
+    //   navLink: "/services"
+    // },
     {
       id: "configuration",
       title: "Configuration",

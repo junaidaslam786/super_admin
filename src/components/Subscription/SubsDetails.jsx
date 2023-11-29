@@ -77,10 +77,10 @@ const SubsDetails = () => {
           alignItems: "center",
         }}
       >
-        <img
+        {/* <img
           src={Image}
           style={{ width: "60vmin", height: "30vmin", borderRadius: "2vmin" }}
-        />
+        /> */}
         <Typography
           sx={{
             marginTop: "3vmin",

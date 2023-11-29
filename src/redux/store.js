@@ -7,6 +7,9 @@ import { userApi } from "./api/userApi";
 import { userManagementApi } from "./api/userManagementApi";
 import { propertyManagementApi } from "./api/propertyManagementApi";
 import { featureManagementApi } from "./api/featureManagementApi";
+import { analyticsApi } from "./api/analyticsApi";
+import { tokenManagementApi } from "./api/tokenManagementApi";
+import { paymentsApi } from "./api/paymnetsApi";
 
 import userManagementReducer from "./features/userManagementSlice";
 import propertyManagementReducer from "./features/propertyManagementSlice";
@@ -26,9 +29,15 @@ const persistConfig = {
     "userManagement",
     "propertyManagement",
     "featureManagement",
+    "analyticsApi",
+    "tokenManagementApi",
+    "paymentsApi",
     userManagementApi.reducerPath,
     propertyManagementApi.reducerPath,
     featureManagementApi.reducerPath,
+    analyticsApi.reducerPath,
+    tokenManagementApi.reducerPath,
+    paymentsApi.reducerPath,
   ], 
 };
 
@@ -38,6 +47,9 @@ const rootReducer = combineReducers({
   [userManagementApi.reducerPath]: userManagementApi.reducer,
   [propertyManagementApi.reducerPath]: propertyManagementApi.reducer,
   [featureManagementApi.reducerPath]: featureManagementApi.reducer,
+  [analyticsApi.reducerPath]: analyticsApi.reducer,
+  [tokenManagementApi.reducerPath]: tokenManagementApi.reducer,
+  [paymentsApi.reducerPath]: paymentsApi.reducer,
   userState: userReducer,
   userManagement: userManagementReducer,
   propertyManagement: propertyManagementReducer,
@@ -72,6 +84,9 @@ const store = configureStore({
       userManagementApi.middleware,
       propertyManagementApi.middleware,
       featureManagementApi.middleware,
+      analyticsApi.middleware,
+      tokenManagementApi.middleware,
+      paymentsApi.middleware,
       toastNotificationsMiddleware,
     ]),
 });

@@ -46,7 +46,7 @@ const navigationConfig = [
     title: "Subscription",
     type: "collapse",
     icon: <Subs className={styles.icon} />,
-    navLink: "/subscription-details"
+    navLink: "/token-management"
   },
   {
     id: "userManagement",
@@ -84,6 +84,20 @@ const navigationConfig = [
         icon: <Icon.Circle size={12} />,
         // navLink: "/user/listing-admin"
         navLink: "/all-traders"
+      },
+      {
+        id: "tradersApprovals",
+        title: "Traders Approvals",
+        type: "item",
+        icon: <Icon.Circle size={12} />,
+        navLink: "/trader-approvals"
+      },
+      {
+        id: "listingAdmins",
+        title: "Admins",
+        type: "item",
+        icon: <Icon.Circle size={12} />,
+        navLink: "/all-admins"
       }
     ]
   },

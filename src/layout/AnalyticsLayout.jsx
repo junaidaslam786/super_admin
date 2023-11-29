@@ -2,7 +2,12 @@ import React from "react";
 import MainLayout from "./MainLayout";
 import { Box, Typography } from "@mui/material";
 
-const AnalyticsLayout = ({ children }) => {
+const AnalyticsLayout = ({ children, sectionRefs }) => {
+  const scrollToRef = (ref) => {
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <MainLayout>
       <Box
@@ -34,6 +39,7 @@ const AnalyticsLayout = ({ children }) => {
             }}
           >
             <Typography
+              onClick={() => scrollToRef(sectionRefs.services)}
               sx={{
                 width: "100%",
                 height: "8vmin",
@@ -53,6 +59,7 @@ const AnalyticsLayout = ({ children }) => {
                 Services
             </Typography>
             <Typography
+              onClick={() => scrollToRef(sectionRefs.tokens)}
               sx={{
                 width: "100%",
                 height: "8vmin",
@@ -72,6 +79,7 @@ const AnalyticsLayout = ({ children }) => {
                 Tokens
             </Typography>
             <Typography
+              onClick={() => scrollToRef(sectionRefs.customers)}
               sx={{
                 width: "100%",
                 height: "8vmin",
@@ -91,6 +99,7 @@ const AnalyticsLayout = ({ children }) => {
                 Customers
             </Typography>
             <Typography
+              onClick={() => scrollToRef(sectionRefs.traders)}
               sx={{
                 width: "100%",
                 height: "8vmin",
@@ -110,6 +119,7 @@ const AnalyticsLayout = ({ children }) => {
                 Traders
             </Typography>
             <Typography
+              onClick={() => scrollToRef(sectionRefs.properties)}
               sx={{
                 width: "100%",
                 height: "8vmin",

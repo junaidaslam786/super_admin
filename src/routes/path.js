@@ -22,6 +22,8 @@ import ServicesPage from "../pages/SubscriptionPage/ServicesPage";
 import TokenManagementPage from "../pages/SubscriptionPage/TokenManagementPage";
 import AnalyticsPage from "../pages/analytics/AnalyticsPage";
 import ReportsPage from "../pages/analytics/ReportsPage";
+import AllAdminsPage from "../pages/user-management/AllAdminsPage";
+import TradersApprovalsPage from "../pages/user-management/TradersApprovalsPage";
 // Add other required imports here ...
 
 const RoutesContent = () => {
@@ -44,8 +46,14 @@ const RoutesContent = () => {
       <Route path="/all-traders" element={<ProtectedRoute />}>
         <Route index element={<AllTradersPage />} />
       </Route>
+      <Route path="/all-admins" element={<ProtectedRoute />}>
+        <Route index element={<AllAdminsPage />} />
+      </Route>
       <Route path="/trader" element={<ProtectedRoute />}>
         <Route index element={<TradersViewPage />} />
+      </Route>
+      <Route path="/trader-approvals" element={<ProtectedRoute />}>
+        <Route index element={<TradersApprovalsPage />} />
       </Route>
       <Route path="/create-user" element={<ProtectedRoute />}>
         <Route index element={<CreateUserPage />} />
@@ -68,7 +76,7 @@ const RoutesContent = () => {
       <Route path="/configuration" element={<ProtectedRoute />}>
         <Route index element={<SubsConfigPage />} />
       </Route>
-      <Route path="/subscription-details" element={<ProtectedRoute />}>
+      <Route path="/subscription-details/:id" element={<ProtectedRoute />}>
         <Route index element={<SubsDetailsPage />} />
       </Route>
       <Route path="/services" element={<ProtectedRoute />}>

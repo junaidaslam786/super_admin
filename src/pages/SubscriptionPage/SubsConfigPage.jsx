@@ -1,78 +1,27 @@
-// import React, { useState } from 'react';
-// import SubsLayout from '../../layout/SubsLayout';
-// import SubsConfig from '../../components/Subscription/SubsConfig';
-// import { useGetAllFeatureQuery } from '../../redux/api/featureManagementApi'; 
-// import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
-// const SubsConfigPage = () => {
-//   const [selectedFeatures, setSelectedFeatures] = useState([]);
-//   const { data: features, isLoading, isError } = useGetAllFeatureQuery();
-
-//   const handleFeatureSelect = (featureName) => {
-//     if (!selectedFeatures.includes(featureName)) {
-//       setSelectedFeatures(prevFeatures => [...prevFeatures, featureName]);
-//     }
-//   };
-
-//   if (isLoading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (isError) {
-//     return <div>Error loading features</div>;
-//   }
-
-//   return (
-//     <SubsLayout>
-//       <FormControl variant="outlined" style={{ width: '200px', marginBottom: '20px' }}>
-//         <InputLabel>Feature</InputLabel>
-//         <Select
-//           label="Feature"
-//           value=""
-//           onChange={(e) => handleFeatureSelect(e.target.value)}
-//         >
-//           {features.map((feature, index) => (
-//             <MenuItem key={feature.id} value={feature.name}>
-//               {feature.name}
-//             </MenuItem>
-//           ))}
-//         </Select>
-//       </FormControl>
-//       {selectedFeatures.map((featureName, index) => (
-//         <SubsConfig key={index} featureName={featureName} />
-//       ))}
-//     </SubsLayout>
-//   );
-// };
-
-// export default SubsConfigPage;
 
 import React, { useState, useEffect } from 'react';
 import SubsLayout from '../../layout/SubsLayout';
 import SubsConfig from '../../components/Subscription/SubsConfig';
 import { useGetAllFeatureQuery } from '../../redux/api/featureManagementApi'; 
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
 const SubsConfigPage = () => {
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const { data: features, isLoading, isError } = useGetAllFeatureQuery();
 
-  useEffect(() => {
-    // Read selected features from localStorage on component mount
-    const storedFeatures = localStorage.getItem('selectedFeatures');
-    if (storedFeatures) {
-      setSelectedFeatures(JSON.parse(storedFeatures));
-    }
-  }, []);
-
-  const handleFeatureSelect = (featureName) => {
-    if (!selectedFeatures.includes(featureName)) {
-      const updatedFeatures = [...selectedFeatures, featureName];
-      setSelectedFeatures(updatedFeatures);
-      // Store the updated list of selected features to localStorage
-      localStorage.setItem('selectedFeatures', JSON.stringify(updatedFeatures));
-    }
+  const slotsLabelMapping = {
+    'Video Call': 'Number of slots',
+    'Property Listing': 'Number of properties',
+    'API Subscription': 'Number of API calls',
+    'Analytics & Reporting': 'Number of reports'
   };
+  const freeLabelMapping = {
+    'Video Call': 'Free Slots',
+    'Property Listing': 'Free Property listings',
+    'API Subscription': 'Free API calls',
+    'Analytics & Reporting': 'Free Reports'
+  };
+
+  const { data: features, isLoading, isError } = useGetAllFeatureQuery();
+  console.log(features);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -84,23 +33,19 @@ const SubsConfigPage = () => {
 
   return (
     <SubsLayout>
-      <FormControl variant="outlined" style={{ width: '200px', marginBottom: '20px' }}>
-        <InputLabel>Feature</InputLabel>
-        <Select
-          label="Feature"
-          value=""
-          onChange={(e) => handleFeatureSelect(e.target.value)}
-        >
-          {features.map((feature, index) => (
-            <MenuItem key={feature.id} value={feature.name}>
-              {feature.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {selectedFeatures.map((featureName, index) => (
-        <SubsConfig key={index} featureName={featureName} />
-      ))}
+      {/* List all features here */}
+      {features && features.map((feature) => {
+        // Get the correct slots label for the current feature
+        const slotsLabel = slotsLabelMapping[feature.name] || 'Number of slots';
+        const freeLabel = freeLabelMapping[feature.name] || 'Free Slots';
+
+        return (
+          <div key={feature.id}>
+            {/* Pass the slotsLabel to the SubsConfig component */}
+            <SubsConfig featureName={feature.name} featureId={feature.id} slotsLabel={slotsLabel} freeLabel={freeLabel}/>
+          </div>
+        );
+      })}
     </SubsLayout>
   );
 };

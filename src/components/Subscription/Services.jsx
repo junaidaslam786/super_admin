@@ -1,8 +1,15 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import Logo from "../../assets/omg.png";
+import { useNavigate } from "react-router-dom";
 
-const Services = ({name}) => {
+
+const Services = ({name, id}) => {
+  const navigate = useNavigate();
+
+  const handleDetailsClick = () => {
+    navigate(`/subscription-details/${id}`);
+  };
   return (
     <Box
       sx={{
@@ -155,6 +162,7 @@ const Services = ({name}) => {
                 backgroundColor:'#00C800'
               },
             }}
+            onClick={handleDetailsClick}
           >
             Details
           </Button>
