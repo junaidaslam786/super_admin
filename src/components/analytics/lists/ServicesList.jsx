@@ -2,7 +2,32 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Image from "../../../assets/property2.svg";
 
+import {
+  useGetUsersAnalyticsQuery,
+  useGetActiveUsersAnalyticsQuery,
+  useGetNonActiveUsersAnalyticsQuery,
+  useGetCustomersAnalyticsQuery
+} from "../../../redux/api/analyticsApi";
+
 const ServicesList = () => {
+
+  // Fetch data from the API endpoint using the custom hook provided by the query object
+
+  const {data, error, isLoading } = useGetCustomersAnalyticsQuery();
+  console.log(data);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // Handle error state
+  if (error) {
+    return <div>Error occurred: {error.message}</div>;
+  }
+
+  // Use the data to display in your UI
+  const totalUsers = data ? data.totalUsers : 'N/A'; // Replace 'data.totalUsers' with the correct data path
+
   return (
     <Box
       sx={{
@@ -42,7 +67,7 @@ const ServicesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -95,7 +120,7 @@ const ServicesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -148,7 +173,7 @@ const ServicesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -201,7 +226,7 @@ const ServicesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
