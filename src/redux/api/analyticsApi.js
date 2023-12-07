@@ -51,6 +51,48 @@ const analyticsApi = createApi({
         };
       },
     }),
+    getUserDataForReports: builder.query({
+      query: (body) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: "/superadmin/reports/users",
+          method: "POST",
+          body: body,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
+    getPropertiesDataForReports: builder.query({
+      query: (body) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: "/superadmin/reports/properties",
+          method: "POST",
+          body: body,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
+    getServicesDataForReports: builder.query({
+      query: (body) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: "/superadmin/reports/services",
+          method: "POST",
+          body: body,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
     getCustomersAnalytics: builder.query({
       query: () => {
         // const { startDate, endDate } = getDefaultDates();
@@ -143,6 +185,9 @@ const {
   useGetAllAgentsQuery,
   useGetAllPropertyAnalyticsQuery,
   useGetAllSoldPropertiesQuery,
+  useGetUserDataForReportsQuery,
+  useGetPropertiesDataForReportsQuery,
+  useGetServicesDataForReportsQuery,
 } = analyticsApi;
 
 export {
@@ -155,4 +200,7 @@ export {
   useGetAllAgentsQuery,
   useGetAllPropertyAnalyticsQuery, 
   useGetAllSoldPropertiesQuery,
+  useGetUserDataForReportsQuery,
+  useGetPropertiesDataForReportsQuery,
+  useGetServicesDataForReportsQuery,
 };

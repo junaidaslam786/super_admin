@@ -1,4 +1,137 @@
-import React, { useState } from "react";
+// import React, { useState, useEffect } from "react";
+// import {
+//   Checkbox,
+//   FormControlLabel,
+//   FormGroup,
+//   Box,
+//   Container,
+//   Typography,
+//   Paper,
+// } from "@mui/material";
+// import { CSVLink } from "react-csv";
+// import { useGetUserDataForReportsQuery } from "../../../redux/api/analyticsApi";
+
+// const categoryData = {
+//   Users: ["Admin", "Agent", "Customer"],
+//   Properties: ["Listed", "Sold", "Not Sold"],
+//   Services: [
+//     "Video Call",
+//     "API Subscriptions",
+//     "Property Listing",
+//     "Reports & Analytics",
+//   ],
+// };
+
+// const Reports = () => {
+//   const [selectedCategory, setSelectedCategory] = useState(null);
+//   const [selectedSubCategories, setSelectedSubCategories] = useState({});
+
+//   // Transform sub-categories to lowercase for API
+//   const transformedSubCategories = Object.keys(selectedSubCategories).map(
+//     (subCat) => subCat.toLowerCase()
+//   );
+
+//   const { data: userData, isFetching } = useGetUserDataForReportsQuery(
+//     {
+//       userCategories: transformedSubCategories,
+//     },
+//     {
+//       skip: !selectedCategory || transformedSubCategories.length === 0,
+//     }
+//   );
+
+//   useEffect(() => {
+//     if (selectedCategory === "Users") {
+//       setSelectedSubCategories({
+//         Admin: true,
+//         Agent: true,
+//         Customer: true,
+//       });
+//     }
+//   }, [selectedCategory]);
+
+//   const handleMainCategoryChange = (category) => {
+//     setSelectedCategory(category);
+//     setSelectedSubCategories({});
+//   };
+
+//   const handleSubCategoryChange = (subCategory) => {
+//     setSelectedSubCategories((prev) => ({
+//       ...prev,
+//       [subCategory]: !prev[subCategory],
+//     }));
+//   };
+
+//   // Headers for CSV file
+//   const flattenedUserData = userData ? [].concat(...Object.values(userData.userData)) : [];
+//   const generateCSVHeaders = () => {
+//     return flattenedUserData.length > 0
+//       ? Object.keys(flattenedUserData[0]).map(key => ({
+//           label: key.charAt(0).toUpperCase() + key.slice(1),
+//           key: key
+//         }))
+//       : [];
+//   };
+//   const csvHeaders = generateCSVHeaders();
+
+//   return (
+//     <Container maxWidth="lg">
+//       <Paper elevation={3} sx={{ p: 3, overflowX: "auto" }}>
+//         <Typography gutterBottom variant="h6">
+//           Select Category
+//         </Typography>
+//         <FormGroup>
+//           {Object.keys(categoryData).map((mainCategory) => (
+//             <FormControlLabel
+//               key={mainCategory}
+//               control={
+//                 <Checkbox
+//                   checked={selectedCategory === mainCategory}
+//                   onChange={() => handleMainCategoryChange(mainCategory)}
+//                 />
+//               }
+//               label={mainCategory}
+//             />
+//           ))}
+//         </FormGroup>
+//         {selectedCategory && (
+//           <Box sx={{ my: 2 }}>
+//             <Typography variant="subtitle1">Sub-Categories</Typography>
+//             <FormGroup>
+//               {categoryData[selectedCategory].map((subCategory) => (
+//                 <FormControlLabel
+//                   key={subCategory}
+//                   control={
+//                     <Checkbox
+//                       checked={!!selectedSubCategories[subCategory]}
+//                       onChange={() => handleSubCategoryChange(subCategory)}
+//                     />
+//                   }
+//                   label={subCategory}
+//                 />
+//               ))}
+//             </FormGroup>
+//           </Box>
+//         )}
+
+//         <CSVLink
+//           data={flattenedUserData}
+//           headers={csvHeaders}
+//           filename="user_data_report.csv"
+//           className="btn btn-primary"
+//           style={{ marginTop: "20px" }}
+//         >
+//           Download Report
+//         </CSVLink>
+//         {isFetching && <Typography>Loading data...</Typography>}
+//       </Paper>
+//     </Container>
+//   );
+// };
+
+// export default Reports;
+
+import React, { useState, useEffect } from "react";
 import {
   Checkbox,
   FormControlLabel,
@@ -6,43 +139,91 @@ import {
   Box,
   Container,
   Typography,
-  Button,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
-import { saveAs } from "file-saver"; // Remember to install file-saver
+import { CSVLink } from "react-csv";
+import {
+  useGetUserDataForReportsQuery,
+  useGetPropertiesDataForReportsQuery,
+  useGetServicesDataForReportsQuery,
+} from "../../../redux/api/analyticsApi";
 
 const categoryData = {
-  Users: ["Admin", "Trader", "Customer"],
+  Users: ["Admin", "Agent", "Customer"],
   Properties: ["Listed", "Sold", "Not Sold"],
   Services: [
     "Video Call",
     "API Subscriptions",
     "Property Listing",
-    'Reports & Analytics'
+    "Reports & Analytics",
   ],
 };
 
-const mockExcelData = [
-  { column1: "Bsss", column2: "Ek", column3: "Representation" },
-  { column1: "Backend", column2: "Nai", column3: "Kol" },
-];
-
-function Reports() {
-  const theme = useTheme();
-  const isXSmall = useMediaQuery(theme.breakpoints.down("xs"));
-  const isSmall = useMediaQuery(theme.breakpoints.between("xs", "sm"));
-  const isMedium = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
+const Reports = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState({});
+
+  // Transform sub-categories to lowercase for API
+  const transformedSubCategories = Object.keys(selectedSubCategories).map(
+    (subCat) => subCat.toLowerCase()
+  );
+
+  const { data: userData, isFetching: isFetchingUsers } =
+    useGetUserDataForReportsQuery(
+      { userCategories: transformedSubCategories },
+      {
+        skip:
+          selectedCategory !== "Users" || transformedSubCategories.length === 0,
+      }
+    );
+
+  const { data: propertiesData, isFetching: isFetchingProperties } =
+    useGetPropertiesDataForReportsQuery(
+      { propertyCategories: transformedSubCategories },
+      {
+        skip:
+          selectedCategory !== "Properties" ||
+          transformedSubCategories.length === 0,
+      }
+    );
+
+  const { data: servicesData, isFetching: isFetchingServices } =
+    useGetServicesDataForReportsQuery(
+      { serviceCategories: transformedSubCategories },
+      {
+        skip:
+          selectedCategory !== "Services" ||
+          transformedSubCategories.length === 0,
+      }
+    );
+
+  useEffect(() => {
+    const subCategories = categoryData[selectedCategory];
+    if (subCategories) {
+      setSelectedSubCategories(
+        subCategories.reduce((acc, subCat) => ({ ...acc, [subCat]: true }), {})
+      );
+    }
+  }, [selectedCategory]);
+
+  const generateCSVContent = (data) => {
+    if (!data) return { headers: [], rows: [] };
+
+    const rows = [].concat(...Object.values(data));
+    const headers =
+      rows.length > 0
+        ? Object.keys(rows[0]).map((key) => ({
+            label: key.charAt(0).toUpperCase() + key.slice(1),
+            key: key,
+          }))
+        : [];
+
+    return { headers, rows };
+  };
+
+  const usersCSV = generateCSVContent(userData?.userData);
+  const propertiesCSV = generateCSVContent(propertiesData?.propertyData);
+  const servicesCSV = generateCSVContent(servicesData?.serviceData);
 
   const handleMainCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -50,48 +231,29 @@ function Reports() {
   };
 
   const handleSubCategoryChange = (subCategory) => {
-    setSelectedSubCategories((prevSelectedSubCategories) => {
-      const newSubCategories = { ...prevSelectedSubCategories };
-      if (newSubCategories[subCategory]) {
-        delete newSubCategories[subCategory];
-      } else {
-        newSubCategories[subCategory] = true;
-      }
-      return newSubCategories;
-    });
+    setSelectedSubCategories((prev) => ({
+      ...prev,
+      [subCategory]: !prev[subCategory],
+    }));
   };
 
-  const handleSubmit = () => {
-    // Simulate generating and downloading an Excel file
-    const fileName = `${selectedCategory}-${Object.keys(
-      selectedSubCategories
-    ).join("-")}.xlsx`;
-    const fileData = new Blob(
-      [
-        /* data representing the Excel file */
-      ],
-      {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      }
-    );
-    saveAs(fileData, fileName);
-  };
-
-  const customColor = "#00C800";
+  const flattenedData =
+    userData?.userData ||
+    propertiesData?.propertyData ||
+    servicesData?.serviceData ||
+    [];
+  const csvHeaders =
+    flattenedData.length > 0
+      ? Object.keys(flattenedData[0]).map((key) => ({
+          label: key.charAt(0).toUpperCase() + key.slice(1),
+          key: key,
+        }))
+      : [];
 
   return (
-    <Container
-      maxWidth={isXSmall ? "xs" : isSmall ? "sm" : "lg"}
-      sx={{ paddingTop: "10vmin", paddingBottom: "10vmin" }}
-    >
-      <Paper
-        elevation={3}
-        sx={{ p: isXSmall ? 1 : isSmall ? 2 : 3, overflowX: "auto" }}
-      >
-        <Typography
-          gutterBottom
-          sx={{ fontSize: "4vmin", fontWeight: "600", color: "#191B2A" }}
-        >
+    <Container maxWidth="lg">
+      <Paper elevation={3} sx={{ p: 3, overflowX: "auto" }}>
+        <Typography gutterBottom variant="h6">
           Select Category
         </Typography>
         <FormGroup>
@@ -102,10 +264,6 @@ function Reports() {
                 <Checkbox
                   checked={selectedCategory === mainCategory}
                   onChange={() => handleMainCategoryChange(mainCategory)}
-                  sx={{
-                    color: customColor,
-                    "&.Mui-checked": { color: customColor },
-                  }}
                 />
               }
               label={mainCategory}
@@ -114,11 +272,7 @@ function Reports() {
         </FormGroup>
         {selectedCategory && (
           <Box sx={{ my: 2 }}>
-            <Typography
-              sx={{ fontSize: "3.5vmin", fontWeight: "600", color: "#191B2A" }}
-            >
-              Sub-Categories
-            </Typography>
+            <Typography variant="subtitle1">Sub-Categories</Typography>
             <FormGroup>
               {categoryData[selectedCategory].map((subCategory) => (
                 <FormControlLabel
@@ -127,10 +281,6 @@ function Reports() {
                     <Checkbox
                       checked={!!selectedSubCategories[subCategory]}
                       onChange={() => handleSubCategoryChange(subCategory)}
-                      sx={{
-                        color: customColor,
-                        "&.Mui-checked": { color: customColor },
-                      }}
                     />
                   }
                   label={subCategory}
@@ -139,48 +289,49 @@ function Reports() {
             </FormGroup>
           </Box>
         )}
-        {/* Mock Excel File Preview */}
-        {Object.keys(selectedSubCategories).length > 0 && (
-          <>
-            <Typography variant="h6" sx={{ mt: 2 }}>
-              Excel File Preview
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table size={isSmall ? "small" : "medium"}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Column 1</TableCell>
-                    <TableCell>Column 2</TableCell>
-                    <TableCell>Column 3</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {mockExcelData.map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{row.column1}</TableCell>
-                      <TableCell>{row.column2}</TableCell>
-                      <TableCell>{row.column3}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </>
+
+        {selectedCategory === "Users" && (
+          <CSVLink
+            data={usersCSV.rows}
+            headers={usersCSV.headers}
+            filename="user_data_report.csv"
+            className="btn btn-primary"
+            style={{ marginTop: "20px" }}
+          >
+            Download User Report
+          </CSVLink>
         )}
 
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          sx={{
-            backgroundColor: customColor,
-            "&:hover": { backgroundColor: customColor },
-            mt: 2,
-          }}
-        >
-          Download Data
-        </Button>
+        {selectedCategory === "Properties" && (
+          <CSVLink
+            data={propertiesCSV.rows}
+            headers={propertiesCSV.headers}
+            filename="property_data_report.csv"
+            className="btn btn-primary"
+            style={{ marginTop: "20px" }}
+          >
+            Download Property Report
+          </CSVLink>
+        )}
+
+        {selectedCategory === "Services" && (
+          <CSVLink
+            data={servicesCSV.rows}
+            headers={servicesCSV.headers}
+            filename="service_data_report.csv"
+            className="btn btn-primary"
+            style={{ marginTop: "20px" }}
+          >
+            Download Service Report
+          </CSVLink>
+        )}
+
+        {isFetchingUsers ||
+          isFetchingProperties ||
+          (isFetchingServices && <Typography>Loading data...</Typography>)}
       </Paper>
     </Container>
   );
-}
-export default Reports
+};
+
+export default Reports;
