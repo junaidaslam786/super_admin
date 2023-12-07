@@ -4,7 +4,7 @@ import customFetchBase from "./customFetchBase";
 
 const getDefaultDates = () => {
   const currentDate = new Date();
-  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1); // January is 0 in JavaScript Date
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -14,10 +14,11 @@ const getDefaultDates = () => {
   };
 
   return {
-    startDate: formatDate(firstDayOfMonth),
+    startDate: formatDate(firstDayOfYear),
     endDate: formatDate(currentDate)
   };
 };
+
 
 const analyticsApi = createApi({
   reducerPath: "analyticsApi",
@@ -28,7 +29,20 @@ const analyticsApi = createApi({
       query: () => {
         const token = localStorage.getItem("token");
         return {
-          URL: "/superadmin/analytics/users",
+          url: "/superadmin/analytics/users",
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
+    getAllTokensDetails: builder.query({
+      query: () => {
+        const token = localStorage.getItem("token");
+        return {
+          url: "/superadmin/analytics/tokens",
           method: "GET",
           credentials: "include",
           headers: {
@@ -39,11 +53,11 @@ const analyticsApi = createApi({
     }),
     getCustomersAnalytics: builder.query({
       query: () => {
-        const { startDate, endDate } = getDefaultDates();
+        // const { startDate, endDate } = getDefaultDates();
         const token = localStorage.getItem('token');
 
         return {
-          URL: `/superadmin/analytics/customers?startDate=${startDate}&endDate=${endDate}`,
+          url: `/superadmin/analytics/customers`,
           method: 'GET',
           credentials: 'include',
           headers: {
@@ -56,7 +70,7 @@ const analyticsApi = createApi({
       query: () => {
         const token = localStorage.getItem("token");
         return {
-          URL: "/superadmin/analytics/active-users",
+          url: "/superadmin/analytics/active-users",
           method: "GET",
           credentials: "include",
           headers: {
@@ -69,7 +83,7 @@ const analyticsApi = createApi({
       query: () => {
         const token = localStorage.getItem("token");
         return {
-          URL: "/superadmin/analytics/non-active-users",
+          url: "/superadmin/analytics/non-active-users",
           method: "GET",
           credentials: "include",
           headers: {
@@ -78,6 +92,45 @@ const analyticsApi = createApi({
         };
       },
     }),
+    getAllAgents: builder.query({
+      query: () => {
+        const token = localStorage.getItem("token");
+        return {
+          url: "/superadmin/analytics/agents",
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+    }),
+    getAllPropertyAnalytics: builder.query({
+      query: () =>{
+        const token = localStorage.getItem("token")
+        return {
+          url: "/superadmin/analytics/properties-listed",
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      }
+    }),
+    getAllSoldProperties: builder.query({
+      query: () =>{
+        const token = localStorage.getItem("token")
+        return {
+          url: "/superadmin/analytics/properties-sold-rented",
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      }
+    }),
   }),
 });
 
@@ -85,7 +138,11 @@ const {
   useGetUsersAnalyticsQuery,
   useGetActiveUsersAnalyticsQuery,
   useGetNonActiveUsersAnalyticsQuery,
-  useGetCustomersAnalyticsQuery
+  useGetCustomersAnalyticsQuery,
+  useGetAllTokensDetailsQuery,
+  useGetAllAgentsQuery,
+  useGetAllPropertyAnalyticsQuery,
+  useGetAllSoldPropertiesQuery,
 } = analyticsApi;
 
 export {
@@ -93,5 +150,9 @@ export {
   useGetUsersAnalyticsQuery,
   useGetActiveUsersAnalyticsQuery,
   useGetNonActiveUsersAnalyticsQuery,
-  useGetCustomersAnalyticsQuery
+  useGetCustomersAnalyticsQuery,
+  useGetAllTokensDetailsQuery,
+  useGetAllAgentsQuery,
+  useGetAllPropertyAnalyticsQuery, 
+  useGetAllSoldPropertiesQuery,
 };

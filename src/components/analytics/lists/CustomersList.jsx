@@ -1,8 +1,14 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import Image from "../../../assets/property2.svg";
+import { useSelector } from "react-redux";
+import { selectTotalCustomers, selectTotalActiveCustomers  } from "../../../redux/selectors/userSelectors";
 
 const CustomersList = () => {
+  const totalCustomers = useSelector(selectTotalCustomers);
+  const activeCustomers = useSelector(selectTotalActiveCustomers );
+  console.log(totalCustomers);
+  console.log(activeCustomers);
   return (
     <Box
       sx={{
@@ -73,7 +79,7 @@ const CustomersList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              350
+              {totalCustomers}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               -2% than the last month
@@ -122,7 +128,7 @@ const CustomersList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              234
+              {activeCustomers}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               -5% than the last month
@@ -166,7 +172,7 @@ const CustomersList = () => {
             <Typography
               sx={{ fontSize: "2vmin", color: "#737791", fontWeight: "600" }}
             >
-              Services Bought
+              Properties Bought
             </Typography>
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
@@ -215,7 +221,7 @@ const CustomersList = () => {
             <Typography
               sx={{ fontSize: "2vmin", color: "#737791", fontWeight: "600" }}
             >
-              Revenue Generated
+              Properties Rented
             </Typography>
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}

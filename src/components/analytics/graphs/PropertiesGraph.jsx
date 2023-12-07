@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Box } from "@mui/material";
 import {
   BarChart,
@@ -9,52 +9,72 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { useGetAllPropertyAnalyticsQuery, useGetAllSoldPropertiesQuery } from "../../../redux/api/analyticsApi";
 
 const PropertiesGraph = () => {
-  const data = [
-    {
-      month: "January",
-      totalusers: 4000,
-      activeusers: 2400,
-      nonactiveusers: 1200,
-      revenuegenerated: 2400,
-    },
-    {
-      month: "February",
-      totalusers: 3456,
-      activeusers: 2564,
-      nonactiveusers: 1300,
-      revenuegenerated: 2599,
-    },
-    {
-      month: "March",
-      totalusers: 3645,
-      activeusers: 3635,
-      nonactiveusers: 800,
-      revenuegenerated: 1452,
-    },
-    {
-      month: "April",
-      totalusers: 4543,
-      activeusers: 2324,
-      nonactiveusers: 2436,
-      revenuegenerated: 2542,
-    },
-    {
-      month: "May",
-      totalusers: 3424,
-      activeusers: 2321,
-      nonactiveusers: 3214,
-      revenuegenerated: 2547,
-    },
-    {
-      month: "June",
-      totalusers: 1452,
-      activeusers: 654,
-      nonactiveusers: 645,
-      revenuegenerated: 6543,
-    },
-  ];
+  const [graphData, setGraphData] = useState([]);
+  const { data: propertyAnalyticsData } = useGetAllPropertyAnalyticsQuery();
+  const { data: soldPropertiesData } = useGetAllSoldPropertiesQuery();
+  
+
+  // useEffect(() => {
+  //   if (propertyAnalyticsData && soldPropertiesData) {
+  //     // Assuming both APIs return data in a monthly format. Adjust the logic based on the actual API response structure.
+  //     const mergedData = propertyAnalyticsData.map((monthData, index) => {
+  //       const soldData = soldPropertiesData[index]; // Match by index or month
+  //       return {
+  //         month: monthData.month,
+  //         propertiesListed: monthData.propertiesListed,
+  //         revenueGenerated: monthData.revenue_generated,
+  //         propertiesUnderOffer: monthData.propertiesUnderOffer,
+  //         propertiesSoldRentedByMonth: soldData.propertiesSoldRentedByMonth,
+  //         // Add other fields as needed
+  //       };
+  //     });
+  //     setGraphData(mergedData);
+  //   }
+  // }, [propertyAnalyticsData, soldPropertiesData]);
+  // useEffect(() => {
+  //   if (propertyAnalyticsData && soldPropertiesData) {
+  //     // Transforming propertyAnalyticsData to an array if it's an object
+  //     const propertyDataArray = Array.isArray(propertyAnalyticsData) 
+  //       ? propertyAnalyticsData 
+  //       : Object.values(propertyAnalyticsData);
+  
+  //     // Merging data
+  //     const mergedData = propertyDataArray.map((monthData, index) => {
+  //       const soldData = soldPropertiesData[index]; // Match by index or month
+  //       return {
+  //         // ... same as before
+  //       };
+  //     });
+  
+  //     setGraphData(mergedData);
+  //   }
+  // }, [propertyAnalyticsData, soldPropertiesData]);
+  useEffect(() => {
+    if (propertyAnalyticsData && soldPropertiesData) {
+      const mergedData = Object.keys(propertyAnalyticsData).map(month => {
+        const monthData = propertyAnalyticsData[month];
+        const soldData = soldPropertiesData[month];
+  
+        return {
+          month,
+          propertiesListed: monthData ? monthData.propertiesListed : 0,
+          revenueGenerated: monthData ? monthData.revenue_generated : 0,
+          propertiesUnderOffer: monthData ? monthData.propertiesUnderOffer : 0,
+          propertiesSoldRentedByMonth: soldData ? soldData.propertiesSoldRentedByMonth : 0,
+          // Add other fields as needed
+        };
+      });
+  
+      setGraphData(mergedData);
+    }
+  }, [propertyAnalyticsData, soldPropertiesData]);
+  
+  
+  console.log(graphData)
+
   return (
     <Box
       sx={{
@@ -81,7 +101,7 @@ const PropertiesGraph = () => {
         <BarChart
           width={1000}
           height={310}
-          data={data}
+          data={graphData}
           margin={{
             top: 20,
             right: 30,
@@ -95,10 +115,10 @@ const PropertiesGraph = () => {
           <YAxis yAxisId="right" orientation="right" stroke="#191B2A" />
           <Tooltip />
           <Legend />
-          <Bar yAxisId="left" dataKey="totalusers" fill="#737791" />
-          <Bar yAxisId="right" dataKey="activeusers" fill="#191B2A" />
-          <Bar yAxisId="right" dataKey="nonactiveusers" fill="red" />
-          <Bar yAxisId="right" dataKey="revenuegenerated" fill="#00C800" />
+          <Bar yAxisId="left" dataKey="propertiesListed" fill="#737791" />
+          <Bar yAxisId="right" dataKey="revenueGenerated" fill="#191B2A" />
+          <Bar yAxisId="right" dataKey="propertiesUnderOffer" fill="red" />
+          <Bar yAxisId="right" dataKey="propertiesSoldRentedByMonth" fill="#00C800" />
         </BarChart>
       </Box>
     </Box>

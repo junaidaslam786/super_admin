@@ -1,60 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { useGetAllTokensDetailsQuery } from "../../../redux/api/analyticsApi";
+import { format, parseISO } from 'date-fns';
 
 const TokensGraph = () => {
-  const data = [
-    {
-      month: "January",
-      totalusers: 4000,
-      activeusers: 2400,
-      nonactiveusers: 1200,
-      revenuegenerated: 2400,
-    },
-    {
-      month: "February",
-      totalusers: 3456,
-      activeusers: 2564,
-      nonactiveusers: 1300,
-      revenuegenerated: 2599,
-    },
-    {
-      month: "March",
-      totalusers: 3645,
-      activeusers: 3635,
-      nonactiveusers: 800,
-      revenuegenerated: 1452,
-    },
-    {
-      month: "April",
-      totalusers: 4543,
-      activeusers: 2324,
-      nonactiveusers: 2436,
-      revenuegenerated: 2542,
-    },
-    {
-      month: "May",
-      totalusers: 3424,
-      activeusers: 2321,
-      nonactiveusers: 3214,
-      revenuegenerated: 2547,
-    },
-    {
-      month: "June",
-      totalusers: 1452,
-      activeusers: 654,
-      nonactiveusers: 645,
-      revenuegenerated: 6543,
-    },
-  ];
+  const [graphData, setGraphData] = useState([]);
+  const { data, error, isLoading } = useGetAllTokensDetailsQuery();
+
+  useEffect(() => {
+    if (data && !isLoading && !error) {
+      // Transform data to fit the graph format
+      const aggregatedData = data.rows.reduce((acc, row) => {
+        const monthYear = format(parseISO(row.createdAt), 'MMMM-yyyy');
+        if (!acc[monthYear]) {
+          acc[monthYear] = { totalTokens: 0, tokensRemaining: 0, pendingTokens: 0, revenue_generated: 0 };
+        }
+        acc[monthYear].totalTokens += row.quantity;
+        acc[monthYear].tokensRemaining += row.remainingAmount;
+        acc[monthYear].revenue_generated += row.totalAmount;
+        return acc;
+      }, {});
+
+      setGraphData(Object.keys(aggregatedData).map(month => ({ month, ...aggregatedData[month] })));
+    }
+  }, [data, isLoading, error]);
+
   return (
     <Box
       sx={{
@@ -73,15 +44,15 @@ const TokensGraph = () => {
           border: "0.2vmin solid #00C800",
           borderRadius: "0.4vmin",
           backgroundColor: "white",
-          display:'flex',
-          alignItems:'center',
-          justifyContent:'center'
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
         }}
       >
         <BarChart
           width={1000}
           height={310}
-          data={data}
+          data={graphData}
           margin={{
             top: 20,
             right: 30,
@@ -91,14 +62,13 @@ const TokensGraph = () => {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" />
-          <YAxis yAxisId="left" orientation="left" stroke="#00C800" />
-          <YAxis yAxisId="right" orientation="right" stroke="#191B2A" />
+          <YAxis />
           <Tooltip />
           <Legend />
-          <Bar yAxisId="left" dataKey="totalusers" fill="#737791" />
-          <Bar yAxisId="right" dataKey="activeusers" fill="#191B2A" />
-          <Bar yAxisId="right" dataKey="nonactiveusers" fill="red" />
-          <Bar yAxisId="right" dataKey="revenuegenerated" fill="#00C800" />
+          <Bar dataKey="totalTokens" fill="#737791" />
+          <Bar dataKey="tokensRemaining" fill="#191B2A" />
+          <Bar dataKey="pendingTokens" fill="red" />
+          <Bar dataKey="revenue_generated" fill="#00C800" />
         </BarChart>
       </Box>
     </Box>

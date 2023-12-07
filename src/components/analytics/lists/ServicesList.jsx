@@ -13,7 +13,7 @@ const ServicesList = () => {
 
   // Fetch data from the API endpoint using the custom hook provided by the query object
 
-  const {data, error, isLoading } = useGetCustomersAnalyticsQuery();
+  const {data, error, isLoading } = useGetUsersAnalyticsQuery();
   console.log(data);
 
   if (isLoading) {
@@ -25,8 +25,8 @@ const ServicesList = () => {
     return <div>Error occurred: {error.message}</div>;
   }
 
-  // Use the data to display in your UI
-  const totalUsers = data ? data.totalUsers : 'N/A'; // Replace 'data.totalUsers' with the correct data path
+ 
+  // const totalUsers = data ? data.totalUsers : 'N/A'; 
 
   return (
     <Box

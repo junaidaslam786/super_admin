@@ -12,7 +12,7 @@ import {ReactComponent as Appointments} from '../assets/Appointments.svg'
 import {ReactComponent as Blog} from '../assets/Blog.svg'
 import {ReactComponent as Community} from '../assets/Community.svg'
 import styles from '../config/navigationConfig.module.css'
-import { Payment } from "@mui/icons-material"
+import { Payment, SummarizeRounded } from "@mui/icons-material"
 
 
 const navigationConfig = [
@@ -198,14 +198,14 @@ const navigationConfig = [
         title: "Add Community",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        navLink: "/cms/add-community"
+        navLink: "/add-community"
       },
       {
         id: "community-listing",
         title: "Community Listing",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        navLink: "/cms/community-listing"
+        navLink: "/list-community"
       }
     ]
   },
@@ -215,59 +215,16 @@ const navigationConfig = [
     type: "item",
     icon: <Community className={styles.icon} />,
     navLink: "/analytics"
+  },
+  {
+    id: "reports",
+    title: "Reports",
+    type: "item",
+    icon: <SummarizeRounded className={styles.icon} />,
+    navLink: "/reports"
   }
 
-  // {
-  //   id: "customers",
-  //   title: "Customers",
-  //   type: "collapse",
-  //   icon: <Users className={styles.icon} />,
-  //   children: [
-  //     {
-  //       id: "add-customer",
-  //       title: "Add Customer",
-  //       type: "item",
-  //       icon: <Icon.Circle size={12} />,
-  //       navLink: "/customer/add-customer"
-  //     },
-  //     {
-  //       id: "customer-listing",
-  //       title: "Customer Listing",
-  //       type: "item",
-  //       icon: <Icon.Circle size={12} />,
-  //       navLink: "/customer/customer-listing"
-  //     },
-  //   ]
-  // },
-  // {
-  //   id: "traders",
-  //   title: "Traders",
-  //   type: "collapse",
-  //   icon: <Traders className={styles.icon} />,
-  //   children: [
-  //     {
-  //       id: "add-trader",
-  //       title: "Add Trader",
-  //       type: "item",
-  //       icon: <Icon.Circle size={12} />,
-  //       navLink: "/trader/add-trader"
-  //     },
-  //     {
-  //       id: "traders-listing",
-  //       title: "Traders Listing",
-  //       type: "item",
-  //       icon: <Icon.Circle size={12} />,
-  //       navLink: "/trader/trader-listing"
-  //     },
-  //     {
-  //       id: "blocked-traders",
-  //       title: "Blocked Traders",
-  //       type: "item",
-  //       icon: <Icon.Circle size={12} />,
-  //       navLink: "/trader/blocked-traders"
-  //     }
-  //   ]
-  // },
+  
   
 
 ]

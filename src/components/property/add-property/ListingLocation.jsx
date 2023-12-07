@@ -1,169 +1,3 @@
-// import React, { useState, useEffect, useRef } from "react";
-// import {
-//   TextField,
-//   Typography,
-//   Grid,
-//   Box,
-//   Select,
-//   InputLabel,
-//   MenuItem,
-//   FormControl,
-//   Card,
-//   CardMedia,
-// } from "@mui/material";
-// import {
-//   GoogleMap,
-//   LoadScript,
-//   StandaloneSearchBox,
-//   Marker,
-// } from "@react-google-maps/api";
-
-// const ListingLocation = ({ updateListingLocation }) => {
-//   // State management for address, city, postal code, and region
-//   const [address, setAddress] = useState("");
-//   const [city, setCity] = useState("");
-//   const [postalCode, setPostalCode] = useState("");
-//   const [region, setRegion] = useState("");
-//   const [mapCenter, setMapCenter] = useState({ lat: 51.505, lng: -0.09 });
-//   const [latitude, setLatitude] = useState(null);
-//   const [longitude, setLongitude] = useState(null);
-
-//   const searchBoxRef = useRef();
-//   const onLoad = (ref) => {
-//     searchBoxRef.current = ref;
-//   };
-
-//   const onPlacesChanged = () => {
-//     const place = searchBoxRef.current.getPlaces()[0];
-//     const location = place.geometry.location;
-//     setAddress(place.formatted_address);
-//     setLatitude(location.lat());
-//     setLongitude(location.lng());
-//     setMapCenter({ lat: location.lat(), lng: location.lng() });
-//     updateListingData();
-//   };
-
-//   const updateListingData = () => {
-//     const data = {
-//       address: searchBoxRef.current?.getPlaces()[0]?.formatted_address,
-//       city: city,
-//       postalCode: postalCode,
-//       region: region,
-//       latitude: latitude,
-//       longitude: longitude,
-//     };
-//     updateListingLocation(data);
-//   };
-
-//   return (
-//     <Box
-//       sx={{
-//         backgroundColor: "white",
-//         padding: "3vh",
-//         width: "100%",
-//         marginTop: "5vmin",
-//         boxShadow: "0px 0px 1px black",
-//       }}
-//     >
-//       <Grid item sx={{ marginBottom: "2vmin" }}>
-//         <Typography
-//           variant="h6"
-//           fontWeight="600"
-//           letterSpacing="0.5px"
-//           sx={{ fontSize: "3vmin" }}
-//         >
-//           Listing Location
-//         </Typography>
-//       </Grid>
-
-//       <LoadScript
-//         googleMapsApiKey="AIzaSyCiIUKO-RSjk304mIlR7bq8h4xqbxXrG58&libraries=places,drawing"
-//         libraries={["places"]}
-//       >
-//         <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged}>
-//           <TextField
-//             label="Address*"
-//             placeholder="624 Queens Rd, Gainesville, FL 32607, USA"
-//             // value={address}
-//             fullWidth
-//             sx={{ marginBottom: "2vh" }}
-//           />
-//         </StandaloneSearchBox>
-
-//         <GoogleMap
-//           center={mapCenter}
-//           zoom={13}
-//           mapContainerStyle={{ width: "100%", height: "400px" }}
-//         >
-//           {latitude && longitude && (
-//             <Marker position={{ lat: latitude, lng: longitude }} />
-//           )}
-//         </GoogleMap>
-//       </LoadScript>
-//       <Box
-//         sx={{
-//           display: "flex",
-//           flexDirection: "row",
-//         }}
-//       >
-//         <TextField
-//           label="City"
-//           value={city}
-//           onChange={(e) => {
-//             setCity(e.target.value);
-//             updateListingData();
-//           }}
-//           fullWidth
-//           sx={{ marginBottom: "2vh", marginTop: "5vh" }}
-//           InputLabelProps={{
-//             style: {
-//               color: "#00C800",
-//               marginRight: "2vw",
-//             },
-//           }}
-//           style={{ marginRight: "2vw" }}
-//         />
-
-//         <TextField
-//           label="Postal Code"
-//           value={postalCode}
-//           onChange={(e) => {
-//             setPostalCode(e.target.value);
-//             updateListingData();
-//           }}
-//           fullWidth
-//           sx={{ marginBottom: "2vh", marginTop: "5vh" }}
-//           InputLabelProps={{
-//             style: {
-//               color: "#00C800",
-//               marginRight: "2vw",
-//             },
-//           }}
-//           style={{ marginRight: "2vw" }}
-//         />
-
-//         <TextField
-//           label="Region"
-//           value={region}
-//           onChange={(e) => {
-//             setRegion(e.target.value);
-//             updateListingData();
-//           }}
-//           fullWidth
-//           sx={{ marginBottom: "2vh", marginTop: "5vh" }}
-//           InputLabelProps={{
-//             style: {
-//               color: "#00C800",
-//               marginRight: "2vw",
-//             },
-//           }}
-//         />
-//       </Box>
-//     </Box>
-//   );
-// };
-
-// export default ListingLocation;
 import React, { useState, useRef } from "react";
 import { TextField, Typography, Grid, Box } from "@mui/material";
 import {
@@ -216,6 +50,42 @@ const ListingLocation = ({ updateListingLocation }) => {
     updateListingLocation(data);
   };
 
+  // Use the Google Maps API to reverse geocode the lat/lng to an address
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCiIUKO-RSjk304mIlR7bq8h4xqbxXrG58&libraries=places,drawing`
+      );
+      const data = await response.json();
+      if (data.results.length > 0) {
+        return data.results[0].formatted_address; // This will give you the full address
+      } else {
+        return "Address not found"; // Fallback in case no results are found
+      }
+    } catch (error) {
+      console.error("Error during reverse geocoding:", error);
+      return "Error retrieving address"; // Error message in case the request fails
+    }
+  };
+
+  const onMarkerDragEnd = async (e) => {
+    const newLat = e.latLng.lat();
+    const newLng = e.latLng.lng();
+    const newAddress = await reverseGeocode(newLat, newLng);
+    setAddress(newAddress);
+    setLatitude(newLat);
+    setLongitude(newLng);
+    setMapCenter({ lat: newLat, lng: newLng });
+    updateListingData({
+      address: newAddress,
+      city,
+      postalCode,
+      region,
+      latitude: newLat,
+      longitude: newLng,
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -244,7 +114,7 @@ const ListingLocation = ({ updateListingLocation }) => {
         <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged}>
           <TextField
             label="Address*"
-            placeholder="624 Queens Rd, Gainesville, FL 32607, USA"
+            placeholder="Enter address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             fullWidth
@@ -258,7 +128,11 @@ const ListingLocation = ({ updateListingLocation }) => {
           mapContainerStyle={{ width: "100%", height: "400px" }}
         >
           {latitude && longitude && (
-            <Marker position={{ lat: latitude, lng: longitude }} />
+            <Marker
+              position={{ lat: latitude, lng: longitude }}
+              draggable={true}
+              onDragEnd={onMarkerDragEnd}
+            />
           )}
         </GoogleMap>
       </LoadScript>

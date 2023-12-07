@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useLoginUserMutation } from "../../redux/api/authApi";
 import { setUser } from "../../redux/features/userSlice";
-import { useAppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -17,7 +17,7 @@ import {
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,

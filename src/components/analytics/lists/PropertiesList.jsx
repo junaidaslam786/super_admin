@@ -2,7 +2,32 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Image from "../../../assets/property2.svg";
 
+import {
+  useGetAllPropertyAnalyticsQuery,
+  useGetAllSoldPropertiesQuery,
+} from "../../../redux/api/analyticsApi";
+
 const PropertiesList = () => {
+  const { data: propertyAnalytics } = useGetAllPropertyAnalyticsQuery();
+  const { data: soldProperties } = useGetAllSoldPropertiesQuery();
+
+  // Add a check to ensure data is defined and has the required properties
+  if (
+    !propertyAnalytics ||
+    propertyAnalytics.propertiesListed === undefined ||
+    propertyAnalytics.revenue_generated === undefined ||
+    propertyAnalytics.propertiesUnderOffer === undefined
+  ) {
+    return <Typography>Error: Data is not available.</Typography>;
+  }
+
+  if (
+    !soldProperties ||
+    soldProperties.propertiesSoldRentedByMonth === undefined
+  ) {
+    return <Typography>Error: Data is not available.</Typography>;
+  }
+
   return (
     <Box
       sx={{
@@ -42,7 +67,7 @@ const PropertiesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -73,7 +98,7 @@ const PropertiesList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              50
+              {propertyAnalytics.propertiesListed}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +3% than the last month
@@ -91,7 +116,7 @@ const PropertiesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -117,12 +142,12 @@ const PropertiesList = () => {
             <Typography
               sx={{ fontSize: "2vmin", color: "#737791", fontWeight: "600" }}
             >
-              VIP Properties
+              Under Offer
             </Typography>
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              5
+              {propertyAnalytics.propertiesUnderOffer}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +3% than the last month
@@ -140,7 +165,7 @@ const PropertiesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -171,7 +196,7 @@ const PropertiesList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              10
+              {soldProperties.propertiesSoldRentedByMonth}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               -2% than the last month
@@ -189,7 +214,7 @@ const PropertiesList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -220,7 +245,7 @@ const PropertiesList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              $1M
+              {propertyAnalytics.revenue_generated}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +4% than the last month

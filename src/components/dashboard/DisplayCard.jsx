@@ -57,7 +57,7 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/', ico
             <Typography
               sx={{
                 color: "#00C800",
-                fontSize: "3vmin",
+                fontSize: "2vmin",
                 fontFamily: "roboto, sans-serif",
                 fontWeight: 500,
                 letterSpacing: "1px",

@@ -24,12 +24,9 @@ const categoryData = {
   Properties: ["Listed", "Sold", "Not Sold"],
   Services: [
     "Video Call",
-    "API",
-    "Meets",
-    "Greeds",
-    "Deeds",
-    "Feeds",
-    "Creeds",
+    "API Subscriptions",
+    "Property Listing",
+    'Reports & Analytics'
   ],
 };
 

@@ -38,7 +38,7 @@ const AnalyticsLayout = ({ children, sectionRefs }) => {
               overflow:'hidden',
             }}
           >
-            <Typography
+            {/* <Typography
               onClick={() => scrollToRef(sectionRefs.services)}
               sx={{
                 width: "100%",
@@ -57,7 +57,7 @@ const AnalyticsLayout = ({ children, sectionRefs }) => {
               }}
             >
                 Services
-            </Typography>
+            </Typography> */}
             <Typography
               onClick={() => scrollToRef(sectionRefs.tokens)}
               sx={{

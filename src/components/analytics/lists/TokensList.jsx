@@ -1,8 +1,23 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import Image from "../../../assets/property2.svg";
+import { useGetAllTokensDetailsQuery } from "../../../redux/api/analyticsApi";
 
 const TokensList = () => {
+  const { data, error, isLoading } = useGetAllTokensDetailsQuery();
+  console.log(data);
+
+  // Add a check to ensure data is defined and has the required properties
+  if (
+    !data ||
+    data.totalTokens === undefined ||
+    data.tokensRemaining === undefined ||
+    data.pendingTokens === undefined ||
+    data.revenue_generated === undefined
+  ) {
+    return <Typography>Error: Data is not available.</Typography>;
+  }
+
   return (
     <Box
       sx={{
@@ -42,7 +57,7 @@ const TokensList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -73,7 +88,7 @@ const TokensList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              250
+              {data.totalTokens}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +0.1% than the last month
@@ -91,7 +106,7 @@ const TokensList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -117,12 +132,12 @@ const TokensList = () => {
             <Typography
               sx={{ fontSize: "2vmin", color: "#737791", fontWeight: "600" }}
             >
-              Tokens Sold
+              Remaining Tokens
             </Typography>
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              234
+              {data.tokensRemaining}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +2% than the last month
@@ -140,7 +155,7 @@ const TokensList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -166,12 +181,12 @@ const TokensList = () => {
             <Typography
               sx={{ fontSize: "2vmin", color: "#737791", fontWeight: "600" }}
             >
-              Tokens In Use
+              Pending Tokens
             </Typography>
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              140
+              {data.pendingTokens}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +8% than the last month
@@ -189,7 +204,7 @@ const TokensList = () => {
             alignItems: "center",
             border: "0.2vmin solid #00C800",
             borderRadius: "0.4vmin",
-            boxShadow:'0px 3px 5px #333'
+            boxShadow: "0px 3px 5px #333",
           }}
         >
           <Box
@@ -220,7 +235,7 @@ const TokensList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              $400
+              {data.revenue_generated}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +9% than the last month

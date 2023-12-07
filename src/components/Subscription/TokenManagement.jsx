@@ -200,7 +200,7 @@ const TokenManagement = () => {
           Save
         </Button>
       </Box>
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -444,7 +444,7 @@ const TokenManagement = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Box>
+      </Box> */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}

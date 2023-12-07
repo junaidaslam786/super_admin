@@ -24,6 +24,9 @@ import AnalyticsPage from "../pages/analytics/AnalyticsPage";
 import ReportsPage from "../pages/analytics/ReportsPage";
 import AllAdminsPage from "../pages/user-management/AllAdminsPage";
 import TradersApprovalsPage from "../pages/user-management/TradersApprovalsPage";
+import AddCommunityPage from "../pages/community/AddCommunityPage";
+import AllCommunityListPage from "../pages/community/AllCommunityListPage";
+import AllCommunityPostsPage from "../pages/community/AllCommunityPostsPage";
 // Add other required imports here ...
 
 const RoutesContent = () => {
@@ -84,6 +87,18 @@ const RoutesContent = () => {
       </Route>
       <Route path="/token-management" element={<ProtectedRoute />}>
         <Route index element={<TokenManagementPage />} />
+      </Route>
+      <Route path="/add-community" element={<ProtectedRoute />}>
+        <Route index element={<AddCommunityPage />} />
+      </Route>
+      <Route path="/add-community/:communityId" element={<ProtectedRoute />}>
+        <Route index element={<AddCommunityPage />} />
+      </Route>
+      <Route path="/list-community" element={<ProtectedRoute />}>
+        <Route index element={<AllCommunityListPage />} />
+      </Route>
+      <Route path="/community-posts/:id" element={<ProtectedRoute />}>
+        <Route index element={<AllCommunityPostsPage />} />
       </Route>
       <Route path="/analytics" element={<AnalyticsPage />} />
       <Route path="/reports" element={<ReportsPage />} />
