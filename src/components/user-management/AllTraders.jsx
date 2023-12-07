@@ -8,6 +8,7 @@ import {
   useDeleteUserMutation,
   useUpdateUserMutation,
   useGetUserByIdQuery,
+  useBlockTradersByIdMutation,
 } from "../../redux/api/userManagementApi";
 import { setUsers } from "../../redux/features/userManagementSlice";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -38,9 +39,20 @@ const TradersData = () => {
     skip: !selectedUserId,
   });
 
+  const [blockTraderById, { isLoading, isError }] = useBlockTradersByIdMutation();
+
+  const handleBlockTrader = async (traderId) => {
+    try {
+      await blockTraderById(traderId).unwrap();
+      toast.success("Trader successfully blocked!", "success");
+      refetch();
+    } catch (error) {
+      toast.error("Error blocking trader. Please try again.", "error");
+      console.error(error);
+    }
+  };
   const handleViewClick = (userId) => {
-    // setSelectedUserId(userId); // Set the selected user ID state
-    // Navigate to TradersView and pass the selectedUserId as state
+    
     navigate("/trader", { state: { selectedUserId: userId } });
   };
 
@@ -50,12 +62,7 @@ const TradersData = () => {
     }
   }, [users, dispatch]);
 
-  // useEffect(() => {
-  //   if (selectedUser) {
-  //     console.log("Selected user data:", selectedUser);
-  //     navigate("/trader"); // Navigate or take other actions based on the fetched data
-  //   }
-  // }, [selectedUser, navigate]);
+
 
   if (!traders)
     return (
@@ -125,10 +132,10 @@ const TradersData = () => {
           width={200}
           cellRender={(cellData) => (
             <div>
-              <button>Block</button>
+              <button onClick={() => handleBlockTrader(cellData.data.id)}>Block</button>
               {/* <button onClick={() => handleBlock(cellData.data)}>Block</button> */}
               {/* <button onClick={() => handleDeactivate(cellData.data)}> */}
-              <button>Deactivate</button>
+              
             </div>
           )}
         />

@@ -111,6 +111,20 @@ const userManagementApi = createApi({
       },
     }),
 
+    blockTradersById: builder.mutation({
+      query: (id) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `superadmin/user/block-trader/${id}`,
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+      },
+    }),
     
     getAgentUser: builder.query({
       query: (agentUserId) => {
@@ -126,6 +140,19 @@ const userManagementApi = createApi({
       // Optionally, you can add a transformResponse to handle the response data before it reaches the component
       // transformResponse: (response) => response.data,
     }),
+    getAllTradersUsersList: builder.query({
+      query: (agentUserId) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `/agent/list-trader-users/${agentUserId}`,
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+      
+    }),
   }),
 });
 
@@ -137,6 +164,8 @@ const {
   useActivateUserMutation,
   useDeactivateUserMutation,
   useGetAgentUserQuery,
+  useGetAllTradersUsersListQuery,
+  useBlockTradersByIdMutation,
 } = userManagementApi;
 
 export {
@@ -148,4 +177,6 @@ export {
   useActivateUserMutation,
   useDeactivateUserMutation,
   useGetAgentUserQuery,
+  useGetAllTradersUsersListQuery,
+  useBlockTradersByIdMutation,
 };

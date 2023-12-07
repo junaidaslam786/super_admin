@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, Typography, Link, Divider } from "@mui/material";
+import { Box, Typography, Link, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import Zangi from "../../assets/Profile.svg";
 import Cover from "../../assets/doc.webp";
 import Partner from "../../assets/Profile.svg";
-import { useGetAgentUserQuery } from "../../redux/api/userManagementApi";
+import { useGetAgentUserQuery, useGetAllTradersUsersListQuery } from "../../redux/api/userManagementApi";
+// import { Box, Typography, Link, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const TradersView = () => {
   const location = useLocation();
@@ -15,6 +16,12 @@ const TradersView = () => {
     skip: !selectedUserId,
   });
   console.log("Selected user data:", selectedUser);
+
+  const { data: tradersUsers, isLoading, isError } = useGetAllTradersUsersListQuery(selectedUserId);
+  console.log("Traders users:", tradersUsers);
+
+  const orignalDocumentPath = selectedUser?.documentUrl;
+  const correctedDocumentPath = orignalDocumentPath?.replace(/\\\\/g, '\\');
 
   return (
     <Box
@@ -66,7 +73,7 @@ const TradersView = () => {
                 fontWeight: "600",
               }}
             >
-             {selectedUser?.user.active === true ? "Active" : "Inactive"}
+              {selectedUser?.user.active === true ? "Active" : "Inactive"}
             </Typography>
           </Box>
         </Box>
@@ -269,8 +276,34 @@ const TradersView = () => {
           </Typography>
         </Box>
         <Divider sx={{ backgroundColor: "#00C800" }} />
-        <img src={selectedUser?.documentUrl} style={{ width: "100%" }} />
+        <img
+          src={correctedDocumentPath}
+          style={{ width: "100%" }}
+        />
+
         <Divider sx={{ backgroundColor: "#00C800" }} />
+        <TableContainer component={Paper}>
+        <Table aria-label="traders users table">
+          <TableHead>
+            <TableRow>
+              <TableCell>First Name</TableCell>
+              <TableCell>Last Name</TableCell>
+              <TableCell>Email</TableCell>
+              {/* Add more TableCell components as needed */}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tradersUsers?.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.firstName}</TableCell>
+                <TableCell>{user.lastName}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                {/* Add more TableCell components as needed */}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       </Box>
     </Box>
   );
