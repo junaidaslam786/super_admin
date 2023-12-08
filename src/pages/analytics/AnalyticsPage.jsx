@@ -12,6 +12,7 @@ import TokensGraph from "../../components/analytics/graphs/TokensGraph";
 import CustomersGraph from "../../components/analytics/graphs/CustomersGraph";
 import TradersGraph from "../../components/analytics/graphs/TradersGraph";
 import PropertiesGraph from "../../components/analytics/graphs/PropertiesGraph";
+import Reports from "../../components/analytics/reports/Reports";
 
 const AnalyticsPage = () => {
   const sectionRefs = {
@@ -20,6 +21,7 @@ const AnalyticsPage = () => {
     customers: useRef(null),
     traders: useRef(null),
     properties: useRef(null),
+    reports: useRef(null),
   };
 
   return (
@@ -54,6 +56,11 @@ const AnalyticsPage = () => {
           <Box ref={sectionRefs.properties}>
             <PropertiesList />
             <PropertiesGraph />
+          </Box>
+
+          {/* Reports Section */}
+          <Box ref={sectionRefs.reports}>
+            <Reports />
           </Box>
 
           {/* Add more sections as needed */}

@@ -55,9 +55,9 @@ const RoutesContent = () => {
       <Route path="/trader" element={<ProtectedRoute />}>
         <Route index element={<TradersViewPage />} />
       </Route>
-      <Route path="/trader-approvals" element={<ProtectedRoute />}>
+      {/* <Route path="/trader-approvals" element={<ProtectedRoute />}>
         <Route index element={<TradersApprovalsPage />} />
-      </Route>
+      </Route> */}
       <Route path="/create-user" element={<ProtectedRoute />}>
         <Route index element={<CreateUserPage />} />
       </Route>

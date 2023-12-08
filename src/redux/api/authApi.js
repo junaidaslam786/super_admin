@@ -77,7 +77,7 @@ const authApi = createApi({
     refreshToken: builder.mutation({
       query(refreshToken) {
         return {
-          url: "superadmin/auth/refresh",
+          url: "/auth/refresh",
           method: "POST",
           body: { refreshToken },
           credentials: "include",

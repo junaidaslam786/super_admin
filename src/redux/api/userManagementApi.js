@@ -32,6 +32,7 @@ const userManagementApi = createApi({
         const token = localStorage.getItem("token");
         return {
           url: `superadmin/user/${id}`,
+          method: "GET",
           credentials: "include",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -144,7 +145,7 @@ const userManagementApi = createApi({
       query: (agentUserId) => {
         const token = localStorage.getItem("token");
         return {
-          url: `/agent/list-trader-users/${agentUserId}`,
+          url: `/superadmin/user/list-trader-users/${agentUserId}`,
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

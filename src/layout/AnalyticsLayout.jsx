@@ -123,6 +123,7 @@ const AnalyticsLayout = ({ children, sectionRefs }) => {
               sx={{
                 width: "100%",
                 height: "8vmin",
+                borderBottom: "0.2vmin solid #171B2A",
                 color:'#737791',
                 fontSize:'3vmin',
                 display:'flex',
@@ -136,6 +137,25 @@ const AnalyticsLayout = ({ children, sectionRefs }) => {
               }}
             >
                 Properties
+            </Typography>
+            <Typography
+              onClick={() => scrollToRef(sectionRefs.properties)}
+              sx={{
+                width: "100%",
+                height: "8vmin",
+                color:'#737791',
+                fontSize:'3vmin',
+                display:'flex',
+                alignItems:'center',
+                justifyContent:'center',
+                '&:hover' : {
+                    color:'#00C800',
+                    borderLeft:'0.5vmin solid #00C800',
+                    cursor:'pointer'
+                }
+              }}
+            >
+                Reports
             </Typography>
           </Box>
         </Box>

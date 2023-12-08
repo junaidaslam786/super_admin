@@ -85,13 +85,13 @@ const navigationConfig = [
         // navLink: "/user/listing-admin"
         navLink: "/all-traders"
       },
-      {
-        id: "tradersApprovals",
-        title: "Traders Approvals",
-        type: "item",
-        icon: <Icon.Circle size={12} />,
-        navLink: "/trader-approvals"
-      },
+      // {
+      //   id: "tradersApprovals",
+      //   title: "Traders Approvals",
+      //   type: "item",
+      //   icon: <Icon.Circle size={12} />,
+      //   navLink: "/trader-approvals"
+      // },
       {
         id: "listingAdmins",
         title: "Admins",
@@ -211,18 +211,18 @@ const navigationConfig = [
   },
   {
     id: "analytics",
-    title: "Analytics",
+    title: "Analytics & Reports",
     type: "item",
     icon: <Community className={styles.icon} />,
     navLink: "/analytics"
   },
-  {
-    id: "reports",
-    title: "Reports",
-    type: "item",
-    icon: <SummarizeRounded className={styles.icon} />,
-    navLink: "/reports"
-  }
+  // {
+  //   id: "reports",
+  //   title: "Reports",
+  //   type: "item",
+  //   icon: <SummarizeRounded className={styles.icon} />,
+  //   navLink: "/reports"
+  // }
 
   
   

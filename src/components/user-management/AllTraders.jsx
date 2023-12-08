@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 import { selectAllAgents } from "../../redux/selectors/userSelectors"; // Assuming the selectors are in this file
-import { CircularProgress, Box } from "@mui/material";
+import { CircularProgress, Box, Button } from "@mui/material";
 import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
@@ -33,13 +33,26 @@ const TradersData = () => {
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [selectedUserId, setSelectedUserId] = useState();
+
   const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
 
   const { data: selectedUser } = useGetUserByIdQuery(selectedUserId, {
     skip: !selectedUserId,
   });
 
-  const [blockTraderById, { isLoading, isError }] = useBlockTradersByIdMutation();
+  const handleApproveTrader = async (trader) => {
+    try {
+      await updateUser({ ...trader, active: true }).unwrap();
+      toast.success("Trader successfully approved!", "success");
+      refetch();
+    } catch (error) {
+      toast.error("Error approving trader. Please try again.", "error");
+      console.error(error);
+    }
+  };
+
+  const [blockTraderById, { isLoading, isError }] =
+    useBlockTradersByIdMutation();
 
   const handleBlockTrader = async (traderId) => {
     try {
@@ -52,7 +65,6 @@ const TradersData = () => {
     }
   };
   const handleViewClick = (userId) => {
-    
     navigate("/trader", { state: { selectedUserId: userId } });
   };
 
@@ -61,8 +73,6 @@ const TradersData = () => {
       dispatch(setUsers(users));
     }
   }, [users, dispatch]);
-
-
 
   if (!traders)
     return (
@@ -127,18 +137,48 @@ const TradersData = () => {
           }
           cellRender={(cellData) => cellData.value}
         />
-        <Column
+        {/* <Column
           caption="Actions"
           width={200}
           cellRender={(cellData) => (
-            <div>
-              <button onClick={() => handleBlockTrader(cellData.data.id)}>Block</button>
-              {/* <button onClick={() => handleBlock(cellData.data)}>Block</button> */}
-              {/* <button onClick={() => handleDeactivate(cellData.data)}> */}
-              
-            </div>
+            <Box>
+              <Button onClick={() => handleBlockTrader(cellData.data.id)}>
+                Block
+              </Button>
+              <Button
+                onClick={() => handleApproveTrader(cellData.data)}
+                disabled={cellData.data.active}
+              >
+                {cellData.data.active === true ? "Approved" : "Approve"}
+              </Button>
+            </Box>
           )}
+        /> */}
+        <Column
+          caption="Actions"
+          width={200}
+          cellRender={(cellData) => {
+            console.log(
+              `Active status for ${cellData.data.firstName}:`,
+              cellData.data.active
+            );
+
+            return (
+              <Box>
+                <Button onClick={() => handleBlockTrader(cellData.data.id)}>
+                  Block
+                </Button>
+                <Button
+                  onClick={() => handleApproveTrader(cellData.data)}
+                  disabled={cellData.data.active}
+                >
+                  {cellData.data.active ? "Approved" : "Approve"}
+                </Button>
+              </Box>
+            );
+          }}
         />
+
         <Column
           width={50}
           cellRender={(data) => (

@@ -1,135 +1,4 @@
-// import React, { useState, useEffect } from "react";
-// import {
-//   Checkbox,
-//   FormControlLabel,
-//   FormGroup,
-//   Box,
-//   Container,
-//   Typography,
-//   Paper,
-// } from "@mui/material";
-// import { CSVLink } from "react-csv";
-// import { useGetUserDataForReportsQuery } from "../../../redux/api/analyticsApi";
 
-// const categoryData = {
-//   Users: ["Admin", "Agent", "Customer"],
-//   Properties: ["Listed", "Sold", "Not Sold"],
-//   Services: [
-//     "Video Call",
-//     "API Subscriptions",
-//     "Property Listing",
-//     "Reports & Analytics",
-//   ],
-// };
-
-// const Reports = () => {
-//   const [selectedCategory, setSelectedCategory] = useState(null);
-//   const [selectedSubCategories, setSelectedSubCategories] = useState({});
-
-//   // Transform sub-categories to lowercase for API
-//   const transformedSubCategories = Object.keys(selectedSubCategories).map(
-//     (subCat) => subCat.toLowerCase()
-//   );
-
-//   const { data: userData, isFetching } = useGetUserDataForReportsQuery(
-//     {
-//       userCategories: transformedSubCategories,
-//     },
-//     {
-//       skip: !selectedCategory || transformedSubCategories.length === 0,
-//     }
-//   );
-
-//   useEffect(() => {
-//     if (selectedCategory === "Users") {
-//       setSelectedSubCategories({
-//         Admin: true,
-//         Agent: true,
-//         Customer: true,
-//       });
-//     }
-//   }, [selectedCategory]);
-
-//   const handleMainCategoryChange = (category) => {
-//     setSelectedCategory(category);
-//     setSelectedSubCategories({});
-//   };
-
-//   const handleSubCategoryChange = (subCategory) => {
-//     setSelectedSubCategories((prev) => ({
-//       ...prev,
-//       [subCategory]: !prev[subCategory],
-//     }));
-//   };
-
-//   // Headers for CSV file
-//   const flattenedUserData = userData ? [].concat(...Object.values(userData.userData)) : [];
-//   const generateCSVHeaders = () => {
-//     return flattenedUserData.length > 0
-//       ? Object.keys(flattenedUserData[0]).map(key => ({
-//           label: key.charAt(0).toUpperCase() + key.slice(1),
-//           key: key
-//         }))
-//       : [];
-//   };
-//   const csvHeaders = generateCSVHeaders();
-
-//   return (
-//     <Container maxWidth="lg">
-//       <Paper elevation={3} sx={{ p: 3, overflowX: "auto" }}>
-//         <Typography gutterBottom variant="h6">
-//           Select Category
-//         </Typography>
-//         <FormGroup>
-//           {Object.keys(categoryData).map((mainCategory) => (
-//             <FormControlLabel
-//               key={mainCategory}
-//               control={
-//                 <Checkbox
-//                   checked={selectedCategory === mainCategory}
-//                   onChange={() => handleMainCategoryChange(mainCategory)}
-//                 />
-//               }
-//               label={mainCategory}
-//             />
-//           ))}
-//         </FormGroup>
-//         {selectedCategory && (
-//           <Box sx={{ my: 2 }}>
-//             <Typography variant="subtitle1">Sub-Categories</Typography>
-//             <FormGroup>
-//               {categoryData[selectedCategory].map((subCategory) => (
-//                 <FormControlLabel
-//                   key={subCategory}
-//                   control={
-//                     <Checkbox
-//                       checked={!!selectedSubCategories[subCategory]}
-//                       onChange={() => handleSubCategoryChange(subCategory)}
-//                     />
-//                   }
-//                   label={subCategory}
-//                 />
-//               ))}
-//             </FormGroup>
-//           </Box>
-//         )}
-
-//         <CSVLink
-//           data={flattenedUserData}
-//           headers={csvHeaders}
-//           filename="user_data_report.csv"
-//           className="btn btn-primary"
-//           style={{ marginTop: "20px" }}
-//         >
-//           Download Report
-//         </CSVLink>
-//         {isFetching && <Typography>Loading data...</Typography>}
-//       </Paper>
-//     </Container>
-//   );
-// };
-
-// export default Reports;
 
 import React, { useState, useEffect } from "react";
 import {
@@ -140,6 +9,7 @@ import {
   Container,
   Typography,
   Paper,
+  Button,
 } from "@mui/material";
 import { CSVLink } from "react-csv";
 import {
@@ -147,6 +17,7 @@ import {
   useGetPropertiesDataForReportsQuery,
   useGetServicesDataForReportsQuery,
 } from "../../../redux/api/analyticsApi";
+import { styled } from '@mui/material/styles';
 
 const categoryData = {
   Users: ["Admin", "Agent", "Customer"],
@@ -162,6 +33,22 @@ const categoryData = {
 const Reports = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState({});
+
+  // Custom styles
+const StyledPaper = styled(Paper)({
+  padding: '20px',
+  marginBottom: '20px',
+  backgroundColor: '#f5f5f5', // Soft background
+});
+
+const DownloadButton = styled(Button)({
+  marginTop: '20px',
+  backgroundColor: '#4caf50', // Theme primary color
+  color: 'white',
+  '&:hover': {
+    backgroundColor: '#388e3c', // Darker shade for hover state
+  },
+});
 
   // Transform sub-categories to lowercase for API
   const transformedSubCategories = Object.keys(selectedSubCategories).map(
@@ -252,7 +139,7 @@ const Reports = () => {
 
   return (
     <Container maxWidth="lg">
-      <Paper elevation={3} sx={{ p: 3, overflowX: "auto" }}>
+      <StyledPaper elevation={3} sx={{ p: 3, overflowX: "auto" }}>
         <Typography gutterBottom variant="h6">
           Select Category
         </Typography>
@@ -329,7 +216,7 @@ const Reports = () => {
         {isFetchingUsers ||
           isFetchingProperties ||
           (isFetchingServices && <Typography>Loading data...</Typography>)}
-      </Paper>
+      </StyledPaper>
     </Container>
   );
 };

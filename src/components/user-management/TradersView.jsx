@@ -1,27 +1,58 @@
 import React from "react";
-import { Box, Typography, Link, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Link,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Card,
+  CardContent,
+} from "@mui/material";
 import { useLocation } from "react-router-dom";
 import Zangi from "../../assets/Profile.svg";
-import Cover from "../../assets/doc.webp";
 import Partner from "../../assets/Profile.svg";
-import { useGetAgentUserQuery, useGetAllTradersUsersListQuery } from "../../redux/api/userManagementApi";
-// import { Box, Typography, Link, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+  useGetAgentUserQuery,
+  useGetAllTradersUsersListQuery,
+} from "../../redux/api/userManagementApi";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const TradersView = () => {
   const location = useLocation();
   const selectedUserId = location.state?.selectedUserId;
-  console.log("Selected user ID:", selectedUserId);
 
   const { data: selectedUser } = useGetAgentUserQuery(selectedUserId, {
     skip: !selectedUserId,
   });
-  console.log("Selected user data:", selectedUser);
+  console.log('selected user',selectedUser)
+  const { data: tradersUsers } = useGetAllTradersUsersListQuery(selectedUserId);
 
-  const { data: tradersUsers, isLoading, isError } = useGetAllTradersUsersListQuery(selectedUserId);
-  console.log("Traders users:", tradersUsers);
-
-  const orignalDocumentPath = selectedUser?.documentUrl;
-  const correctedDocumentPath = orignalDocumentPath?.replace(/\\\\/g, '\\');
+  const getFileLink = (path) => {
+    if (!path) {
+      return <Typography variant="subtitle1">No document available</Typography>;
+    }
+  
+    const fullUrl = new URL(path, process.env.REACT_APP_SERVER_ENDPOINT).href;
+    const fileName = path.split("/").pop();
+  
+    return (
+      <Link
+        href={fullUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <AttachFileIcon style={{ marginRight: 8 }} />
+        {fileName}
+      </Link>
+    );
+  };
+  
 
   return (
     <Box
@@ -30,281 +61,86 @@ const TradersView = () => {
         flexDirection: "column",
         width: "100%",
         backgroundColor: "#FAFBFC",
-        paddingTop: "2vmin",
+        padding: "2vmin",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-        }}
-      >
-        <Box
-          sx={{
-            width: "25%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src={Zangi}
-            style={{
-              width: "60%",
-              borderRadius: "50%",
-              border: "0.5vmin solid #00C800",
-              filter: "drop-shadow(0px 0px 4px black)",
-            }}
-          />
+      <Card sx={{ marginBottom: "2vmin" }}>
+        <CardContent>
           <Box
-            sx={{
-              marginTop: "2vmin",
-              padding: "1vh 1vw",
-              borderRadius: "1vmin",
-              backgroundColor: "rgb(0, 200, 0)",
-            }}
+            sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
           >
-            <Typography
-              sx={{
-                fontSize: "3vmin",
-                color: "white",
-                fontWeight: "600",
+            <img
+              src={Zangi}
+              alt="Profile"
+              style={{
+                width: "10vmin",
+                borderRadius: "50%",
+                marginRight: "1vmin",
               }}
-            >
-              {selectedUser?.user.active === true ? "Active" : "Inactive"}
+            />
+            <Typography variant="h5">
+              {selectedUser?.user.firstName} {selectedUser?.user.lastName}
             </Typography>
           </Box>
-        </Box>
-        <Box sx={{ width: "74%" }}>
-          <Box
-            sx={{
-              width: "100%",
-              padding: "2vmin",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <img src={Partner} style={{ marginRight: "1vmin" }} />
-            <Typography
-              sx={{
-                fontSize: "4vmin",
-                fontWeight: "500",
-                color: "#00C800",
-              }}
-            >
-              Trader
-            </Typography>
-          </Box>
-          <Divider sx={{ backgroundColor: "#00C800" }} />
-          <Box
-            sx={{
-              width: "100%",
-              padding: "2vmin",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "3.5vmin",
-                fontWeight: "500",
-                color: "#737791",
-              }}
-            >
-              {selectedUser?.user.firstName}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "3.5vmin",
-                fontWeight: "500",
-                color: "#737791",
-                marginLeft: "1vmin",
-              }}
-            >
-              {selectedUser?.user.lastName}
-            </Typography>
-          </Box>
-          <Divider sx={{ backgroundColor: "#00C800" }} />
-          <Box
-            sx={{
-              width: "100%",
-              padding: "2vmin",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "3.5vmin",
-                  fontWeight: "500",
-                  color: "#00C800",
-                }}
-              >
-                Phone No:
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "3vmin",
-                  fontWeight: "500",
-                  color: "#737791",
-                  marginLeft: "1vmin",
-                }}
-              >
-                {selectedUser?.user.phoneNumber}
-              </Typography>
-            </Box>
-            <Typography
-              sx={{
-                fontSize: "3vmin",
-                fontWeight: "500",
-                color: "#737791",
-                marginLeft: "1vmin",
-              }}
-            >
-              {selectedUser?.user.email}
-            </Typography>
-          </Box>
-          <Divider sx={{ backgroundColor: "#00C800" }} />
-          <Box
-            sx={{
-              width: "100%",
-              padding: "2vmin",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "3.5vmin",
-                fontWeight: "500",
-                color: "#00C800",
-              }}
-            >
-              Location:
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "3vmin",
-                fontWeight: "500",
-                color: "#737791",
-                marginLeft: "1vmin",
-              }}
-            >
-              {selectedUser?.companyAddress}
-            </Typography>
-          </Box>
-          <Divider sx={{ backgroundColor: "#00C800" }} />
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          width: "98%",
-          margin: "0 1%",
-        }}
-      >
-        <Box
-          sx={{
-            width: "100%",
-            padding: "2vmin",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "3.5vmin",
-              fontWeight: "500",
-              color: "#00C800",
-            }}
-          >
-            Company Name:
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="subtitle1">
+            Phone: {selectedUser?.user.phoneNumber}
           </Typography>
-          <Typography
-            sx={{
-              fontSize: "3vmin",
-              fontWeight: "500",
-              color: "#737791",
-              marginLeft: "1vmin",
-            }}
-          >
-            {selectedUser?.companyName}
+          <Typography variant="subtitle1">
+            Email: {selectedUser?.user.email}
           </Typography>
-        </Box>
-        <Divider sx={{ backgroundColor: "#00C800" }} />
-        <Box
-          sx={{
-            width: "100%",
-            padding: "2vmin",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "3.5vmin",
-              fontWeight: "500",
-              color: "#00C800",
-            }}
-          >
-            Company Address:
+          <Typography variant="subtitle1">
+            Location: {selectedUser?.companyAddress}
           </Typography>
-          <Typography
-            sx={{
-              fontSize: "3vmin",
-              fontWeight: "500",
-              color: "#737791",
-              marginLeft: "1vmin",
-            }}
-          >
-            {selectedUser?.companyAddress}
+          <Typography variant="subtitle1">
+            Company Name: {selectedUser?.companyName}
           </Typography>
-        </Box>
-        <Divider sx={{ backgroundColor: "#00C800" }} />
-        <img
-          src={correctedDocumentPath}
-          style={{ width: "100%" }}
-        />
+          <Typography variant="subtitle1">
+            Status: {selectedUser?.user.active ? "Active" : "Inactive"}
+          </Typography>
+        </CardContent>
+      </Card>
 
-        <Divider sx={{ backgroundColor: "#00C800" }} />
-        <TableContainer component={Paper}>
-        <Table aria-label="traders users table">
-          <TableHead>
-            <TableRow>
-              <TableCell>First Name</TableCell>
-              <TableCell>Last Name</TableCell>
-              <TableCell>Email</TableCell>
-              {/* Add more TableCell components as needed */}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tradersUsers?.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.firstName}</TableCell>
-                <TableCell>{user.lastName}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                {/* Add more TableCell components as needed */}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      </Box>
+      <Card sx={{ marginBottom: "2vmin" }}>
+        <CardContent>
+          <Typography variant="h6">Documents:</Typography>
+          {getFileLink(selectedUser?.documentUrl)}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent>
+          <Typography variant="h6">Associated Users:</Typography>
+          <TableContainer component={Paper}>
+            <Table aria-label="traders users table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Last Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>User Type</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(tradersUsers?.data) ? (
+                  tradersUsers.data.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.firstName}</TableCell>
+                      <TableCell>{user.lastName}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.agent.agentType}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4}>No data available</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
     </Box>
   );
 };
