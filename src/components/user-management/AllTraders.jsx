@@ -22,6 +22,11 @@ import DataGrid, {
   FilterRow,
   Column,
   Editing,
+  GroupPanel,
+  Grouping,
+  Export,
+  Summary,
+  MasterDetail,
 } from "devextreme-react/data-grid";
 import { toast } from "react-toastify";
 
@@ -35,6 +40,7 @@ const TradersData = () => {
   const [selectedUserId, setSelectedUserId] = useState();
 
   const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
+  
 
   const { data: selectedUser } = useGetUserByIdQuery(selectedUserId, {
     skip: !selectedUserId,
@@ -137,31 +143,16 @@ const TradersData = () => {
           }
           cellRender={(cellData) => cellData.value}
         />
-        {/* <Column
-          caption="Actions"
-          width={200}
-          cellRender={(cellData) => (
-            <Box>
-              <Button onClick={() => handleBlockTrader(cellData.data.id)}>
-                Block
-              </Button>
-              <Button
-                onClick={() => handleApproveTrader(cellData.data)}
-                disabled={cellData.data.active}
-              >
-                {cellData.data.active === true ? "Approved" : "Approve"}
-              </Button>
-            </Box>
-          )}
-        /> */}
+        <Column dataField="active" caption="Active" />
+        
         <Column
           caption="Actions"
           width={200}
           cellRender={(cellData) => {
-            console.log(
-              `Active status for ${cellData.data.firstName}:`,
-              cellData.data.active
-            );
+            // console.log(
+            //   `Active status for ${cellData.data.firstName}:`,
+            //   cellData.data.active
+            // );
 
             return (
               <Box>
@@ -181,15 +172,11 @@ const TradersData = () => {
 
         <Column
           width={50}
-          cellRender={(data) => (
+          cellRender={(cellData) => (
             <VisibilityIcon
               style={{ cursor: "pointer" }}
-              // onClick={() => {
-              //   setSelectedUserId(data.data.id);
-              //   console.log("Selected user data:", selectedUser);
-              //   // navigate("/trader"); // Navigate or take other actions based on the fetched data
-              // }}
-              onClick={() => handleViewClick(data.data.id)}
+              
+              onClick={() => handleViewClick(cellData.data.id)}
             />
           )}
         />
@@ -197,6 +184,14 @@ const TradersData = () => {
         <Paging defaultPageSize={20} />
         <Pager showPageSizeSelector={true} allowedPageSizes={[5, 10, 15, 20]} />
         <FilterRow visible={true} />
+        <GroupPanel visible={true} />
+        <Grouping autoExpandAll={false} />
+        <Export enabled={true} fileName="Traders" allowExportSelectedData={true} />
+        {/* <Summary>
+          <TotalItem column="firstName" summaryType="count" displayFormat="Total: {0}" />
+         
+        </Summary>
+        <MasterDetail enabled={true} component={renderDetailGrid} /> */}
 
         <Editing
           mode="popup"
