@@ -24,6 +24,8 @@ import { tr } from "date-fns/locale";
 const PromoCodeGeneration = () => {
   const [couponCodeAmount, setCouponCodeAmount] = useState("");
   const [couponCodePercent, setCouponCodePercent] = useState("");
+  const [nameAmount, setNameAmount] = useState("");
+  const [namePercent, setNamePercent] = useState("");
   const [amount, setAmount] = useState("");
   const [percentage, setPercentage] = useState("");
   const [createCouponAmount] = useCreateCouponByAmountMutation();
@@ -34,10 +36,12 @@ const PromoCodeGeneration = () => {
     try {
       await createCouponAmount({
         couponId: couponCodeAmount,
+        name: nameAmount,
         amountOff: amount,
       });
       refetchCoupons(); // Refetch list of coupons
       setAmount("");
+      setNameAmount("");
       setCouponCodeAmount("");
     } catch (err) {
       toast.error(err?.data?.message || 'Failed to create coupon');
@@ -48,10 +52,12 @@ const PromoCodeGeneration = () => {
     try {
       await createCouponPercent({
         couponId: couponCodePercent,
+        name: namePercent,
         percentOff: percentage,
       });
       refetchCoupons(); // Refetch list of coupons
       setPercentage("");
+      setNamePercent("");
       setCouponCodePercent("");
     } catch (err) {
       toast.error(err?.data?.message || 'Failed to create coupon');
@@ -70,6 +76,11 @@ const PromoCodeGeneration = () => {
               label="Coupon Code"
               value={couponCodeAmount}
               onChange={(e) => setCouponCodeAmount(e.target.value)}
+            />
+            <TextField
+              label="Name"
+              value={nameAmount}
+              onChange={(e) => setNameAmount(e.target.value)}
             />
             <TextField
               label="Amount"
@@ -93,6 +104,11 @@ const PromoCodeGeneration = () => {
               label="Coupon Code"
               value={couponCodePercent}
               onChange={(e) => setCouponCodePercent(e.target.value)}
+            />
+            <TextField
+              label="Name"
+              value={namePercent}
+              onChange={(e) => setNamePercent(e.target.value)}
             />
             <TextField
               label="Percentage"
