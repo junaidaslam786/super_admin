@@ -200,8 +200,8 @@ const PropertyDesciption = ({ updateDescription }) => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              // value=""
-              // onChange={handleChange}
+              value={propertyCategory}
+              onChange={(e) => setPropertyCategory(e.target.value)}
               label="Property Category"
             >
               <MenuItem value="Rent">Rent</MenuItem>
@@ -281,8 +281,8 @@ const PropertyDesciption = ({ updateDescription }) => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                // value=""
-                // onChange={handleChange}
+                value={bedrooms}
+                onChange={(e) => setBedrooms(e.target.value)}
                 label="No. of Bedrooms"
               >
                 <MenuItem value={0}>0</MenuItem>
@@ -301,7 +301,8 @@ const PropertyDesciption = ({ updateDescription }) => {
             <TextField
               label="Area*"
               placeholder="7500"
-              // value=""
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
               fullWidth
               sx={{ marginBottom: "2vh", marginRight: "2vw" }}
               InputLabelProps={{

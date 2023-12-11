@@ -31,6 +31,7 @@ const AddPropertyPage = () => {
     useAddPropertyMutation({
       onSuccess: () => {
         setPropertyCreated(true);
+        refetch();
       },
     });
 

@@ -26,6 +26,9 @@ import storage from 'redux-persist/lib/storage';
 import { toast } from 'react-toastify';
 import { CustomErrorMessage } from '../utils/CustomErrorMessage';
 
+//middleware
+import { localStorageMiddleware, reHydrateStore } from '../middleware/localStorageMiddleware'
+
 const persistConfig = {
   key: 'root',
   storage,
@@ -80,11 +83,12 @@ const toastNotificationsMiddleware = (storeAPI) => (next) => (action) => {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
+  preloadedState: reHydrateStore(),
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
     }).concat([
       authApi.middleware,
@@ -96,6 +100,7 @@ const store = configureStore({
       tokenManagementApi.middleware,
       paymentsApi.middleware,
       communityApi.middleware,
+      localStorageMiddleware,
       toastNotificationsMiddleware,
     ]),
 });
