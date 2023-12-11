@@ -65,6 +65,8 @@ const rootReducer = combineReducers({
   userState: userReducer,
   userManagement: userManagementReducer,
   propertyManagement: propertyManagementReducer,
+  featureManagement: featureManagementApi.reducer,
+  analyticsApi: analyticsApi.reducer,
   // other reducers
 });
 
@@ -74,11 +76,14 @@ const toastNotificationsMiddleware = (storeAPI) => (next) => (action) => {
     toast.success('Operation successful!');
   }
   if (action.type.endsWith('/rejected')) {
-    const errorMessage = CustomErrorMessage(action.error);
+    // Check if the action payload contains a specific message
+    const message = action.error?.data?.message || action.error?.message;
+    const errorMessage = message || 'An error occurred';
     toast.error(errorMessage);
   }
   return next(action);
 };
+
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -91,6 +96,7 @@ const store = configureStore({
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
     }).concat([
+      localStorageMiddleware,
       authApi.middleware,
       userApi.middleware,
       userManagementApi.middleware,
@@ -100,7 +106,6 @@ const store = configureStore({
       tokenManagementApi.middleware,
       paymentsApi.middleware,
       communityApi.middleware,
-      localStorageMiddleware,
       toastNotificationsMiddleware,
     ]),
 });
