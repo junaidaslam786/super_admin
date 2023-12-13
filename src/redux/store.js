@@ -19,7 +19,14 @@ import propertyManagementReducer from './features/propertyManagementSlice';
 import userReducer from './features/userSlice';
 
 // Redux Persist
-import { persistStore, persistReducer } from 'redux-persist';
+import {  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER, } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 // Toast notifications
@@ -27,27 +34,28 @@ import { toast } from 'react-toastify';
 import { CustomErrorMessage } from '../utils/CustomErrorMessage';
 
 //middleware
-import { localStorageMiddleware, reHydrateStore } from '../middleware/localStorageMiddleware'
+// import { localStorageMiddleware, reHydrateStore } from '../middleware/localStorageMiddleware'
 
 const persistConfig = {
   key: 'root',
+  version: 1,
   storage,
   whitelist: [
     'userState',
     "userManagement",
     "propertyManagement",
-    "featureManagement",
+    // "featureManagement",
     // "analyticsApi",
     "tokenManagementApi",
     "paymentsApi",
     "communityApi",
-    userManagementApi.reducerPath,
-    propertyManagementApi.reducerPath,
-    featureManagementApi.reducerPath,
-    // analyticsApi.reducerPath,
-    tokenManagementApi.reducerPath,
-    paymentsApi.reducerPath,
-    communityApi.reducerPath,
+    // userManagementApi.reducerPath,
+    // propertyManagementApi.reducerPath,
+    // // featureManagementApi.reducerPath,
+    // // analyticsApi.reducerPath,
+    // tokenManagementApi.reducerPath,
+    // paymentsApi.reducerPath,
+    // communityApi.reducerPath,
   ],
 };
 
@@ -88,15 +96,13 @@ const toastNotificationsMiddleware = (storeAPI) => (next) => (action) => {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  preloadedState: reHydrateStore(),
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }).concat([
-      localStorageMiddleware,
       authApi.middleware,
       userApi.middleware,
       userManagementApi.middleware,

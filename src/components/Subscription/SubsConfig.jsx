@@ -4,6 +4,7 @@ import {
   useGetFeatureByIdQuery,
   useUpdateTokensForFeatureMutation,
 } from "../../redux/api/featureManagementApi";
+import { useQueryClient } from 'react-query';
 
 const SubsConfig = ({ featureName, slotsLabel, featureId, freeLabel }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -11,13 +12,15 @@ const SubsConfig = ({ featureName, slotsLabel, featureId, freeLabel }) => {
   const [slots, setSlots] = useState("");
   const [free, setFree] = useState("");
 
+  const queryClient = useQueryClient(); 
+
   const {
     data: featureData,
     isLoading: isFeatureLoading,
     isError: isFeatureError,
   } = useGetFeatureByIdQuery(featureId);
   const [updateTokensForFeature] = useUpdateTokensForFeatureMutation();
-  // console.log(featureData.tokensPerUnit);
+  console.log(featureData);
 
   const defaultSlotsLabel = "Number of slots";
 
@@ -30,8 +33,10 @@ const SubsConfig = ({ featureName, slotsLabel, featureId, freeLabel }) => {
     try {
       await updateTokensForFeature({
         id: featureId,
-        data: { tokensPerUnit },
+        data: { tokensPerUnit, totalUnits: slots, freeUnits: free },
       }).unwrap();
+
+      queryClient.invalidateQueries(['getFeatureById', featureId]);
 
       setOpenSnackbar(true);
       // Additional logic after successful update
