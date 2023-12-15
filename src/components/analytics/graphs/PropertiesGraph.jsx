@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import {
   BarChart,
@@ -15,65 +15,19 @@ const PropertiesGraph = () => {
   const [graphData, setGraphData] = useState([]);
   const { data: propertyAnalyticsData } = useGetAllPropertyAnalyticsQuery();
   const { data: soldPropertiesData } = useGetAllSoldPropertiesQuery();
-  
 
-  // useEffect(() => {
-  //   if (propertyAnalyticsData && soldPropertiesData) {
-  //     // Assuming both APIs return data in a monthly format. Adjust the logic based on the actual API response structure.
-  //     const mergedData = propertyAnalyticsData.map((monthData, index) => {
-  //       const soldData = soldPropertiesData[index]; // Match by index or month
-  //       return {
-  //         month: monthData.month,
-  //         propertiesListed: monthData.propertiesListed,
-  //         revenueGenerated: monthData.revenue_generated,
-  //         propertiesUnderOffer: monthData.propertiesUnderOffer,
-  //         propertiesSoldRentedByMonth: soldData.propertiesSoldRentedByMonth,
-  //         // Add other fields as needed
-  //       };
-  //     });
-  //     setGraphData(mergedData);
-  //   }
-  // }, [propertyAnalyticsData, soldPropertiesData]);
-  // useEffect(() => {
-  //   if (propertyAnalyticsData && soldPropertiesData) {
-  //     // Transforming propertyAnalyticsData to an array if it's an object
-  //     const propertyDataArray = Array.isArray(propertyAnalyticsData) 
-  //       ? propertyAnalyticsData 
-  //       : Object.values(propertyAnalyticsData);
-  
-  //     // Merging data
-  //     const mergedData = propertyDataArray.map((monthData, index) => {
-  //       const soldData = soldPropertiesData[index]; // Match by index or month
-  //       return {
-  //         // ... same as before
-  //       };
-  //     });
-  
-  //     setGraphData(mergedData);
-  //   }
-  // }, [propertyAnalyticsData, soldPropertiesData]);
   useEffect(() => {
     if (propertyAnalyticsData && soldPropertiesData) {
-      const mergedData = Object.keys(propertyAnalyticsData).map(month => {
-        const monthData = propertyAnalyticsData[month];
-        const soldData = soldPropertiesData[month];
-  
-        return {
-          month,
-          propertiesListed: monthData ? monthData.propertiesListed : 0,
-          revenueGenerated: monthData ? monthData.revenue_generated : 0,
-          propertiesUnderOffer: monthData ? monthData.propertiesUnderOffer : 0,
-          propertiesSoldRentedByMonth: soldData ? soldData.propertiesSoldRentedByMonth : 0,
-          // Add other fields as needed
-        };
-      });
-  
-      setGraphData(mergedData);
+      const dataEntry = {
+        propertiesListed: propertyAnalyticsData.propertiesListed.length,
+        revenueGenerated: propertyAnalyticsData.revenue_generated,
+        propertiesUnderOffer: propertyAnalyticsData.propertiesUnderOffer,
+        propertiesSoldRented: soldPropertiesData.propertiesSold,
+      };
+
+      setGraphData([dataEntry]); // Graph data now contains only one entry
     }
   }, [propertyAnalyticsData, soldPropertiesData]);
-  
-  
-  console.log(graphData)
 
   return (
     <Box
@@ -93,14 +47,14 @@ const PropertiesGraph = () => {
           border: "0.2vmin solid #00C800",
           borderRadius: "0.4vmin",
           backgroundColor: "white",
-          display:'flex',
-          alignItems:'center',
-          justifyContent:'center'
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <BarChart
-          width={1000}
-          height={310}
+          width={500}
+          height={300}
           data={graphData}
           margin={{
             top: 20,
@@ -110,15 +64,14 @@ const PropertiesGraph = () => {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis yAxisId="left" orientation="left" stroke="#00C800" />
-          <YAxis yAxisId="right" orientation="right" stroke="#191B2A" />
+          <XAxis dataKey="name" />
+          <YAxis />
           <Tooltip />
           <Legend />
-          <Bar yAxisId="left" dataKey="propertiesListed" fill="#737791" />
-          <Bar yAxisId="right" dataKey="revenueGenerated" fill="#191B2A" />
-          <Bar yAxisId="right" dataKey="propertiesUnderOffer" fill="red" />
-          <Bar yAxisId="right" dataKey="propertiesSoldRentedByMonth" fill="#00C800" />
+          <Bar dataKey="propertiesListed" fill="#737791" />
+          <Bar dataKey="revenueGenerated" fill="#191B2A" />
+          <Bar dataKey="propertiesUnderOffer" fill="red" />
+          <Bar dataKey="propertiesSoldRented" fill="#00C800" />
         </BarChart>
       </Box>
     </Box>

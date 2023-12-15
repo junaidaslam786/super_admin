@@ -2,13 +2,25 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Image from "../../../assets/property2.svg";
 import { useSelector } from "react-redux";
-import { selectTotalCustomers, selectTotalActiveCustomers  } from "../../../redux/selectors/userSelectors";
+import { useGetCustomersAnalyticsQuery } from "../../../redux/api/analyticsApi";
 
 const CustomersList = () => {
-  const totalCustomers = useSelector(selectTotalCustomers);
-  const activeCustomers = useSelector(selectTotalActiveCustomers );
-  console.log(totalCustomers);
-  console.log(activeCustomers);
+
+  const { data, error, isLoading } = useGetCustomersAnalyticsQuery();
+
+  // You can handle loading and error states as well
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred: {error.message}</div>;
+
+  // Destructure the required fields from the data
+  const {
+    totalCustomers,
+    activeCustomers,
+    propertiesBought,
+    propertiesRented,
+    // other fields as needed
+  } = data || {};
+  
   return (
     <Box
       sx={{
@@ -177,7 +189,7 @@ const CustomersList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              577
+              {propertiesBought}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +3% than the last month
@@ -226,7 +238,7 @@ const CustomersList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              $350
+              {propertiesRented}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +2% than the last month

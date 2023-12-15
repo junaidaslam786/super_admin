@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import {
   BarChart,
@@ -10,34 +9,34 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { selectCustomersGroupedByMonth } from '../../../redux/selectors/userSelectors'; 
 import { useGetCustomersAnalyticsQuery } from '../../../redux/api/analyticsApi';
 
 const CustomersGraph = () => {
   const [graphData, setGraphData] = useState([]);
-  const customersByMonth = useSelector(selectCustomersGroupedByMonth);
   const { data: analyticsData } = useGetCustomersAnalyticsQuery();
-  console.log(customersByMonth);
 
   useEffect(() => {
-    if (analyticsData && customersByMonth) {
-      const mergedData = Object.entries(customersByMonth).map(([month, values]) => ({
-        month,
-        totalCustomers: values.total,
-        activeCustomers: values.active,
-        propertiesBought: analyticsData.propertiesBought,
-        propertiesRented: analyticsData.propertiesRented
-      }));
-      setGraphData(mergedData);
+    if (analyticsData) {
+      setGraphData([
+        {
+          name: 'Total Customers',
+          count: analyticsData.totalCustomers,
+        },
+        {
+          name: 'Active Customers',
+          count: analyticsData.activeCustomers,
+        },
+        {
+          name: 'Properties Bought',
+          count: analyticsData.propertiesBought,
+        },
+        {
+          name: 'Properties Rented',
+          count: analyticsData.propertiesRented,
+        },
+      ]);
     }
-  }, [customersByMonth, analyticsData]);
-  
-  // Convert the object into an array for the chart
-  // const data = Object.entries(customersByMonth).map(([month, values]) => ({
-  //   month: month,
-  //   totalCustomers: values.total,
-  //   activeCustomers: values.active,
-  // }));
+  }, [analyticsData]);
 
   return (
     <Box
@@ -63,8 +62,8 @@ const CustomersGraph = () => {
         }}
       >
         <BarChart
-          width={1000}
-          height={310}
+          width={500}
+          height={300}
           data={graphData}
           margin={{
             top: 20,
@@ -74,14 +73,11 @@ const CustomersGraph = () => {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
+          <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="totalCustomers" fill="#737791" />
-          <Bar dataKey="activeCustomers" fill="#82ca9d" />
-          <Bar dataKey="propertiesBought" fill="#8884d8" />
-          <Bar dataKey="propertiesRented" fill="#82ca9d" />
+          <Bar dataKey="count" fill="#8884d8" />
         </BarChart>
       </Box>
     </Box>

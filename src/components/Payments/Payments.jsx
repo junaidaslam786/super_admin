@@ -26,7 +26,7 @@ const InvoicesLine = () => {
     isError,
   } = useFetchCustomerInvoicesQuery();
 
-  // console.log("invoices", invoices.invoices);
+  console.log("invoices", invoices);
   // console.log("Url", invoices.invoices.hosted_invoice_url);
 
   const InvoiceActionCell = ({ data }) => {
@@ -41,11 +41,7 @@ const InvoicesLine = () => {
             View Invoice
           </Button>
         </Link>
-        <Link
-          to={data.invoice_pdf}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link to={data.invoice_pdf} target="_blank" rel="noopener noreferrer">
           <IconButton color="primary" aria-label="download">
             <DownloadIcon />
           </IconButton>
@@ -53,7 +49,6 @@ const InvoicesLine = () => {
       </>
     );
   };
-
 
   useEffect(() => {
     if (invoices) {
@@ -93,20 +88,25 @@ const InvoicesLine = () => {
   }
 
   return (
-    <Box width="75%" >
+    <Box width="75%">
       <DataGrid
         dataSource={
           updatedInvoices ? JSON.parse(JSON.stringify(updatedInvoices)) : []
         }
         showBorders={true}
       >
-        {/* Define columns based on your invoice structure */}
-        <Column dataField="id" caption="Invoice ID" />
+        <Column dataField="number" caption="Invoice Number" />
         <Column dataField="customer_name" caption="Customer Name" />
-        <Column dataField="amount_paid" caption="Amount Paid" />
+
+        {/* Custom Cell Render for Amount Paid */}
+        <Column
+          dataField="amount_paid"
+          caption="Amount Paid"
+          cellRender={(data) => `AED ${data.value}`}
+        />
+
         <Column dataField="quantity" caption="Quantity" />
         <Column caption="Actions" cellRender={InvoiceActionCell} />
-        {/* Add more columns as needed */}
 
         <Paging defaultPageSize={10} />
         <Pager
@@ -115,9 +115,6 @@ const InvoicesLine = () => {
           showNavigationButtons={true}
         />
         <FilterRow visible={true} />
-
-        {/* If you need editing functionality, include it here */}
-        {/* <Editing mode="popup" allowUpdating={true} popup={{ title: "Edit Invoice", showTitle: true, width: 700, height: 525 }} /> */}
       </DataGrid>
     </Box>
   );

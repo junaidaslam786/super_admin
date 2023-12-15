@@ -1,22 +1,21 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import Image from "../../../assets/property2.svg";
-import { selectTotalAgents, selectTotalActiveTraders } from "../../../redux/selectors/userSelectors";
-import { useSelector } from "react-redux";
+
 import { useGetAllAgentsQuery } from "../../../redux/api/analyticsApi";
 
 const TradersList = () => {
-  const totalAgents = useSelector(selectTotalAgents);
-  const activeTraders = useSelector(selectTotalActiveTraders);
+  
   const {data: agentsData} = useGetAllAgentsQuery();
 
   // Add a check to ensure data is defined and has the required properties
-  if (
-    !agentsData ||
-    agentsData.inactiveAgents === undefined ||
-    agentsData.servicesBought === undefined   ) {
+  if (!agentsData) {
     return <Typography>Error: agentsData is not available.</Typography>;
   }
+
+  // Destructure data for easier access
+  const { totalAgents, activeAgents, inactiveAgents, servicesBought } = agentsData;
+
 
   return (
     <Box
@@ -137,7 +136,7 @@ const TradersList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              {activeTraders}
+              {activeAgents}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +3% than the last month
@@ -186,7 +185,7 @@ const TradersList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              {agentsData.inactiveAgents}
+              {inactiveAgents}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               -2% than the last month
@@ -235,7 +234,7 @@ const TradersList = () => {
             <Typography
               sx={{ fontSize: "3.5vmin", color: "#191B2A", fontWeight: "600" }}
             >
-              {agentsData.servicesBought}
+              {servicesBought}
             </Typography>
             <Typography sx={{ fontSize: "1.2vmin", color: "#00C800" }}>
               +4% than the last month
