@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Grid, Box } from "@mui/material";
-import PaymentRequest from "../../components/Payments/PaymentsRequest";
+// import PaymentRequest from "../../components/Payments/PaymentsRequest";
 import PaymentRefund from "../../components/Payments/PaymentRefund";
 import PromoCodeGeneration from "../../components/Payments/PromoCodeGeneration";
 import MainLayout from "../../layout/MainLayout";
@@ -8,7 +8,7 @@ import Payments from "../../components/Payments/Payments";
 
 const PaymentPage = () => {
   const paymentsRef = useRef(null);
-  const paymentRequestRef = useRef(null);
+  // const paymentRequestRef = useRef(null);
   const paymentRefundRef = useRef(null);
   const promoCodeGenerationRef = useRef(null);
 
@@ -19,12 +19,12 @@ const PaymentPage = () => {
       component: <Payments />,
       ref: paymentsRef,
     },
-    {
-      id: "paymentRequest",
-      label: "Payment Request",
-      component: <PaymentRequest />,
-      ref: paymentRequestRef,
-    },
+    // {
+    //   id: "paymentRequest",
+    //   label: "Payment Request",
+    //   component: <PaymentRequest />,
+    //   ref: paymentRequestRef,
+    // },
     {
       id: "paymentRefund",
       label: "Payment Refund",

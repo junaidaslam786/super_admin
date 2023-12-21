@@ -1,64 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrumbs, Link } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import MiniVariantDrawer from "../components/drawr-menu/MiniVariantDrawer";
 
-const MainLayout = ({ navigationItems, children }) => {
-  const location = useLocation();
 
-  // Generate breadcrumbs based on the current route
-  // const generateBreadcrumbs = (path) => {
-  //   const parts = path.split("/").filter(Boolean);
-  //   return parts.map((part, index) => (
-  //     <Link key={index} color="inherit" href={`/${part}`}>
-  //       {part.charAt(0).toUpperCase() + part.slice(1)}
-  //     </Link>
-  //   ));
-  // };
+const MainLayout = ({ navigationItems, children }) => {
+  const [sidebarWidth, setSidebarWidth] = useState(0);
+  const location = useLocation();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('lg'));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const generateBreadcrumbs = (path) => {
     const parts = path.split("/").filter(Boolean);
-    const breadcrumbs = [];
+    let breadcrumbPath = "";
 
-    for (let i = 0; i < parts.length; i++) {
-      if (i < parts.length - 1) {
-        breadcrumbs.push(`${parts[i]}/${parts[i + 1]}`);
-        i++; // Skip the next part since it's already added
-      } else {
-        breadcrumbs.push(parts[i]);
-      }
-    }
-
-    return breadcrumbs.map((breadcrumb, index) => (
-      <Link key={index} color="inherit" to={`/${breadcrumb}`}>
-        {breadcrumb
-          .replace(/-/g, " ")
-          .split("/")
-          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-          .join(" / ")}
-      </Link>
-    ));
+    return parts.map((part, index) => {
+      breadcrumbPath += `/${part}`;
+      return (
+        <Link
+          key={index}
+          color="inherit"
+          to={breadcrumbPath}
+          style={{
+            fontFamily: "Roboto",
+            color: "white",
+            textDecoration: "none",
+          }}
+        >
+          {part.charAt(0).toUpperCase() + part.slice(1)}
+        </Link>
+      );
+    });
   };
 
+  useEffect(() => {
+    // Update the width of the sidebar based on screen size or open state
+    const updateSidebarWidth = () => {
+      const sidebar = document.getElementById("sidebar");
+      if (sidebar) {
+        setSidebarWidth(sidebar.offsetWidth);
+      }
+    };
+
+    // Call the function on mount and whenever the screen size changes
+    updateSidebarWidth();
+    window.addEventListener("resize", updateSidebarWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateSidebarWidth);
+    };
+  }, [isLargeScreen]);
+
   return (
-    <div style={{ display: "flex"}}>
-      <MiniVariantDrawer navigationItems={navigationItems} />
-      <main style={{ flexGrow: 1, paddingTop: "64px" }}>
-        {/* Breadcrumb section */}
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <MiniVariantDrawer id="sidebar" navigationItems={navigationItems} />
+      <main
+        style={{
+          flexGrow: 1,
+          paddingTop: "70px",
+          marginLeft: sidebarWidth,
+        }}
+      >
         <Breadcrumbs
           aria-label="breadcrumb"
+          separator=" / "
           sx={{
             color: "white",
             backgroundColor: "#171B2A",
-            height: "6vmin",
-            fontSize: "1.5vmin",
+            height: isLargeScreen ? "6vmin" : "5vmin",
+            fontSize: isLargeScreen ? "1.5vmin" : "1.2vmin",
             textAlign: "center",
             padding: "1.5vmin 0",
-            paddingLeft: "2vw",
+            paddingLeft: isLargeScreen ? "2vw" : "5vw",
           }}
         >
           {generateBreadcrumbs(location.pathname)}

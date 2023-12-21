@@ -23,9 +23,7 @@ const Dashboard = () => {
   const totalAdmins = useSelector(selectTotalAdmins);
   const { totalCount, totalAmount } = useSelector(selectInvoiceSummary);
   console.log(totalCount, totalAmount);
-  // const totalInvoicesCount = useSelector(selectTotalInvoiceCount);
-  // const totalInvoicesAmount = useSelector(selectTotalInvoiceAmount);
-  // const totalAdmins = useSelector(selectTotalAdmins);
+  
 
   const cardData = [
     {

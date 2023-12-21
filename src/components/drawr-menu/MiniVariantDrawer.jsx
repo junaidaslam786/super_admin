@@ -1,38 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useTheme } from "@mui/material/styles";
-import { styled, alpha } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import LogoutIcon from "@mui/icons-material/Logout";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Badge from "@mui/material/Badge";
-import InputBase from "@mui/material/InputBase";
-
+import { useTheme, styled, alpha } from "@mui/material/styles";
+import {
+  Box,
+  Drawer,
+  AppBar,
+  Toolbar,
+  List,
+  Typography,
+  IconButton,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Badge,
+  InputBase,
+  CssBaseline,
+} from "@mui/material";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/features/userSlice";
-
 import { useAppSelector } from "../../redux/store";
-
 import navigationConfig from "../../config/navigation";
 import { Link, useNavigate } from "react-router-dom";
 
-const drawerWidth = 260;
+const drawerWidth = 300;
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -88,41 +86,39 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(24)} + 6px)`,
   [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(10)} + 2px)`,
   },
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end",
+  justifyContent: "space-around",
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
 
-const AppBar = styled(MuiAppBar, {
+const MainAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
+  transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: drawerWidth,
+    // marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
 }));
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+const MainDrawer = styled(Drawer)(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
@@ -138,15 +134,15 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
-
-  const userState = useAppSelector((state) => state.userState);
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
-  const [openSubmenuId, setOpenSubmenuId] = React.useState(null);
+  const [open, setOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [openSubmenu, setOpenSubmenu] = useState(null);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userState = useAppSelector((state) => state.userState);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -156,94 +152,227 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  const toggleSubmenu = (itemId) => {
-    if (openSubmenuId === itemId) {
-      setOpenSubmenuId(null); // If the clicked submenu is already open, close it.
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  // Function to toggle submenu
+  const toggleSubmenu = (itemTitle) => {
+    if (openSubmenu === itemTitle) {
+      setOpenSubmenu(null); // Close submenu if already open
     } else {
-      setOpenSubmenuId(itemId); // Otherwise, open the clicked submenu and close any other open submenu.
+      setOpenSubmenu(itemTitle); // Open the clicked submenu
     }
   };
+
+  const drawerHeaderContent = (
+    <DrawerHeader>
+      <img
+        src={logo}
+        alt="Logo"
+        style={{ width: open ? "50%" : "75%", height: "auto", padding: "2px" }}
+      />
+      <IconButton
+        onClick={handleDrawerClose}
+        sx={{ marginRight: theme.spacing(1) }}
+      >
+        <ChevronLeftIcon />
+      </IconButton>
+    </DrawerHeader>
+  );
+
+  const drawerContent = (
+    <div>
+      {drawerHeaderContent}
+      <List>
+        {navigationConfig.map((item) => (
+          <React.Fragment key={item.title}>
+            <ListItem
+              disablePadding
+              sx={{
+                padding: open ? "0.5vh 0" : "0.5vh 1vw",
+                margin: "0 1vw",
+                borderRadius: "1vmin",
+                fill: "#171B2A",
+                color: "#171B2A",
+                display: "block",
+                "&:hover": {
+                  backgroundColor: "#00C800",
+                  fill: "white",
+                  color: "white",
+                },
+              }}
+              onClick={() => (item.children ? toggleSubmenu(item.title) : null)}
+            >
+              <Link
+                to={item.navLink}
+                style={{ textDecoration: "none", color: "#737791" }}
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2,
+                    borderRadius: "1vmin",
+                    // "&:hover": {
+                    //   color: "#00C800", // Text color changes on hover
+                    // },
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      width: "4vmin",
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.title}
+                    sx={{
+                      display: open ? "block" : "none",
+                    }}
+                  />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            {/* Conditional rendering of submenu items */}
+            {item.children && openSubmenu === item.title && (
+              <List component="div" disablePadding>
+                {item.children.map((subItem) => (
+                  <Link
+                    to={subItem.navLink}
+                    style={{ textDecoration: "none", color: "#737791" }}
+                    key={subItem.title}
+                  >
+                    <ListItem
+                      button
+                      sx={{
+                        pl: 12,
+                        "&:hover": {
+                          color: "#00C800", // Text color changes on hover
+                        },
+                      }}
+                    >
+                      <ListItemText primary={subItem.title} />
+                    </ListItem>
+                  </Link>
+                ))}
+              </List>
+            )}
+          </React.Fragment>
+        ))}
+        <ListItem
+          button
+          onClick={() => {
+            dispatch(logout());
+            navigate("/login");
+          }}
+          sx={{
+            padding: open ? "0 1vw" : "0 0",
+            height: "4vmin",
+            borderRadius: "1vmin",
+            marginTop: "5vh",
+            backgroundColor: "#171B2A",
+            color: "white",
+            "&:hover": { backgroundColor: "#171B2A", opacity: "95%" },
+          }}
+        >
+          <ListItemIcon>
+            <LogoutIcon
+              sx={{ fill: "white", marginLeft: open ? "0" : "0.5vw" }}
+            />
+          </ListItemIcon>
+          <ListItemText
+            primary="Sign Out"
+            sx={{ display: open ? "block" : "none" }}
+          />
+        </ListItem>
+      </List>
+    </div>
+  );
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
+      <MainAppBar
         open={open}
-        sx={{ boxShadow: "0px 0px 1px black" }}
+        sx={{ boxShadow: "0px 0px 1px black", justifyContent: "space-between" }}
       >
         <Toolbar sx={{ backgroundColor: "white" }}>
           <IconButton
-            color="#00C800"
+            color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={open ? handleDrawerClose : handleDrawerOpen}
             edge="start"
             sx={{
               marginRight: 5,
               ...(open && { display: "none" }),
+              color: "#00C800", // If you want to maintain color styles
             }}
           >
-            <MenuIcon sx={{ color: "#00C800", fontSize: "3vmin" }} />
+            <MenuIcon sx={{ fontSize: "3vmin" }} />
           </IconButton>
 
-          <Typography
-            variant="p"
-            noWrap
-            component="div"
+          {/* Search Component */}
+          <Box
             sx={{
-              display: { xs: "none", sm: "block", color: "#171B2A" },
-              fontSize: "3vmin",
-              fontWeight: "600",
-              marginLeft: "1vw",
+              backgroundColor: "#FAFBFC",
+              left: "15vw",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            Dashboard
-          </Typography>
-          <Search sx={{ backgroundColor: "#FAFBFC", left: "15vw" }}>
-            <SearchIconWrapper>
-              <SearchIcon
-                sx={{
-                  color: "#00C800",
-                  fontSize: "2.5vmin",
-                  marginLeft: "0.5vw",
-                }}
-              />
-            </SearchIconWrapper>
-            <StyledInputBase
+            <IconButton type="submit" sx={{ p: "10px" }}>
+              <SearchIcon sx={{ color: "#00C800", fontSize: "2.5vmin" }} />
+            </IconButton>
+            <InputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              value={searchQuery}
+              onChange={handleSearchChange}
               sx={{
                 color: "#171B2A",
                 width: "20vw",
-                paddingLeft: "2vw",
                 height: "4vmin",
                 borderRadius: "1vmin",
                 fontSize: "1.5vmin",
                 fontWeight: "600",
               }}
             />
-          </Search>
+          </Box>
+
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="#00C800"
-              sx={{ marginRight: "2vw" }}
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon
-                  sx={{ fontSize: "2.5vmin", fill: "#00C800" }}
-                />
-              </Badge>
-            </IconButton>
+
+          {/* Notification Icon */}
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            sx={{ marginRight: "2vw" }}
+          >
+            <Badge badgeContent={17} color="error">
+              <NotificationsIcon
+                sx={{ fontSize: "2.5vmin", color: "#00C800" }}
+              />
+            </Badge>
+          </IconButton>
+
+          {/* User Profile Section */}
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+          >
             <img
               src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${
-                userState?.user?.imageUrl?.imageUrl
-                  ? userState?.user?.imageUrl?.imageUrl
-                  : userState?.user?.profileImage
+                userState?.user?.imageUrl?.imageUrl ||
+                userState?.user?.profileImage
               }?${Date.now()}`}
               alt="userImage"
-              style={{ width: "6vmin", height: "6vmin" }}
+              style={{ width: "6vmin", height: "6vmin", borderRadius: "50%" }}
             />
             <Box sx={{ marginLeft: "1vw", marginRight: "2vw" }}>
               <Typography
@@ -252,7 +381,6 @@ export default function MiniDrawer() {
                   fontSize: "1.5vmin",
                   fontWeight: "600",
                   fontFamily: "helvetica",
-                  margin: "0",
                   marginTop: "1vmin",
                 }}
               >
@@ -271,179 +399,12 @@ export default function MiniDrawer() {
             </Box>
           </Box>
         </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader sx={{ height: "6vmin" }}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon sx={{ color: "#00C800", fontSize: "3vmin" }} />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginTop: "3vmin",
-          }}
-        >
-          <img
-            src={logo}
-            alt="Logo"
-            style={{ width: open ? "5vmin" : '3vmin', height: open ? "5vmin" : '3vmin', marginBottom: "2vh" }}
-          />
-          {navigationConfig.map((item) => (
-            <React.Fragment key={item.id}>
-              <ListItem
-                sx={{
-                  padding: open ? "0.5vh 0" : "0.5vh 1vw",
-                  margin: "0 1vw",
-                  borderRadius: "1vmin",
-                  fill: "#171B2A",
-                  color: "#171B2A",
-                  display: "block",
-                  "&:hover": {
-                    backgroundColor: "#00C800",
-                    fill: "white",
-                    color: "white",
-                  },
-                }}
-              >
-                {/* Check if the menu item has a navLink and doesn't have a submenu */}
-                {item.navLink && !item.children ? (
-                  <Link to={item.navLink} style={{ textDecoration: "none" }}>
-                    <ListItemButton
-                      sx={{
-                        minHeight: 48,
-                        justifyContent: open ? "initial" : "center",
-                        px: 2,
-                        borderRadius: "1vmin",
-                        "&:hover": {
-                          backgroundColor: "#00C800",
-                          fill: "white",
-                          color: "white",
-                        },
-                      }}
-                    >
-                      <ListItemIcon
-                        sx={{
-                          width: "4vmin",
-                          mr: open ? 3 : "auto",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {item.icon}
-                      </ListItemIcon>
-                      <Typography
-                        sx={{
-                          display: open ? "block" : "none",
-                          color: "black",
-                        }}
-                      >
-                        {item.title}
-                      </Typography>
-                    </ListItemButton>
-                  </Link>
-                ) : (
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2,
-                      "&:hover": {
-                        backgroundColor: "#00C800",
-                        borderRadius: "2vmin",
-                      },
-                    }}
-                    onClick={() => toggleSubmenu(item.id)}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        width: "4vmin",
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.title}
-                      sx={{
-                        opacity: open ? 1 : 0,
-                      }}
-                    />
-                  </ListItemButton>
-                )}
-              </ListItem>
-              {item.type === "collapse" &&
-                item.id === openSubmenuId &&
-                item.children.map((child) => (
-                  <ListItem
-                    key={child.id}
-                    disablePadding
-                    sx={{ display: "block", marginLeft: 2 }}
-                  >
-                    <Link
-                      to={child.navLink}
-                      style={{ textDecoration: "none", color: "black" }}
-                    >
-                      <ListItemButton
-                        sx={{
-                          minHeight: 48,
-                          justifyContent: open ? "initial" : "center",
-                          px: 2.5,
-                        }}
-                      >
-                        <ListItemIcon
-                          sx={{
-                            minWidth: 0,
-                            mr: open ? 3 : "auto",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {child.icon}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={child.title}
-                          sx={{ opacity: open ? 1 : 0 }}
-                        />
-                      </ListItemButton>
-                    </Link>
-                  </ListItem>
-                ))}
-            </React.Fragment>
-          ))}
-          <ListItemButton
-          onClick={() => {
-            dispatch(logout());
-            navigate("/login")
-          }}
-            sx={{
-              padding: open ? "0 1vw" : "0 0",
-              height: "4vmin",
-              borderRadius: "1vmin",
-              marginTop: "5vh",
-              backgroundColor: "#171B2A",
-              color: "white",
-              "&:hover": { backgroundColor: "#171B2A", opacity: "95%" },
-            }}
-          >
-            <ListItemIcon>
-              <LogoutIcon
-                sx={{ fill: "white", marginLeft: open ? "0" : "0.5vw" }}
-              />
-            </ListItemIcon>
-            <ListItemText
-              primary="Sign Out"
-              sx={{ display: open ? "block" : "none" }}
-            />
-          </ListItemButton>
-        </List>
-      </Drawer>
+      </MainAppBar>
+      <MainDrawer variant="permanent" open={open}>
+        {/* {drawerHeaderContent} */}
+        {drawerContent}
+      </MainDrawer>
+      
     </Box>
   );
 }

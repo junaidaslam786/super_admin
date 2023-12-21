@@ -1,44 +1,75 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Alert,
+} from "@mui/material";
 
 const PaymentRefund = () => {
-  const [transactionId, setTransactionId] = useState('');
-  const [refundStatus, setRefundStatus] = useState('');
+  const [transactionId, setTransactionId] = useState("");
+  const [refundStatus, setRefundStatus] = useState("");
 
   const handleRefund = async () => {
-    // Logic to process the refund based on transactionId
+    // Dummy refund logic for illustration purposes
     try {
-      // Assuming a refund processing function exists
+      // Replace the following with your actual refund logic
       // await processRefund(transactionId);
-      setRefundStatus('Refund processed successfully for transaction ID: ' + transactionId);
+      setRefundStatus(
+        "Refund processed successfully for transaction ID: " + transactionId
+      );
     } catch (error) {
-      setRefundStatus('Failed to process refund: ' + error.message);
+      setRefundStatus("Failed to process refund: " + error.message);
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 300 }}>
-      <h2>Process Refund</h2>
-      <TextField
-        label="Transaction ID"
-        variant="outlined"
-        value={transactionId}
-        onChange={(e) => setTransactionId(e.target.value)}
-        required
-        fullWidth
-      />
-      <Button 
-        variant="contained" 
-        color="error"
-        onClick={handleRefund}
-        sx={{ mt: 2 }}
-      >
-        Refund
-      </Button>
-      {refundStatus && <Alert severity="info" sx={{ mt: 2 }}>{refundStatus}</Alert>}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        padding: "1.5vh 0",
+        // justifyContent: "center",
+        // alignItems: "center",
+        // padding: "20px",
+      }}
+    >
+      <Card >
+        <CardContent>
+          <Typography variant="h5" gutterBottom>
+            Process Refund
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            sx={{ display: "flex",  gap: 2 }}
+          >
+            <TextField
+              label="Transaction ID"
+              variant="outlined"
+              value={transactionId}
+              onChange={(e) => setTransactionId(e.target.value)}
+              required
+              fullWidth
+            />
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleRefund}
+              fullWidth
+            >
+              Refund
+            </Button>
+            {refundStatus && <Alert severity="info">{refundStatus}</Alert>}
+          </Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 };
