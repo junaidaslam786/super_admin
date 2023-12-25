@@ -138,7 +138,7 @@ const navigationConfig = [
         // title: "Completed Appointments",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        navLink: "/appointments/all-appointments"
+        navLink: "/appointments-list"
       },
       
     ]
@@ -176,7 +176,7 @@ const navigationConfig = [
         title: "Add Blog",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        navLink: "/blog/add-blog"
+        navLink: "/add-blog"
       },
       {
         id: "all-blog",

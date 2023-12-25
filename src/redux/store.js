@@ -32,6 +32,8 @@ import storage from 'redux-persist/lib/storage';
 // Toast notifications
 import { toast } from 'react-toastify';
 import { CustomErrorMessage } from '../utils/CustomErrorMessage';
+import { appointmentsApi } from './api/appointmentsApi';
+import { cmsApi } from './api/cmsApi';
 
 //middleware
 // import { localStorageMiddleware, reHydrateStore } from '../middleware/localStorageMiddleware'
@@ -70,12 +72,18 @@ const rootReducer = combineReducers({
   [tokenManagementApi.reducerPath]: tokenManagementApi.reducer,
   [paymentsApi.reducerPath]: paymentsApi.reducer,
   [communityApi.reducerPath]: communityApi.reducer,
+  [appointmentsApi.reducerPath]: appointmentsApi.reducer,
+  [cmsApi.reducerPath]: cmsApi.reducer,
   userState: userReducer,
   userManagement: userManagementReducer,
   propertyManagement: propertyManagementReducer,
   featureManagement: featureManagementApi.reducer,
   analyticsApi: analyticsApi.reducer,
-  // other reducers
+  tokenManagementApi: tokenManagementApi.reducer,
+  paymentsApi: paymentsApi.reducer,
+  communityApi: communityApi.reducer,
+  appointmentsApi: appointmentsApi.reducer,
+  cmsApi: cmsApi.reducer,
 });
 
 // Toast notifications middleware
@@ -112,6 +120,8 @@ const store = configureStore({
       tokenManagementApi.middleware,
       paymentsApi.middleware,
       communityApi.middleware,
+      appointmentsApi.middleware,
+      cmsApi.middleware,
       toastNotificationsMiddleware,
     ]),
 });

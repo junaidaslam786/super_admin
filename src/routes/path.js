@@ -27,6 +27,9 @@ import TradersApprovalsPage from "../pages/user-management/TradersApprovalsPage"
 import AddCommunityPage from "../pages/community/AddCommunityPage";
 import AllCommunityListPage from "../pages/community/AllCommunityListPage";
 import AllCommunityPostsPage from "../pages/community/AllCommunityPostsPage";
+import AddBlogPage from "../pages/blog/AddBlogPage";
+import ListAppointmentsPage from "../pages/appointments/ListAppointmentsPage";
+import ListBlogs from "../pages/blog/ListBlogs";
 // Add other required imports here ...
 
 const RoutesContent = () => {
@@ -99,6 +102,15 @@ const RoutesContent = () => {
       </Route>
       <Route path="/community-posts/:id" element={<ProtectedRoute />}>
         <Route index element={<AllCommunityPostsPage />} />
+      </Route>
+      <Route path="/add-blog" element={<ProtectedRoute />}>
+        <Route index element={<AddBlogPage />} />
+      </Route>
+      <Route path="/blog/all-blogs" element={<ProtectedRoute />}>
+        <Route index element={<ListBlogs />} />
+      </Route>
+      <Route path="/appointments-list" element={<ProtectedRoute />}>
+        <Route index element={<ListAppointmentsPage />} />
       </Route>
       <Route path="/analytics" element={<AnalyticsPage />} />
       <Route path="/reports" element={<ReportsPage />} />

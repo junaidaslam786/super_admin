@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
-import { selectAllAgents } from "../../redux/selectors/userSelectors"; // Assuming the selectors are in this file
+import { selectAllAgents } from "../../redux/selectors/userSelectors"; 
 import { CircularProgress, Box, Button } from "@mui/material";
 import {
   useGetAllUsersExceptSuperAdminQuery,
@@ -40,7 +40,6 @@ const TradersData = () => {
   const [selectedUserId, setSelectedUserId] = useState();
 
   const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
-  
 
   const { data: selectedUser } = useGetUserByIdQuery(selectedUserId, {
     skip: !selectedUserId,
@@ -103,6 +102,8 @@ const TradersData = () => {
       <DataGrid
         dataSource={traders ? JSON.parse(JSON.stringify(traders)) : []}
         showBorders={true}
+        columnAutoWidth={true}
+        wordWrapEnabled={true}
         onRowRemoving={async (e) => {
           try {
             await deleteUser(e.data.id);
@@ -144,16 +145,11 @@ const TradersData = () => {
           cellRender={(cellData) => cellData.value}
         />
         <Column dataField="active" caption="Active" />
-        
+
         <Column
           caption="Actions"
           width={200}
           cellRender={(cellData) => {
-            // console.log(
-            //   `Active status for ${cellData.data.firstName}:`,
-            //   cellData.data.active
-            // );
-
             return (
               <Box>
                 <Button onClick={() => handleBlockTrader(cellData.data.id)}>
@@ -175,7 +171,6 @@ const TradersData = () => {
           cellRender={(cellData) => (
             <VisibilityIcon
               style={{ cursor: "pointer" }}
-              
               onClick={() => handleViewClick(cellData.data.id)}
             />
           )}
@@ -186,12 +181,11 @@ const TradersData = () => {
         <FilterRow visible={true} />
         <GroupPanel visible={true} />
         <Grouping autoExpandAll={false} />
-        <Export enabled={true} fileName="Traders" allowExportSelectedData={true} />
-        {/* <Summary>
-          <TotalItem column="firstName" summaryType="count" displayFormat="Total: {0}" />
-         
-        </Summary>
-        <MasterDetail enabled={true} component={renderDetailGrid} /> */}
+        <Export
+          enabled={true}
+          fileName="Traders"
+          allowExportSelectedData={true}
+        />
 
         <Editing
           mode="popup"

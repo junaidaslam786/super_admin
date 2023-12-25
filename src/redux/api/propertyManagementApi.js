@@ -37,6 +37,20 @@ const propertyManagementApi = createApi({
       invalidatesTags: ['Property'] // Invalidate the tag on success
     }),
 
+    getPropertyById: builder.query({
+      query: (id) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: `superadmin/property/${id}`,
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+      providesTags: ['Property'] // Tag the query
+    }),
+
     updateProperty: builder.mutation({
       query: (property) => {
         const token = localStorage.getItem("token");
@@ -79,6 +93,7 @@ const {
   useDeletePropertyMutation,
   useUpdatePropertyMutation,
   useAddPropertyMutation,
+  useGetPropertyByIdQuery
 } = propertyManagementApi;
 
 export {
@@ -87,4 +102,5 @@ export {
   useDeletePropertyMutation,
   useUpdatePropertyMutation,
   useAddPropertyMutation,
+  useGetPropertyByIdQuery
 };

@@ -57,6 +57,8 @@ const CustomerData = () => {
       <DataGrid
         dataSource={customers ? JSON.parse(JSON.stringify(customers)) : []}
         showBorders={true}
+        columnAutoWidth={true}
+        wordWrapEnabled={true}
         onRowRemoving={async (e) => {
           try {
             await deleteUser(e.data.id);

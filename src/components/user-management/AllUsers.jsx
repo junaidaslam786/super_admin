@@ -42,6 +42,8 @@ const AllUsers = () => {
       <DataGrid
         dataSource={users ? JSON.parse(JSON.stringify(users)) : []}
         showBorders={true}
+        columnAutoWidth={true}
+        wordWrapEnabled={true}
         onRowRemoving={async (e) => {
           try {
             await deleteUser(e.data.id);
