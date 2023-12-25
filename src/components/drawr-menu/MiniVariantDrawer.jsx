@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -78,6 +78,9 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+  [theme.breakpoints.down("md")]: {
+    width: drawerWidth, // full width on smaller screens
+  },
 });
 
 const closedMixin = (theme) => ({
@@ -89,6 +92,9 @@ const closedMixin = (theme) => ({
   width: `calc(${theme.spacing(24)} + 6px)`,
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(10)} + 2px)`,
+  },
+  [theme.breakpoints.down("md")]: {
+    width: 0, // fully hidden on smaller screens
   },
 });
 
@@ -184,6 +190,25 @@ export default function MiniDrawer() {
       </IconButton>
     </DrawerHeader>
   );
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= theme.breakpoints.values.md) {
+        setOpen(false); // Automatically close drawer on small screens
+      } else {
+        setOpen(true); // Keep it open on larger screens
+      }
+    };
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, [theme.breakpoints.values.md]);
 
   const drawerContent = (
     <div>
@@ -404,7 +429,6 @@ export default function MiniDrawer() {
         {/* {drawerHeaderContent} */}
         {drawerContent}
       </MainDrawer>
-      
     </Box>
   );
 }
