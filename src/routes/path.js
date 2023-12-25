@@ -12,6 +12,7 @@ import AllTradersPage from "../pages/user-management/AllTradersPage";
 import AddPropertyPage from "../pages/property/AddPropertyPage";
 import CreateUserPage from "../pages/user/CreateUserPage";
 import PropertyListPage from "../pages/property/PropertyListPage";
+import PropertyViewPage from "../pages/property/PropertyViewPage";
 import NewsPage from "../pages/NewsPage/NewsPage";
 import PaymentsPage from "../pages/PaymentsPage/PaymentsPage";
 import SubscriptionPage from "../pages/SubscriptionPage/SubscriptionPage";
@@ -69,6 +70,9 @@ const RoutesContent = () => {
       </Route>
       <Route path="/property-list" element={<ProtectedRoute />}>
         <Route index element={<PropertyListPage />} />
+      </Route>
+      <Route path="/property-details" element={<ProtectedRoute />}>
+        <Route index element={<PropertyViewPage />} />
       </Route>
       <Route path="/news" element={<ProtectedRoute />}>
         <Route index element={<NewsPage />} />
