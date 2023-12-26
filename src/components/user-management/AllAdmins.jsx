@@ -109,7 +109,7 @@ const AllAdmins = () => {
           cellRender={(cellData) => (
             <div>
               <button>Block</button>
-              <button>Deactivate</button>
+              {/* <button>Deactivate</button> */}
             </div>
           )}
         />

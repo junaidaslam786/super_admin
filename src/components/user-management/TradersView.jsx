@@ -30,29 +30,24 @@ const TradersView = () => {
   const { data: selectedUser } = useGetAgentUserQuery(selectedUserId, {
     skip: !selectedUserId,
   });
-  console.log('selected user',selectedUser)
+  console.log("selected user", selectedUser);
   const { data: tradersUsers } = useGetAllTradersUsersListQuery(selectedUserId);
 
   const getFileLink = (path) => {
     if (!path) {
       return <Typography variant="subtitle1">No document available</Typography>;
     }
-  
+
     const fullUrl = new URL(path, process.env.REACT_APP_SERVER_ENDPOINT).href;
     const fileName = path.split("/").pop();
-  
+
     return (
-      <Link
-        href={fullUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link href={fullUrl} target="_blank" rel="noopener noreferrer">
         <AttachFileIcon style={{ marginRight: 8 }} />
         {fileName}
       </Link>
     );
   };
-  
 
   return (
     <Box
@@ -134,6 +129,35 @@ const TradersView = () => {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={4}>No data available</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Typography variant="h6" sx={{ marginTop: "2vmin" }}>
+            Products:
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table aria-label="traders products table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(selectedUser?.user.products) ? (
+                  selectedUser.user.products.map((product) => (
+                    <TableRow key={product.id}>
+                      <TableCell>{product.title}</TableCell>
+                      <TableCell>{product.description}</TableCell>
+                      <TableCell>{product.status}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3}>No data available</TableCell>
                   </TableRow>
                 )}
               </TableBody>
