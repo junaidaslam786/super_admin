@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgress, Typography, Box, Button } from "@mui/material";
+import {
+  CircularProgress,
+  Typography,
+  Box,
+  Button,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import DataGrid, {
   Paging,
   Pager,
@@ -27,13 +34,16 @@ const ListCommunity = () => {
     refetch,
   } = useListCommunityQuery();
 
-  console.log('communities', communities)
+  console.log("communities", communities);
 
   const [deleteCommunityById] = useDeleteCommunityMutation();
   const [updateCommunityStatus] = useUpdateCommunityStatusMutation();
 
   const navigate = useNavigate();
   const userIdToNameMap = useSelector(selectUserIdToNameMap);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleEditCommunity = (community) => {
     // Navigate to AddCommunity with community ID (adjust the path as needed)
@@ -101,75 +111,87 @@ const ListCommunity = () => {
   }
 
   return (
-    <Box width="100%" sx={{ marginTop: "10vmin", marginLeft: "10vw" }}>
-      <DataGrid
-        dataSource={
-          updatedCommunities
-            ? JSON.parse(JSON.stringify(updatedCommunities))
-            : []
-        }
-        showBorders={true}
-        onRowRemoving={async (e) => {
-          await handleDeleteCommunity(e.data.id);
-        }}
-        onRowUpdating={async (e) => {
-          // Implement the edit logic (navigation to AddCommunity component for editing)
-        }}
-      >
-        <Column dataField="title" caption="Title" />
-        <Column dataField="createdBy" caption="Created By" />
-        <Column dataField="status" caption="Status" />
-        <Column
-          caption="Actions"
-          cellRender={(data) => {
-            const community = data.data;
-            return (
-              <>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleEditCommunity(community)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() =>
-                    navigate(`/community-posts/${community.id}`)
-                  }
-                >
-                  View Posts
-                </Button>
-                <Button
-                  variant="contained"
-                  color={
-                    community.status === "published" ? "secondary" : "primary"
-                  }
-                  onClick={() => handlePublishToggle(community)}
-                >
-                  {community.status === "published" ? "Unpublish" : "Publish"}
-                </Button>
-                {/* Add other action buttons here */}
-              </>
-            );
+    <Box width="100%" sx={{ p: isMobile ? 2 : 4 }}>
+      {isLoading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <CircularProgress />
+        </Box>
+      ) : isError ? (
+        <Typography variant="h6" color="error" align="center">
+          Error Loading Communities
+        </Typography>
+      ) : (
+        <DataGrid
+          dataSource={updatedCommunities || []}
+          showBorders={true}
+          onRowRemoving={async (e) => {
+            await handleDeleteCommunity(e.data.id);
           }}
-        />
+          onRowUpdating={async (e) => {
+            // Implement the edit logic (navigation to AddCommunity component for editing)
+          }}
+        >
+          <Column dataField="title" caption="Title" />
+          <Column dataField="createdBy" caption="Created By" />
+          <Column dataField="status" caption="Status" />
+          <Column
+            caption="Actions"
+            cellRender={(data) => {
+              const community = data.data;
+              return (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleEditCommunity(community)}
+                    sx={{ margin: theme.spacing(1) }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate(`/community-posts/${community.id}`)}
+                    sx={{ margin: theme.spacing(1) }}
+                  >
+                    View Posts
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color={
+                      community.status === "published" ? "secondary" : "primary"
+                    }
+                    onClick={() => handlePublishToggle(community)}
+                    sx={{ margin: theme.spacing(1) }}
+                  >
+                    {community.status === "published" ? "Unpublish" : "Publish"}
+                  </Button>
+                  {/* Add other action buttons here */}
+                </>
+              );
+            }}
+          />
 
-        <Paging defaultPageSize={20} />
-        <Pager
-          showPageSizeSelector={true}
-          allowedPageSizes={[5, 10, 15, 20]}
-          showNavigationButtons={true}
-        />
-        <FilterRow visible={true} />
+          <Paging defaultPageSize={20} />
+          <Pager
+            showPageSizeSelector={true}
+            allowedPageSizes={[5, 10, 15, 20]}
+            showNavigationButtons={true}
+          />
+          <FilterRow visible={true} />
 
-        {/* <Editing
-          mode="popup"
-          allowUpdating={true}
-          allowDeleting={true} 
-        /> */}
-      </DataGrid>
+          {/* <Editing
+            mode="popup"
+            allowUpdating={true}
+            allowDeleting={true}
+          /> */}
+        </DataGrid>
+      )}
     </Box>
   );
 };

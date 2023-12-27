@@ -22,12 +22,13 @@ import {
   Badge,
   InputBase,
   CssBaseline,
+  Breadcrumbs,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/features/userSlice";
 import { useAppSelector } from "../../redux/store";
 import navigationConfig from "../../config/navigation";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const drawerWidth = 300;
 
@@ -148,6 +149,7 @@ export default function MiniDrawer() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const userState = useAppSelector((state) => state.userState);
 
   const handleDrawerOpen = () => {
@@ -168,10 +170,8 @@ export default function MiniDrawer() {
 
   // Function to toggle submenu
   const toggleSubmenu = (itemTitle) => {
-    if (openSubmenu === itemTitle) {
-      setOpenSubmenu(null); // Close submenu if already open
-    } else {
-      setOpenSubmenu(itemTitle); // Open the clicked submenu
+    if (openSubmenu !== itemTitle) {
+      setOpenSubmenu(itemTitle);
     }
   };
 
@@ -191,6 +191,42 @@ export default function MiniDrawer() {
     </DrawerHeader>
   );
 
+  const mapPathToTitle = (pathPart) => {
+    // Define your mapping here
+    const mapping = {
+      dashboard: "Dashboard",
+      profile: "User Profile",
+      // Add more mappings as necessary
+    };
+    return (
+      mapping[pathPart] || pathPart.charAt(0).toUpperCase() + pathPart.slice(1)
+    );
+  };
+
+  const generateBreadcrumbs = (path) => {
+    const parts = path.split("/").filter(Boolean);
+    let breadcrumbPath = "";
+
+    return parts.map((part, index) => {
+      breadcrumbPath += `/${part}`;
+      const title = mapPathToTitle(part); // Use the mapping function
+      return (
+        <Link
+          key={index}
+          color="inherit"
+          to={breadcrumbPath}
+          style={{
+            fontFamily: "Roboto",
+            color: "white",
+            textDecoration: "none",
+          }}
+        >
+          {title}
+        </Link>
+      );
+    });
+  };
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= theme.breakpoints.values.md) {
@@ -209,6 +245,18 @@ export default function MiniDrawer() {
     // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, [theme.breakpoints.values.md]);
+
+  useEffect(() => {
+    // Logic to determine which submenu should be open based on the current URL
+    const currentPath = location.pathname;
+    // Example logic to determine which submenu should be open
+    const currentOpenSubmenu = navigationConfig.find(
+      (item) =>
+        item.children &&
+        item.children.some((subItem) => subItem.navLink === currentPath)
+    )?.title;
+    setOpenSubmenu(currentOpenSubmenu);
+  }, [location.pathname]);
 
   const drawerContent = (
     <div>
@@ -231,21 +279,16 @@ export default function MiniDrawer() {
                   color: "white",
                 },
               }}
-              onClick={() => (item.children ? toggleSubmenu(item.title) : null)}
+              onClick={() => item.children && toggleSubmenu(item.title)}
             >
-              <Link
-                to={item.navLink}
-                style={{ textDecoration: "none", color: "#737791" }}
-              >
+              {item.children ? (
                 <ListItemButton
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
                     px: 2,
                     borderRadius: "1vmin",
-                    // "&:hover": {
-                    //   color: "#00C800", // Text color changes on hover
-                    // },
+                    width: "100%",
                   }}
                 >
                   <ListItemIcon
@@ -259,12 +302,42 @@ export default function MiniDrawer() {
                   </ListItemIcon>
                   <ListItemText
                     primary={item.title}
-                    sx={{
-                      display: open ? "block" : "none",
-                    }}
+                    sx={{ display: open ? "block" : "none" }}
                   />
                 </ListItemButton>
-              </Link>
+              ) : (
+                <Link
+                  to={item.navLink}
+                  style={{
+                    textDecoration: "none",
+                    color: "#737791",
+                    width: "100%",
+                  }}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2,
+                      borderRadius: "1vmin",
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        width: "4vmin",
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={item.title}
+                      sx={{ display: open ? "block" : "none" }}
+                    />
+                  </ListItemButton>
+                </Link>
+              )}
             </ListItem>
             {/* Conditional rendering of submenu items */}
             {item.children && openSubmenu === item.title && (
@@ -293,7 +366,6 @@ export default function MiniDrawer() {
           </React.Fragment>
         ))}
         <ListItem
-          button
           onClick={() => {
             dispatch(logout());
             navigate("/login");
@@ -325,6 +397,7 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+
       <MainAppBar
         open={open}
         sx={{ boxShadow: "0px 0px 1px black", justifyContent: "space-between" }}
@@ -344,8 +417,10 @@ export default function MiniDrawer() {
             <MenuIcon sx={{ fontSize: "3vmin" }} />
           </IconButton>
 
+          
+
           {/* Search Component */}
-          <Box
+          {/* <Box
             sx={{
               backgroundColor: "#FAFBFC",
               left: "15vw",
@@ -370,12 +445,12 @@ export default function MiniDrawer() {
                 fontWeight: "600",
               }}
             />
-          </Box>
+          </Box> */}
 
           <Box sx={{ flexGrow: 1 }} />
 
           {/* Notification Icon */}
-          <IconButton
+          {/* <IconButton
             size="large"
             aria-label="show 17 new notifications"
             sx={{ marginRight: "2vw" }}
@@ -385,11 +460,11 @@ export default function MiniDrawer() {
                 sx={{ fontSize: "2.5vmin", color: "#00C800" }}
               />
             </Badge>
-          </IconButton>
+          </IconButton> */}
 
           {/* User Profile Section */}
           <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", padding: "0 1vw" }}
           >
             <img
               src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${
@@ -397,7 +472,7 @@ export default function MiniDrawer() {
                 userState?.user?.profileImage
               }?${Date.now()}`}
               alt="userImage"
-              style={{ width: "6vmin", height: "6vmin", borderRadius: "50%" }}
+              style={{ width: "6vmin", height: "6vmin", borderRadius: "50%", padding: "10px" }}
             />
             <Box sx={{ marginLeft: "1vw", marginRight: "2vw" }}>
               <Typography
@@ -425,6 +500,7 @@ export default function MiniDrawer() {
           </Box>
         </Toolbar>
       </MainAppBar>
+
       <MainDrawer variant="permanent" open={open}>
         {/* {drawerHeaderContent} */}
         {drawerContent}

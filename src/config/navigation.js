@@ -46,7 +46,7 @@ const navigationConfig = [
     title: "Subscription",
     type: "collapse",
     icon: <Subs className={styles.icon} />,
-    navLink: "/token-management"
+    navLink: "/configuration"
   },
   {
     id: "userManagement",
@@ -156,13 +156,13 @@ const navigationConfig = [
         icon: <Icon.Circle size={12} />,
         navLink: "/news/add-news"
       },
-      {
-        id: "all-news",
-        title: "News Listing",
-        type: "item",
-        icon: <Icon.Circle size={12} />,
-        navLink: "/news/all-news"
-      }
+      // {
+      //   id: "all-news",
+      //   title: "News Listing",
+      //   type: "item",
+      //   icon: <Icon.Circle size={12} />,
+      //   navLink: "/news/all-news"
+      // }
     ]
   },
   {

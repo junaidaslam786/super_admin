@@ -34,9 +34,9 @@ import { toast } from 'react-toastify';
 import { CustomErrorMessage } from '../utils/CustomErrorMessage';
 import { appointmentsApi } from './api/appointmentsApi';
 import { cmsApi } from './api/cmsApi';
+import { history } from '../utils/history';
 
-//middleware
-// import { localStorageMiddleware, reHydrateStore } from '../middleware/localStorageMiddleware'
+
 
 const persistConfig = {
   key: 'root',
@@ -44,20 +44,7 @@ const persistConfig = {
   storage,
   whitelist: [
     'userState',
-    // "userManagement",
-    // "propertyManagement",
-    // "featureManagement",
-    // "analyticsApi",
-    // "tokenManagementApi",
-    // "paymentsApi",
-    // "communityApi",
-    // userManagementApi.reducerPath,
-    // propertyManagementApi.reducerPath,
-    // // featureManagementApi.reducerPath,
-    // // analyticsApi.reducerPath,
-    // tokenManagementApi.reducerPath,
-    // paymentsApi.reducerPath,
-    // communityApi.reducerPath,
+   
   ],
 };
 
@@ -94,6 +81,12 @@ const toastNotificationsMiddleware = (storeAPI) => (next) => (action) => {
   if (action.type.endsWith('/rejected')) {
     // Check if the action payload contains a specific message
     const message = action.error?.data?.message || action.error?.message;
+    
+    // Check for session expiration (401 status or specific message)
+    if (action.error?.status === 401 || message === "Session expired") {
+      // Redirect to login page
+      history.push("/login");
+    }
     const errorMessage = message || 'An error occurred';
     toast.error(errorMessage);
   }

@@ -7,52 +7,65 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import moment from "moment-timezone";
 import React, { useState, useEffect } from "react";
+import { useAppSelector } from "../../../redux/store";
+import { useProfileUpdateMutation } from "../../../redux/api/userApi";
 
 const TimeZone = () => {
   const [selectedTimeZone, setSelectedTimeZone] = useState("");
-  const [updated, setUpdated] = useState(false);
+  const [timeZones, setTimeZones] = useState([]);
+  const [updateProfile, { isSuccess }] = useProfileUpdateMutation();
+
+  const userState = useAppSelector((state) => state.userState);
+
 
   // List of common IANA timezones
-  const timeZones = [
-    "UTC",
-    "Europe/London",
-    "Europe/Paris",
-    "Europe/Berlin",
-    "Europe/Moscow",
-    "Asia/Kolkata",
-    "Asia/Tokyo",
-    "Asia/Shanghai",
-    "America/New_York",
-    "America/Chicago",
-    "America/Denver",
-    "America/Los_Angeles",
-    "America/Sao_Paulo",
-    "Africa/Cairo",
-    "Africa/Johannesburg",
-    "Australia/Sydney",
-    "America/Toronto",
-    "America/Mexico_City",
-    "America/Bogota",
-    "America/Buenos_Aires",
-    "America/Santiago",
-    "Asia/Seoul",
-    "Asia/Singapore",
-    "Asia/Hong_Kong",
-    "Asia/Manila",
-    "Asia/Bangkok",
-    "Asia/Jakarta",
-    "Asia/Dubai",
-    "Asia/Karachi",
-    "Europe/Rome",
-    "Europe/Madrid",
-    "Europe/Amsterdam",
-    "Europe/Copenhagen",
-    "Europe/Istanbul",
-    "Pacific/Auckland",
-    "America/Caracas",
-    "Asia/Taipei",
-  ];
+  // const timeZones = [
+  //   "UTC",
+  //   "Europe/London",
+  //   "Europe/Paris",
+  //   "Europe/Berlin",
+  //   "Europe/Moscow",
+  //   "Asia/Kolkata",
+  //   "Asia/Tokyo",
+  //   "Asia/Shanghai",
+  //   "America/New_York",
+  //   "America/Chicago",
+  //   "America/Denver",
+  //   "America/Los_Angeles",
+  //   "America/Sao_Paulo",
+  //   "Africa/Cairo",
+  //   "Africa/Johannesburg",
+  //   "Australia/Sydney",
+  //   "America/Toronto",
+  //   "America/Mexico_City",
+  //   "America/Bogota",
+  //   "America/Buenos_Aires",
+  //   "America/Santiago",
+  //   "Asia/Seoul",
+  //   "Asia/Singapore",
+  //   "Asia/Hong_Kong",
+  //   "Asia/Manila",
+  //   "Asia/Bangkok",
+  //   "Asia/Jakarta",
+  //   "Asia/Dubai",
+  //   "Asia/Karachi",
+  //   "Europe/Rome",
+  //   "Europe/Madrid",
+  //   "Europe/Amsterdam",
+  //   "Europe/Copenhagen",
+  //   "Europe/Istanbul",
+  //   "Pacific/Auckland",
+  //   "America/Caracas",
+  //   "Asia/Taipei",
+  // ];
+
+
+  // Fetch time zones from an API or use a static list
+  useEffect(() => {
+    setTimeZones(moment.tz.names()); // Set the list of time zones
+  }, []);
 
   // Retrieve selected timezone from localStorage on component mount
   useEffect(() => {
@@ -63,9 +76,10 @@ const TimeZone = () => {
   }, []);
 
   // Update selected timezone in state and localStorage
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
+    const userId = userState.user.id;
+    await updateProfile({ id: userId, userData: { timeZone: selectedTimeZone } });
     localStorage.setItem("selectedTimeZone", selectedTimeZone);
-    setUpdated(true);
   };
 
   return (
@@ -118,7 +132,7 @@ const TimeZone = () => {
       >
         Update
       </Button>
-      {updated && <Typography>Your timezone updated successfully!</Typography>}
+      {isSuccess && <Typography>Your timezone updated successfully!</Typography>}
     </Box>
   );
 };

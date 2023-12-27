@@ -1,13 +1,13 @@
 import React from 'react'
 import MainLayout from '../../layout/MainLayout'
-import News from '../../components/News/News'
+import AddNewsForm from '../../components/News/AddNewsForm'
 
-const NewsPage = () => {
+const AddBlogPage = () => {
   return (
     <MainLayout>
-        <News />
+        <AddNewsForm />
     </MainLayout>
   )
 }
 
-export default NewsPage
+export default AddBlogPage

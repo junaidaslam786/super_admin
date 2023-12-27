@@ -14,6 +14,9 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { useLocation } from "react-router-dom";
 import PropertyImage from "../../assets/Property.svg"; // Replace with your image import
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -45,10 +48,18 @@ const PropertyView = () => {
 
     return (
       <Link href={fullUrl} target="_blank" rel="noopener noreferrer">
-        <AttachFileIcon style={{ marginRight: 8 }} />
+        <AttachFileIcon style={{ marginRight: "5px" }} />
         {fileName}
       </Link>
     );
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
 
   return (
@@ -61,6 +72,41 @@ const PropertyView = () => {
         padding: "2vmin",
       }}
     >
+      {/* Property Images Slider */}
+      <Card
+        sx={{
+          maxWidth: "100%",
+          width: "100%",
+          marginBottom: "2vmin",
+          "& > *": {
+            maxWidth: "800px", // Limit card content width
+          },
+          "@media (max-width: 1024px)": {
+            width: "500px", // Adjust width for smaller screens
+          },
+        }}
+      >
+        <CardContent>
+          <Typography variant="h6">Property Images:</Typography>
+          <Slider {...settings}>
+            {selectedProperty?.productImages.map((image, index) => (
+              <Box key={index}>
+                <img
+                  src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${image.image}`}
+                  alt="Property"
+                  style={{
+                    maxWidth: "100%",
+                    height: "50vh",
+                    objectFit: "cover",
+                    alignItems: "center",
+                  }}
+                />
+              </Box>
+            ))}
+          </Slider>
+        </CardContent>
+      </Card>
+
       {/* Property Details Card */}
       <Card sx={{ marginBottom: "2vmin" }}>
         <CardContent>
@@ -68,7 +114,7 @@ const PropertyView = () => {
             sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
           >
             <img
-              src={PropertyImage}
+              src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${selectedProperty?.featuredImage}`}
               alt="Property"
               style={{
                 width: "10vmin",
@@ -102,7 +148,7 @@ const PropertyView = () => {
         <CardContent>
           <Typography variant="h6">Documents:</Typography>
           {selectedProperty?.productDocuments.map((doc, index) => (
-            <Box key={index}>{getFileLink(doc.url)}</Box>
+            <Box key={index}>{getFileLink(doc.file)}</Box>
           ))}
         </CardContent>
       </Card>

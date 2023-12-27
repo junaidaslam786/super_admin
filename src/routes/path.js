@@ -36,7 +36,7 @@ import ListBlogs from "../pages/blog/ListBlogs";
 const RoutesContent = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<Dashboard />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dashboard" element={<ProtectedRoute />}>
         <Route index element={<Dashboard />} />
@@ -74,7 +74,7 @@ const RoutesContent = () => {
       <Route path="/property-details" element={<ProtectedRoute />}>
         <Route index element={<PropertyViewPage />} />
       </Route>
-      <Route path="/news" element={<ProtectedRoute />}>
+      <Route path="/news/add-news" element={<ProtectedRoute />}>
         <Route index element={<NewsPage />} />
       </Route>
       <Route path="/payments" element={<ProtectedRoute />}>

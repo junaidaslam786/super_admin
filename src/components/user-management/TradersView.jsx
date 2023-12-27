@@ -65,7 +65,7 @@ const TradersView = () => {
             sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
           >
             <img
-              src={Zangi}
+              src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${selectedUser?.user.profileImage}`}
               alt="Profile"
               style={{
                 width: "10vmin",
@@ -135,7 +135,7 @@ const TradersView = () => {
             </Table>
           </TableContainer>
           <Typography variant="h6" sx={{ marginTop: "2vmin" }}>
-            Products:
+            Properties:
           </Typography>
           <TableContainer component={Paper}>
             <Table aria-label="traders products table">
