@@ -153,7 +153,7 @@ const AddPropertyPage = () => {
         spacing={3}
         sx={{ padding: "4vh 0", backgroundColor: "#FAFBFC" }}
       >
-        <Grid item xs={12} md={3} sx={{ width: "25%" }}>
+        <Grid item xs={12} md={3} sx={{ width: '25%' }}>
           <Box
             sx={{
               margin: "0 3vw",

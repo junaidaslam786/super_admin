@@ -26,7 +26,7 @@ const SubsLayout = ({ children }) => {
         >
           <Box
             sx={{
-              width: "20%",
+              width: "30%",
               position: "fixed",
               top: "20vmin",
               border: "0.2vmin solid #171B2A",
@@ -34,7 +34,7 @@ const SubsLayout = ({ children }) => {
               display: "flex",
               flexDirection: "column",
               borderRadius:'0.4vmin',
-              overflow:'hidden'
+              overflow:'hidden',
             }}
           >
             {menuItems.map(item => (

@@ -69,8 +69,8 @@ const PaymentPage = () => {
                 sx={{
                   fontSize: "2vmin",
                   color: "#737791",
-                  padding: "1vw",
-                  paddingLeft: "3vw",
+                  padding: "2vmin",
+                  paddingLeft: "1vw",
                   borderBottom: "0.1vmin solid rgba(0, 0, 0, 0.5)",
                   "&:hover": {
                     borderLeft: "0.5vmin solid #00C800",

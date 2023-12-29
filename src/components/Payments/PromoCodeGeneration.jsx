@@ -11,6 +11,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  createTheme,
+  ThemeProvider,
   Alert,
 } from "@mui/material";
 import {
@@ -20,6 +22,15 @@ import {
 } from "../../redux/api/paymnetsApi"; // Import RTK Query hooks
 import { toast } from "react-toastify";
 import { tr } from "date-fns/locale";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#00C800",
+      contrastText: "#fff",
+    },
+  },
+});
 
 const PromoCodeGeneration = () => {
   const [couponCodeAmount, setCouponCodeAmount] = useState("");
@@ -44,7 +55,7 @@ const PromoCodeGeneration = () => {
       setNameAmount("");
       setCouponCodeAmount("");
     } catch (err) {
-      toast.error(err?.data?.message || 'Failed to create coupon');
+      toast.error(err?.data?.message || "Failed to create coupon");
     }
   };
 
@@ -60,7 +71,7 @@ const PromoCodeGeneration = () => {
       setNamePercent("");
       setCouponCodePercent("");
     } catch (err) {
-      toast.error(err?.data?.message || 'Failed to create coupon');
+      toast.error(err?.data?.message || "Failed to create coupon");
     }
   };
 
@@ -87,9 +98,11 @@ const PromoCodeGeneration = () => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
-            <Button variant="contained" onClick={handleCreateAmountCoupon}>
-              Create
-            </Button>
+            <ThemeProvider theme={theme}>
+              <Button variant="contained" onClick={handleCreateAmountCoupon}>
+                Create
+              </Button>
+            </ThemeProvider>
           </Box>
         </CardContent>
       </Card>
@@ -115,9 +128,11 @@ const PromoCodeGeneration = () => {
               value={percentage}
               onChange={(e) => setPercentage(e.target.value)}
             />
-            <Button variant="contained" onClick={handleCreatePercentCoupon}>
-              Create
-            </Button>
+            <ThemeProvider theme={theme}>
+              <Button variant="contained" onClick={handleCreatePercentCoupon}>
+                Create
+              </Button>
+            </ThemeProvider>
           </Box>
         </CardContent>
       </Card>

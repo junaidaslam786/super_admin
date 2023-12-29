@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import MainLayout from "./MainLayout";
 import { Box, Typography } from "@mui/material";
@@ -29,13 +27,13 @@ const AnalyticsLayout = ({ children, sectionRefs }) => {
       onClick={() => scrollToRef(item.ref)}
       sx={{
         width: "100%",
-        height: isMobile ? "6vmin" : "8vmin",
-        borderBottom: "0.2vmin solid #171B2A",
+        padding:'2vmin',
+        borderBottom: "0.1vmin solid #737791",
         color: "#737791",
-        fontSize: isMobile ? "2.5vmin" : "3vmin",
+        fontSize: "2vmin",
         display: "flex",
+        paddingLeft: "2vw",
         alignItems: "center",
-        justifyContent: "center",
         "&:hover": {
           color: "#00C800",
           borderLeft: "0.5vmin solid #00C800",
@@ -54,6 +52,7 @@ const AnalyticsLayout = ({ children, sectionRefs }) => {
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           backgroundColor: "#FAFBFC",
+          width:'100%'
         }}
       >
         <Box
@@ -62,28 +61,29 @@ const AnalyticsLayout = ({ children, sectionRefs }) => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            pb: isMobile ? 2 : 0,
+            mb: isMobile ? 2 : 0,
           }}
         >
-          <Box
-            sx={{
-              width: isMobile ? "90%" : "20%",
-              position: isMobile ? "static" : "fixed",
-              top: isMobile ? "auto" : "20vmin",
-              border: "0.2vmin solid #171B2A",
-              backgroundColor: "white",
-              display: "flex",
-              flexDirection: "column",
-              borderRadius: "0.4vmin",
-              overflow: "hidden",
-            }}
-          >
+            <Box
+              sx={{
+                width: isMobile ? "90%" : "17%",
+                position: isMobile ? "static" : "fixed",
+                top: isMobile ? "auto" : "10vmin",
+                border: "0.1vmin solid #737791",
+                backgroundColor: "white",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                borderRadius: "0.2vmin",
+                marginLeft:'1vw'
+              }}
+            >
             {menuItems.map((item, index) => (
               <NavigationItem key={index} item={item} />
             ))}
           </Box>
         </Box>
-        <Box sx={{ width: isMobile ? "100%" : "70%", pt: isMobile ? 2 : 0 }}>
+        <Box sx={{ width: isMobile ? "100%" : "70%", mt: isMobile ? 2 : 4 }}>
           {children}
         </Box>
       </Box>

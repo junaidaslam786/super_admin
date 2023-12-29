@@ -19,19 +19,15 @@ const navigationConfig = [
   {
     id: "dashboard",
     title: "Dashboard",
-    // type: "collapse",
     icon: <DashIcon className={styles.icon} />,
     badge: "warning",
-    // badgeText: "2",
     navLink: "/dashboard"
   },
   {
     id: "profile",
     title: "Profile",
-    // type: "collapse",
     icon: <ProfileIcon className={styles.icon} />,
     badge: "warning",
-    // badgeText: "2",
     navLink: "/profile"
   },
   {
@@ -66,7 +62,6 @@ const navigationConfig = [
         title: "Users Listing",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        // navLink: "/user/listing-admin"
         navLink: "/all-users"
       },
       {
@@ -74,7 +69,6 @@ const navigationConfig = [
         title: "Customers",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        // navLink: "/user/listing-admin"
         navLink: "/all-customers"
       },
       {
@@ -82,16 +76,8 @@ const navigationConfig = [
         title: "Traders",
         type: "item",
         icon: <Icon.Circle size={12} />,
-        // navLink: "/user/listing-admin"
         navLink: "/all-traders"
       },
-      // {
-      //   id: "tradersApprovals",
-      //   title: "Traders Approvals",
-      //   type: "item",
-      //   icon: <Icon.Circle size={12} />,
-      //   navLink: "/trader-approvals"
-      // },
       {
         id: "listingAdmins",
         title: "Admins",
@@ -135,7 +121,6 @@ const navigationConfig = [
       {
         id: "all-appointments",
         title: "Appointments Listing",
-        // title: "Completed Appointments",
         type: "item",
         icon: <Icon.Circle size={12} />,
         navLink: "/appointments-list"
@@ -216,17 +201,6 @@ const navigationConfig = [
     icon: <Community className={styles.icon} />,
     navLink: "/analytics"
   },
-  // {
-  //   id: "reports",
-  //   title: "Reports",
-  //   type: "item",
-  //   icon: <SummarizeRounded className={styles.icon} />,
-  //   navLink: "/reports"
-  // }
-
-  
-  
-
 ]
 
 export default navigationConfig

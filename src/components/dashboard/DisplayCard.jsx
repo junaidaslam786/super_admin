@@ -19,11 +19,10 @@ const DisplayCard = ({ title = "Total Traders", count = "500+", route = '/', ico
   return (
     <Box
       sx={{
-        width: isXs || isSm ? "100vw" : "15vw",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
-        alignItems: isXs || isSm ? "center" : "initial",
-        margin: isLg ? '0' : '0 3vw'
+        alignItems: "center",
       }}
     >
       <Box

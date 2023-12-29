@@ -180,7 +180,7 @@ export default function MiniDrawer() {
       <img
         src={logo}
         alt="Logo"
-        style={{ width: open ? "50%" : "75%", height: "auto", padding: "2px" }}
+        style={{ width: open ? "50%" : "75%", height: "auto", padding: "10px" }}
       />
       <IconButton
         onClick={handleDrawerClose}
@@ -268,13 +268,11 @@ export default function MiniDrawer() {
               disablePadding
               sx={{
                 padding: open ? "0.5vh 0" : "0.5vh 1vw",
-                margin: "0 1vw",
                 borderRadius: "1vmin",
                 fill: "#171B2A",
                 color: "#171B2A",
                 display: "block",
                 "&:hover": {
-                  backgroundColor: "#00C800",
                   fill: "white",
                   color: "white",
                 },
@@ -464,7 +462,7 @@ export default function MiniDrawer() {
 
           {/* User Profile Section */}
           <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", padding: "0 1vw" }}
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", padding: "0" }}
           >
             <img
               src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${
@@ -474,7 +472,7 @@ export default function MiniDrawer() {
               alt="userImage"
               style={{ width: "6vmin", height: "6vmin", borderRadius: "50%", padding: "10px" }}
             />
-            <Box sx={{ marginLeft: "1vw", marginRight: "2vw" }}>
+            <Box sx={{ marginLeft: "1vw", marginRight: "2vw"}}>
               <Typography
                 sx={{
                   color: "#171B2A",

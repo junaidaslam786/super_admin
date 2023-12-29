@@ -69,7 +69,6 @@ const Dashboard = () => {
   ];
 
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
     <MainLayout>
@@ -82,9 +81,9 @@ const Dashboard = () => {
           gap: "16px",
         }}
       >
-        <Grid container spacing={2} alignItems="center" justifyContent="center">
+        <Grid container spacing={2} alignItems="center" justifyContent="center" sx={{margin:'0', padding:'0'}}>
           {cardData.map((data, index) => (
-            <Grid item xs={9} sm={6} md={4} lg={3} key={index}>
+            <Grid item xs={9} sm={8} md={6} lg={4} key={index}>
               <DisplayCard
                 title={data.title}
                 count={data.count.toString() + "+"}

@@ -139,10 +139,21 @@ import {
   TableCell,
   Paper,
   Pagination,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useFetchCustomerInvoicesQuery } from "../../redux/api/paymnetsApi";
 import { Link } from "react-router-dom";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#00C800",
+      contrastText: "#fff",
+    },
+  },
+});
 
 const InvoicesLine = () => {
   const [updatedInvoices, setUpdatedInvoices] = useState([]);
@@ -172,14 +183,18 @@ const InvoicesLine = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button variant="contained" color="primary" sx="4">
-            View Invoice
-          </Button>
+          <ThemeProvider theme={theme}>
+            <Button variant="contained" color="primary" sx="4">
+              View Invoice
+            </Button>
+          </ThemeProvider>
         </Link>
         <Link to={data.invoice_pdf} target="_blank" rel="noopener noreferrer">
-          <IconButton color="primary" aria-label="download">
-            <DownloadIcon />
-          </IconButton>
+          <ThemeProvider theme={theme}>
+            <IconButton color="primary" aria-label="download">
+              <DownloadIcon />
+            </IconButton>
+          </ThemeProvider>
         </Link>
       </>
     );

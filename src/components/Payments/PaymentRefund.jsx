@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   Alert,
 } from "@mui/material";
 
@@ -39,7 +38,7 @@ const PaymentRefund = () => {
         // padding: "20px",
       }}
     >
-      <Card >
+      <Card>
         <CardContent>
           <Typography variant="h5" gutterBottom>
             Process Refund
@@ -48,7 +47,7 @@ const PaymentRefund = () => {
             component="form"
             noValidate
             autoComplete="off"
-            sx={{ display: "flex",  gap: 2 }}
+            sx={{ display: "flex", gap: 2 }}
           >
             <TextField
               label="Transaction ID"
@@ -58,14 +57,14 @@ const PaymentRefund = () => {
               required
               fullWidth
             />
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleRefund}
-              fullWidth
-            >
-              Refund
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleRefund}
+                fullWidth
+              >
+                Refund
+              </Button>
             {refundStatus && <Alert severity="info">{refundStatus}</Alert>}
           </Box>
         </CardContent>
