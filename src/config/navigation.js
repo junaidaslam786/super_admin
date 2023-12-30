@@ -11,8 +11,9 @@ import {ReactComponent as Property} from "../assets/Property.svg"
 import {ReactComponent as Appointments} from '../assets/Appointments.svg'
 import {ReactComponent as Blog} from '../assets/Blog.svg'
 import {ReactComponent as Community} from '../assets/Community.svg'
+import {ReactComponent as Payment} from '../assets/payment.svg'
+import {ReactComponent as Mango} from '../assets/user.svg'
 import styles from '../config/navigationConfig.module.css'
-import { Payment, SummarizeRounded } from "@mui/icons-material"
 
 
 const navigationConfig = [
@@ -48,7 +49,7 @@ const navigationConfig = [
     id: "userManagement",
     title: "User Management",
     type: "collapse",
-    icon: <Icon.User className={styles.icon} />,
+    icon: <Mango className={styles.icon} />,
     children: [
       {
         id: "createUser",

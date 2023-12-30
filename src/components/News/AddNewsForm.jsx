@@ -15,9 +15,20 @@ import {
   InputLabel,
   Grid,
   Box,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 
 const AddNewsForm = () => {
+  const thematic = createTheme({
+    palette: {
+      primary: {
+        main: "#00C800",
+        contrastText: "#fff",
+      },
+    },
+  });
+
   const [addCmsPage, { isLoading }] = useAddCmsPageMutation();
   const [description, setDescription] = useState("");
   const [newsData, setNewsData] = useState({
@@ -146,15 +157,21 @@ const AddNewsForm = () => {
                       placeholder="Select an image"
                     />
                   </Box>
-                  <Button variant="contained" component="label" sx={{ ml: 2 }}>
-                    Choose File
-                    <input
-                      type="file"
-                      hidden
-                      name="image"
-                      onChange={handleChange}
-                    />
-                  </Button>
+                  <ThemeProvider theme={thematic}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{ ml: 2 }}
+                    >
+                      Choose File
+                      <input
+                        type="file"
+                        hidden
+                        name="image"
+                        onChange={handleChange}
+                      />
+                    </Button>
+                  </ThemeProvider>
                 </Box>
               </FormControl>
             </Grid>
@@ -172,15 +189,21 @@ const AddNewsForm = () => {
                       placeholder="Select a file"
                     />
                   </Box>
-                  <Button variant="contained" component="label" sx={{ ml: 2 }}>
-                    Choose File
-                    <input
-                      type="file"
-                      hidden
-                      name="file"
-                      onChange={handleChange}
-                    />
-                  </Button>
+                  <ThemeProvider theme={thematic}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{ ml: 2 }}
+                    >
+                      Choose File
+                      <input
+                        type="file"
+                        hidden
+                        name="file"
+                        onChange={handleChange}
+                      />
+                    </Button>
+                  </ThemeProvider>
                 </Box>
               </FormControl>
             </Grid>
@@ -193,16 +216,18 @@ const AddNewsForm = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={isLoading}
-                sx={{ mt: 3, mb: 2 }}
-              >
-                {isLoading ? <CircularProgress size={24} /> : "Submit"}
-              </Button>
+              <ThemeProvider theme={thematic}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  disabled={isLoading}
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  {isLoading ? <CircularProgress size={24} /> : "Submit"}
+                </Button>
+              </ThemeProvider>
             </Grid>
           </Grid>
         </Box>

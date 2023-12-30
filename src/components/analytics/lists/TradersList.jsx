@@ -10,7 +10,7 @@ const DataBox = ({ title, count, percentageChange, imgSrc }) => (
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
       border: "0.2vmin solid #00C800",
       borderRadius: "0.4vmin",
       boxShadow: "0px 3px 5px #333",

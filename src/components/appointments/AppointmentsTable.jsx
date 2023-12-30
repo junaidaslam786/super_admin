@@ -11,6 +11,8 @@ import {
   Typography,
   Avatar,
   Button,
+  createTheme,
+  ThemeProvider,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -23,6 +25,15 @@ import DetailModal from "./DetailModal";
 import { useGetPropertyByIdQuery } from "../../redux/api/propertyManagementApi";
 
 const AppointmentsTable = ({ appointmentsData }) => {
+  const thematic = createTheme({
+    palette: {
+      primary: {
+        main: "#00C800",
+        contrastText: "#fff",
+      },
+    },
+  });
+
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
@@ -36,7 +47,6 @@ const AppointmentsTable = ({ appointmentsData }) => {
       setSelectedProductId(selectedAppointment.products[0].id);
     }
   }, [selectedAppointment]);
-  
 
   const handleViewClick = (appointment) => {
     setSelectedAppointment(appointment);
@@ -87,13 +97,15 @@ const AppointmentsTable = ({ appointmentsData }) => {
                 <TableCell>{appointment.agentTimeSlot.textShow}</TableCell>
                 <TableCell>{appointment.status}</TableCell>
                 <TableCell align="right">
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleViewClick(appointment)}
-                  >
-                    View
-                  </Button>
+                  <ThemeProvider theme={thematic}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => handleViewClick(appointment)}
+                    >
+                      View
+                    </Button>
+                  </ThemeProvider>
                 </TableCell>
               </TableRow>
             ))}

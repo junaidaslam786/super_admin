@@ -19,10 +19,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Badge,
   InputBase,
   CssBaseline,
-  Breadcrumbs,
+  createTheme,
+  ThemeProvider,
+  useMediaQuery
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/features/userSlice";
@@ -142,6 +143,24 @@ const MainDrawer = styled(Drawer)(({ theme, open }) => ({
 
 export default function MiniDrawer() {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const thematic = createTheme({
+    components: {
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            fill:'#737791',
+            "&:hover": {
+              backgroundColor: "#00C800",
+              color: "#fff",
+              fill: '#fff',
+              fill:'#fff'
+            },
+          },
+        },
+      },
+    },
+  });
   const [open, setOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -264,60 +283,25 @@ export default function MiniDrawer() {
       <List>
         {navigationConfig.map((item) => (
           <React.Fragment key={item.title}>
-            <ListItem
-              disablePadding
-              sx={{
-                padding: open ? "0.5vh 0" : "0.5vh 1vw",
-                borderRadius: "1vmin",
-                fill: "#171B2A",
-                color: "#171B2A",
-                display: "block",
-                "&:hover": {
-                  fill: "white",
-                  color: "white",
-                },
-              }}
-              onClick={() => item.children && toggleSubmenu(item.title)}
-            >
-              {item.children ? (
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2,
-                    borderRadius: "1vmin",
-                    width: "100%",
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      width: "4vmin",
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.title}
-                    sx={{ display: open ? "block" : "none" }}
-                  />
-                </ListItemButton>
-              ) : (
-                <Link
-                  to={item.navLink}
-                  style={{
-                    textDecoration: "none",
-                    color: "#737791",
-                    width: "100%",
-                  }}
-                >
+            <ThemeProvider theme={thematic}>
+              <ListItem
+                disablePadding
+                sx={{
+                  padding: open ? "0.5vh 0" : "0.5vh 1vw",
+                  borderRadius: "1vmin",
+                  color: "#737791",
+                  display: "block",
+                }}
+                onClick={() => item.children && toggleSubmenu(item.title)}
+              >
+                {item.children ? (
                   <ListItemButton
                     sx={{
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2,
                       borderRadius: "1vmin",
+                      width: "100%",
                     }}
                   >
                     <ListItemIcon
@@ -334,9 +318,41 @@ export default function MiniDrawer() {
                       sx={{ display: open ? "block" : "none" }}
                     />
                   </ListItemButton>
-                </Link>
-              )}
-            </ListItem>
+                ) : (
+                  <Link
+                    to={item.navLink}
+                    style={{
+                      textDecoration: "none",
+                      color: "#737791",
+                      width: "100%",
+                    }}
+                  >
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2,
+                        borderRadius: "1vmin",
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          width: "4vmin",
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.title}
+                        sx={{ display: open ? "block" : "none" }}
+                      />
+                    </ListItemButton>
+                  </Link>
+                )}
+              </ListItem>
+            </ThemeProvider>
             {/* Conditional rendering of submenu items */}
             {item.children && openSubmenu === item.title && (
               <List component="div" disablePadding>
@@ -415,54 +431,14 @@ export default function MiniDrawer() {
             <MenuIcon sx={{ fontSize: "3vmin" }} />
           </IconButton>
 
-          
-
-          {/* Search Component */}
-          {/* <Box
-            sx={{
-              backgroundColor: "#FAFBFC",
-              left: "15vw",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <IconButton type="submit" sx={{ p: "10px" }}>
-              <SearchIcon sx={{ color: "#00C800", fontSize: "2.5vmin" }} />
-            </IconButton>
-            <InputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-              value={searchQuery}
-              onChange={handleSearchChange}
-              sx={{
-                color: "#171B2A",
-                width: "20vw",
-                height: "4vmin",
-                borderRadius: "1vmin",
-                fontSize: "1.5vmin",
-                fontWeight: "600",
-              }}
-            />
-          </Box> */}
-
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* Notification Icon */}
-          {/* <IconButton
-            size="large"
-            aria-label="show 17 new notifications"
-            sx={{ marginRight: "2vw" }}
-          >
-            <Badge badgeContent={17} color="error">
-              <NotificationsIcon
-                sx={{ fontSize: "2.5vmin", color: "#00C800" }}
-              />
-            </Badge>
-          </IconButton> */}
-
-          {/* User Profile Section */}
           <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", padding: "0" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: "0",
+            }}
           >
             <img
               src={`${process.env.REACT_APP_SERVER_ENDPOINT}/${
@@ -470,9 +446,14 @@ export default function MiniDrawer() {
                 userState?.user?.profileImage
               }?${Date.now()}`}
               alt="userImage"
-              style={{ width: "6vmin", height: "6vmin", borderRadius: "50%", padding: "10px" }}
+              style={{
+                width: isMobile ? "10vmin" : "6vmin",
+                height: isMobile ? "10vmin" : "6vmin",
+                borderRadius: "50%",
+                padding: "10px",
+              }}
             />
-            <Box sx={{ marginLeft: "1vw", marginRight: "2vw"}}>
+            <Box sx={{ marginLeft: "1vw", marginRight: "2vw" }}>
               <Typography
                 sx={{
                   color: "#171B2A",

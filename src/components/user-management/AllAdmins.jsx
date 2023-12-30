@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAllAdmins } from "../../redux/selectors/userSelectors"; // Update with the correct selector
 import { CircularProgress, Box } from "@mui/material";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
@@ -21,6 +23,10 @@ import DataGrid, {
 import { toast } from "react-toastify";
 
 const AllAdmins = () => {
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -50,19 +56,33 @@ const AllAdmins = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        height="100vh"
+        height="100%"
+        width='100%'
       >
         <CircularProgress />
       </Box>
     );
 
   return (
-    <Box width="100%" sx={{ marginTop: "10vmin", marginLeft: "10vw" }}>
+    <Box
+      width="100%"
+      sx={{
+        marginTop: "10vmin",
+        marginLeft: isMobile ? "0" : "10vw",
+        ".dx-datagrid": {
+          width: "100%",
+          overflowX: isMobile ? "auto" : "hidden",
+          maxHeight:'none'
+        },
+      }}
+    >
       <DataGrid
         dataSource={admins ? JSON.parse(JSON.stringify(admins)) : []}
         showBorders={true}
         columnAutoWidth={true}
         wordWrapEnabled={true}
+        sx={{ width: "100%" }}
+        scrolling={{ mode: "standard" }}
         onRowRemoving={async (e) => {
           try {
             await deleteUser(e.data.id);
