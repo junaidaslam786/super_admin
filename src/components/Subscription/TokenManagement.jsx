@@ -100,10 +100,10 @@ const TokenManagement = () => {
         }}
       >
         <Typography sx={{ fontSize: "3vmin", fontWeight: "600" }}>
-          Enter Token Price:
+          Enter USEE Coin Price:
         </Typography>
         <TextField
-          label="Price Per Token"
+          label="Price Per USEE Coin"
           value={inputTokenPrice}
           onChange={(e) => setInputTokenPrice(e.target.value)}
           placeholder=""

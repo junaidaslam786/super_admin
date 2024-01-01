@@ -52,6 +52,7 @@ const customFetchBase = async (args, api, extraOptions) => {
         // release must be called once the mutex should be released again.
         release();
       }
+      api.dispatch(logout());
     } else {
       // wait until the mutex is available without locking it
       await mutex.waitForUnlock();

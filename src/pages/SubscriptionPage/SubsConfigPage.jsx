@@ -107,7 +107,7 @@ const SubsConfigPage = () => {
                 },
               }}
             >
-              Token Management
+              USEE Coin Management
             </Typography>
           </Box>
         </Grid>

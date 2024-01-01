@@ -98,7 +98,7 @@ const SubsConfig = ({ featureName, slotsLabel, featureId, freeLabel }) => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
-              label="Tokens Per Unit"
+              label="USEE Coin Per Unit"
               type="number"
               value={tokensPerUnit}
               onChange={(e) => setTokensPerUnit(e.target.value)}
