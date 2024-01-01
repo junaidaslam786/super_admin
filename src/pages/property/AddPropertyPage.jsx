@@ -22,7 +22,7 @@ const AddPropertyPage = () => {
   const [vrData, setVrData] = useState({ type: null, data: null });
 
   const [listingLocation, setListingLocation] = useState({});
-  //  const [moreImages, setMoreImages] = useState([]);
+  const [moreImages, setMoreImages] = useState([]);
   //  const [documents, setDocuments] = useState([]);
 
   const navigate = useNavigate();
@@ -47,8 +47,8 @@ const AddPropertyPage = () => {
   };
 
   const handleVRTourData = (receivedData) => {
-    setVrData(receivedData);  // Store the received data in the state
-  
+    setVrData(receivedData); // Store the received data in the state
+
     // Differentiate and handle based on the type
     if (receivedData.type === "file") {
       // Handle the received file
@@ -58,7 +58,10 @@ const AddPropertyPage = () => {
       console.log("Received a URL:", receivedData.data);
     }
   };
-  
+
+  const handleUpdateImages = (newImage) => {
+    setMoreImages([...moreImages, newImage]);
+  };
 
   const handleSubmit = () => {
     const rawUserState = localStorage.getItem("userState");
@@ -66,12 +69,12 @@ const AddPropertyPage = () => {
     if (rawUserState) {
       const userState = JSON.parse(rawUserState);
       const user = userState.user;
-      userId = user.userId; 
+      userId = user.userId;
     }
-    
+
     const propertyData = {
       userId: userId,
-      title: propertyDescription.title, 
+      title: propertyDescription.title,
       address: listingLocation.address,
       city: listingLocation.city,
       region: listingLocation.region,
@@ -85,16 +88,15 @@ const AddPropertyPage = () => {
 
     // Integrate VR data
     if (vrData.type === "file") {
-      propertyData.vrFile = vrData.data;  // Add the file data to the propertyData
+      propertyData.vrFile = vrData.data; // Add the file data to the propertyData
       // Note: Depending on your backend, you might need to handle the file data differently, such as converting it to a specific format or uploading separately.
     } else if (vrData.type === "url") {
-      propertyData.vrUrl = vrData.data;  // Add the URL to the propertyData
+      propertyData.vrUrl = vrData.data; // Add the URL to the propertyData
     }
 
     addProperty(propertyData);
     navigate("/property-list");
-};
-
+  };
 
   useEffect(() => {
     if (propertyCreate) {
@@ -131,8 +133,7 @@ const AddPropertyPage = () => {
     {
       id: "addMoreImages",
       label: "Add More Images",
-      component: <AddMoreImages />,
-      // component: <AddMoreImages updateImages={setMoreImages}/>,
+      component: <AddMoreImages updateImages={handleUpdateImages} />,
     },
     {
       id: "addDocuments",
@@ -153,7 +154,7 @@ const AddPropertyPage = () => {
         spacing={3}
         sx={{ padding: "4vh 0", backgroundColor: "#FAFBFC" }}
       >
-        <Grid item xs={12} md={3} sx={{ width: '25%' }}>
+        <Grid item xs={12} md={3} sx={{ width: "25%" }}>
           <Box
             sx={{
               margin: "0 3vw",

@@ -25,7 +25,7 @@ export const appointmentsApi = createApi({
       query: (body) => {
         const token = localStorage.getItem("token");
         return {
-          url: "/superadmin/appointment/add",
+          url: "/superadmin/appointment/create",
           method: "POST",
           credentials: "include",
           headers: {
@@ -40,6 +40,6 @@ export const appointmentsApi = createApi({
   }),
 });
 
-const { useListAppointmentsQuery } = appointmentsApi;
+const { useListAppointmentsQuery, useAddAppointmentsMutation} = appointmentsApi;
 
-export { useListAppointmentsQuery };
+export { useListAppointmentsQuery, useAddAppointmentsMutation };

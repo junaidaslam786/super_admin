@@ -70,10 +70,10 @@ export const cmsApi = createApi({
       query: (pageType) => {
         const token = localStorage.getItem("token");
         return {
-          url: `/superadmin/cms/all-pages`,
+          url: `/superadmin/cms/page/all-pages`,
           method: "POST",
           credentials: "include",
-          body: pageType,
+          body: pageType, // Make sure this is what your backend expects
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

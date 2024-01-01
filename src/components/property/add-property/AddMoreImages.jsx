@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Grid, Typography, Button } from "@mui/material";
 
-const AddMoreImages = () => {
+const AddMoreImages = ({ updateImages }) => {
+  const [profileImage, setProfileImage] = useState(null);
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(URL.createObjectURL(file));
+      setSelectedImageFile(file);
+      updateImages(file); // Update the state in the parent component
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -21,19 +33,19 @@ const AddMoreImages = () => {
         >
           Add More Images
         </Typography>
-        <Typography color="#737791" sx={{ fontSize: "1.5vmin" }}>
+        {/* <Typography color="#737791" sx={{ fontSize: "1.5vmin" }}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend
           justo eget
-        </Typography>
+        </Typography> */}
       </Grid>
       <Grid item sx={{ marginTop: "3vmin" }}>
         <Button
           variant="outlined"
           color="primary"
-          //   onClick={() => {
-          //     const fileInput = document.getElementById("hiddenFileInput");
-          //     fileInput.click();
-          //   }}
+          onClick={() => {
+            const fileInput = document.getElementById("hiddenFileInput");
+            fileInput.click();
+          }}
           sx={{
             border: "0.1vmin solid #00C800",
             color: "#00C800",
@@ -54,13 +66,7 @@ const AddMoreImages = () => {
           type="file"
           id="hiddenFileInput"
           style={{ display: "none" }}
-          //   onChange={(e) => {
-          //     const file = e.target.files[0];
-          //     if (file) {
-          //       setProfileImage(URL.createObjectURL(file));
-          //       setSelectedImageFile(file);
-          //     }
-          //   }}
+          onChange={handleFileChange}
         />
       </Grid>
     </Box>

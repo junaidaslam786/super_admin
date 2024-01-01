@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { DatePicker, TimePicker } from "@mui/lab";
 import {
   TextField,
   Typography,
@@ -10,11 +11,43 @@ import {
   Button,
   createTheme,
   ThemeProvider,
+  Autocomplete,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useAddAppointmentsMutation } from "../../redux/api/appointmentsApi";
+import { useGetAllUsersExceptSuperAdminQuery } from "../../redux/api/userManagementApi";
+import { useGetAllPropertiesQuery } from "../../redux/api/propertyManagementApi";
 
 const AddAppointments = () => {
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+
+  const { data: properties, isLoading: propertiesLoading } =
+    useGetAllPropertiesQuery();
+  const { data: users, isLoading: customersLoading } =
+    useGetAllUsersExceptSuperAdminQuery();
+
+  const [addAppointment, { isLoading: addAppointmentLoading }] =
+    useAddAppointmentsMutation();
+
+  const handleSubmit = () => {
+    const appointmentData = {
+      propertyId: selectedProperty?.id,
+      date: selectedDate,
+      time: selectedTime,
+      customerId: selectedCustomer?.id,
+      customerEmail: selectedCustomer?.email,
+      customerPhone: selectedCustomer?.phone,
+      agentId: selectedAgent?.id,
+      // ...other data as needed
+    };
+    addAppointment(appointmentData);
+  };
+
   const theme = useTheme();
   const isTab = useMediaQuery(theme.breakpoints.down("md"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -37,37 +70,23 @@ const AddAppointments = () => {
         boxShadow: "0px 0px 1px black",
       }}
     >
-      <Box>
-        <Typography
-          sx={{
-            fontSize: "3vmin",
-            fontWeight: "600",
-            fontFamily: "helvetica",
-            marginBottom: "2vh",
-          }}
-        >
-          Add Appointments
-        </Typography>
-        <FormControl fullWidth variant="outlined" sx={{ marginBottom: "2vh" }}>
-          <InputLabel
-            id="select-property-label"
-            sx={{
-              color: "#00C800",
-              "&.MuiInputLabel-shrink": { color: "#00C800" },
-            }}
-          >
-            Select Property*
-          </InputLabel>
-          <Select
-            labelId="property-select-label"
-            id="property-select"
-            label="Select Property"
-          >
-            <MenuItem value="another">Another</MenuItem>
-            <MenuItem value="andAnother">And Another</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+      <Typography variant="h6" sx={{ marginBottom: "2vh" }}>
+        Add Appointments
+      </Typography>
+
+      {/* Select Property */}
+      <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
+        <Autocomplete
+          options={properties || []}
+          getOptionLabel={(option) => option.name}
+          onChange={(event, newValue) => setSelectedProperty(newValue)}
+          renderInput={(params) => (
+            <TextField {...params} label="Select Property" />
+          )}
+        />
+      </FormControl>
+
+      {/* Date and Time Selection */}
       <Box
         sx={{
           display: "flex",
@@ -81,115 +100,204 @@ const AddAppointments = () => {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ marginBottom:'2vh', marginRight: isTab ? "0" : "2vw", height: isMobile ? "15vmin" : isMobile ? "6vmin" : "4vmin" }}
+            sx={{
+              marginBottom: "2vh",
+              marginRight: isTab ? "0" : "2vw",
+              height: isMobile ? "15vmin" : "6vmin",
+            }}
           >
             Request Now
           </Button>
         </ThemeProvider>
-        <TextField
-          label="Select Date*"
-          placeholder="12/12/2000"
-          fullWidth
-          sx={{ marginBottom: "2vh", marginRight: isTab ? "0" : "2vw" }}
-          InputLabelProps={{
-            style: {
-              color: "#00C800",
-            },
-          }}
+        <DatePicker
+          label="Select Date"
+          value={selectedDate}
+          onChange={setSelectedDate}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              sx={{ marginBottom: "2vh", marginRight: isTab ? "0" : "2vw" }}
+            />
+          )}
         />
-        <TextField
-          label="Choose Time*"
-          placeholder="12:12:12"
-          fullWidth
-          sx={{ marginBottom: "2vh" }}
-          InputLabelProps={{
-            style: {
-              color: "#00C800",
-            },
-          }}
+        <TimePicker
+          label="Choose Time"
+          value={selectedTime}
+          onChange={setSelectedTime}
+          renderInput={(params) => (
+            <TextField {...params} sx={{ marginBottom: "2vh" }} />
+          )}
         />
       </Box>
+
+      {/* Select Customer */}
       <Box
         sx={{
-            display: "flex",
-            flexDirection: isTab ? "column" : "row",
-            width: "100%",
+          display: "flex",
+          flexDirection: isTab ? "column" : "row",
+          width: "100%",
         }}
       >
         <FormControl
           fullWidth
-          variant="outlined"
           sx={{ marginBottom: "2vh", marginRight: isTab ? "0" : "2vw" }}
         >
-          <InputLabel
-            id="customer-name"
-            sx={{
-              color: "#00C800",
-              "&.MuiInputLabel-shrink": { color: "#00C800" },
-            }}
-          >
-            Customer Name
-          </InputLabel>
-          <Select label="Customer Name">
-            <MenuItem value="another">Another</MenuItem>
-            <MenuItem value="andAnother">And Another</MenuItem>
-          </Select>
+          <Autocomplete
+            options={
+              users?.filter((user) => user.userType !== "superadmin") || []
+            }
+            getOptionLabel={(option) => option.name}
+            onChange={(event, newValue) => setSelectedCustomer(newValue)}
+            renderInput={(params) => (
+              <TextField {...params} label="Customer Name" />
+            )}
+          />
         </FormControl>
         <TextField
           label="Customer Email"
-          placeholder="customer@gmail.com"
+          value={selectedCustomer?.email || ""}
           fullWidth
           sx={{ marginBottom: "2vh" }}
-          InputLabelProps={{
-            style: {
-              color: "#00C800",
-            },
-          }}
+          disabled
         />
       </Box>
+
+      {/* Customer Phone and Assign To */}
       <Box
         sx={{
-            display: "flex",
-            flexDirection: isTab ? "column" : "row",
-            width: "100%",
+          display: "flex",
+          flexDirection: isTab ? "column" : "row",
+          width: "100%",
         }}
       >
         <TextField
           label="Customer Phone"
-          placeholder="+1234567890"
+          value={selectedCustomer?.phone || ""}
           fullWidth
           sx={{ marginBottom: "2vh", marginRight: isTab ? "0" : "2vw" }}
-          InputLabelProps={{
-            style: {
-              color: "#00C800",
-            },
-          }}
+          disabled
         />
-        <FormControl fullWidth variant="outlined" sx={{ marginBottom: "2vh" }}>
-          <InputLabel
-            id="assign-to"
-            sx={{
-              color: "#00C800",
-              "&.MuiInputLabel-shrink": { color: "#00C800" },
-            }}
-          >
-            Assign To
-          </InputLabel>
-          <Select label="Assign To">
-            <MenuItem value="another">Another</MenuItem>
-            <MenuItem value="andAnother">And Another</MenuItem>
-          </Select>
+        <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
+          <Autocomplete
+            options={users?.filter((user) => user.userType === "agent") || []}
+            getOptionLabel={(option) => option.name}
+            onChange={(event, newValue) => setSelectedAgent(newValue)}
+            renderInput={(params) => (
+              <TextField {...params} label="Assign To" />
+            )}
+          />
         </FormControl>
       </Box>
+
+      {/* Submit Button */}
       <Box>
         <ThemeProvider theme={thematic}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+          >
             Submit
           </Button>
         </ThemeProvider>
       </Box>
     </Box>
   );
+
+  // return (
+  //   <Box
+  //     sx={{
+  //       backgroundColor: "white",
+  //       padding: "3vh",
+  //       width: "90%",
+  //       margin: "5vmin",
+  //       boxShadow: "0px 0px 1px black",
+  //     }}
+  //   >
+  //     <Typography variant="h6" sx={{ marginBottom: "2vh" }}>
+  //       Add Appointments
+  //     </Typography>
+
+  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
+  //       <Autocomplete
+  //         options={properties || []}
+  //         getOptionLabel={(option) => option.name}
+  //         onChange={(event, newValue) => setSelectedProperty(newValue)}
+  //         renderInput={(params) => (
+  //           <TextField {...params} label="Select Property" />
+  //         )}
+  //       />
+  //     </FormControl>
+
+  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
+  //       <DatePicker
+  //         label="Select Date"
+  //         value={selectedDate}
+  //         onChange={setSelectedDate}
+  //         renderInput={(params) => <TextField {...params} />}
+  //       />
+  //     </FormControl>
+
+  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
+  //       <TimePicker
+  //         label="Choose Time"
+  //         value={selectedTime}
+  //         onChange={setSelectedTime}
+  //         renderInput={(params) => <TextField {...params} />}
+  //       />
+  //     </FormControl>
+
+  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
+  //       <Autocomplete
+  //         options={
+  //           users?.filter((user) => user.userType !== "superadmin") || []
+  //         }
+  //         getOptionLabel={(option) => option.name}
+  //         onChange={(event, newValue) => setSelectedCustomer(newValue)}
+  //         renderInput={(params) => (
+  //           <TextField {...params} label="Customer Name" />
+  //         )}
+  //       />
+  //     </FormControl>
+
+  //     <TextField
+  //       label="Customer Email"
+  //       value={selectedCustomer?.email || ""}
+  //       fullWidth
+  //       sx={{ marginBottom: "2vh" }}
+  //       disabled
+  //     />
+  //     <TextField
+  //       label="Customer Phone"
+  //       value={selectedCustomer?.phone || ""}
+  //       fullWidth
+  //       sx={{ marginBottom: "2vh" }}
+  //       disabled
+  //     />
+
+  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
+  //       <Autocomplete
+  //         options={users?.filter((user) => user.userType === "agent") || []}
+  //         getOptionLabel={(option) => option.name}
+  //         onChange={(event, newValue) => setSelectedAgent(newValue)}
+  //         renderInput={(params) => <TextField {...params} label="Assign To" />}
+  //       />
+  //     </FormControl>
+
+  //     <ThemeProvider theme={thematic}>
+  //       <Button
+  //         type="submit"
+  //         variant="contained"
+  //         color="primary"
+  //         fullWidth={isTab}
+  //         onClick={handleSubmit}
+  //       >
+  //         Submit
+  //       </Button>
+  //     </ThemeProvider>
+  //   </Box>
+  // );
 };
 
 export default AddAppointments;

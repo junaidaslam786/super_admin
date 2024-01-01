@@ -1,23 +1,37 @@
-import React from 'react';
-import { useGetAllCmsPagesQuery, useUpdateCmsPageMutation, useDeleteCmsPageMutation } from '../../redux/api/cmsApi';
-import CmsPagesList from './CmsPagesList';
-// Assume you have functions for deleting and updating
-// import { deleteCmsPage, updateCmsPage } from 'path-to-your-update-delete-functions';
+import React from "react";
+import { Grid } from "@mui/material";
+import {
+  useGetAllCmsPagesQuery,
+  useUpdateCmsPageMutation,
+  useDeleteCmsPageMutation,
+} from "../../redux/api/cmsApi";
+import CmsPagesList from "./CmsPagesList";
 
 const CmsPageContainer = () => {
-  const { data: cmsPages, isLoading, error } = useGetAllCmsPagesQuery('blogs');
+  const { data: cmsPages, isLoading, error } = useGetAllCmsPagesQuery({ pageType: "blogs" });
+  const [deleteCmsPage] = useDeleteCmsPageMutation();
+  const [updateCmsPage] = useUpdateCmsPageMutation();
+
+  console.log("cmsPages data:", cmsPages);
+
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error occurred: {error.message}</p>;
 
-  const handleDelete = (pageId) => {
-    // Call delete function
-    useDeleteCmsPageMutation(pageId);
+  const handleDelete = async (pageId) => {
+    try {
+      await deleteCmsPage(pageId).unwrap();
+    } catch (err) {
+      console.error("Failed to delete CMS page:", err);
+    }
   };
 
-  const handleUpdate = (pageId) => {
-    // Call update function or redirect to update page
-    useUpdateCmsPageMutation(pageId);
+  const handleUpdate = async (pageId) => {
+    try {
+      await updateCmsPage(pageId).unwrap();
+    } catch (err) {
+      console.error("Failed to update CMS page:", err);
+    }
   };
 
   return (
