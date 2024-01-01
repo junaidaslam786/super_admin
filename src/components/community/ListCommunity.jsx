@@ -12,7 +12,6 @@ import DataGrid, {
   Pager,
   FilterRow,
   Column,
-  Editing,
 } from "devextreme-react/data-grid";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

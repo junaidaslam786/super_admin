@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import LogoutIcon from "@mui/icons-material/Logout";
-import SearchIcon from "@mui/icons-material/Search";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { useTheme, styled, alpha } from "@mui/material/styles";
+
+import { useTheme, styled} from "@mui/material/styles";
 import {
   Box,
   Drawer,
@@ -19,7 +17,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  InputBase,
   CssBaseline,
   createTheme,
   ThemeProvider,
@@ -33,45 +30,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const drawerWidth = 300;
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -154,7 +113,6 @@ export default function MiniDrawer() {
               backgroundColor: "#00C800",
               color: "#fff",
               fill: '#fff',
-              fill:'#fff'
             },
           },
         },
@@ -179,13 +137,13 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  // const handleSearchChange = (e) => {
+  //   setSearchQuery(e.target.value);
+  // };
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  // const handleDrawerToggle = () => {
+  //   setMobileOpen(!mobileOpen);
+  // };
 
   // Function to toggle submenu
   const toggleSubmenu = (itemTitle) => {

@@ -50,15 +50,7 @@ const AddCommunity = () => {
     }
   }, [params.communityId]);
 
-  //   const handleSubmit = async (event) => {
-  //     event.preventDefault();
-  //     try {
-  //       await addCommunity({ title, category, subCategory, categoryType, status }).unwrap();
-  //       // Redirect or show success message
-  //     } catch (err) {
-  //       // Handle error
-  //     }
-  //   };
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { CircularProgress, Typography, Box, Button } from "@mui/material";
+import React from "react";
+import { Box, Button } from "@mui/material";
 import DataGrid, {
   Paging,
   Pager,
   FilterRow,
   Column,
-  Editing,
+  
 } from "devextreme-react/data-grid";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { useGetAllCummunityPostsQuery } from '../../redux/api/communityApi';
 
 

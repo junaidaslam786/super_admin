@@ -4,9 +4,6 @@ import {
   TextField,
   Typography,
   Box,
-  Select,
-  InputLabel,
-  MenuItem,
   FormControl,
   Button,
   createTheme,
@@ -205,99 +202,7 @@ const AddAppointments = () => {
     </Box>
   );
 
-  // return (
-  //   <Box
-  //     sx={{
-  //       backgroundColor: "white",
-  //       padding: "3vh",
-  //       width: "90%",
-  //       margin: "5vmin",
-  //       boxShadow: "0px 0px 1px black",
-  //     }}
-  //   >
-  //     <Typography variant="h6" sx={{ marginBottom: "2vh" }}>
-  //       Add Appointments
-  //     </Typography>
-
-  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
-  //       <Autocomplete
-  //         options={properties || []}
-  //         getOptionLabel={(option) => option.name}
-  //         onChange={(event, newValue) => setSelectedProperty(newValue)}
-  //         renderInput={(params) => (
-  //           <TextField {...params} label="Select Property" />
-  //         )}
-  //       />
-  //     </FormControl>
-
-  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
-  //       <DatePicker
-  //         label="Select Date"
-  //         value={selectedDate}
-  //         onChange={setSelectedDate}
-  //         renderInput={(params) => <TextField {...params} />}
-  //       />
-  //     </FormControl>
-
-  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
-  //       <TimePicker
-  //         label="Choose Time"
-  //         value={selectedTime}
-  //         onChange={setSelectedTime}
-  //         renderInput={(params) => <TextField {...params} />}
-  //       />
-  //     </FormControl>
-
-  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
-  //       <Autocomplete
-  //         options={
-  //           users?.filter((user) => user.userType !== "superadmin") || []
-  //         }
-  //         getOptionLabel={(option) => option.name}
-  //         onChange={(event, newValue) => setSelectedCustomer(newValue)}
-  //         renderInput={(params) => (
-  //           <TextField {...params} label="Customer Name" />
-  //         )}
-  //       />
-  //     </FormControl>
-
-  //     <TextField
-  //       label="Customer Email"
-  //       value={selectedCustomer?.email || ""}
-  //       fullWidth
-  //       sx={{ marginBottom: "2vh" }}
-  //       disabled
-  //     />
-  //     <TextField
-  //       label="Customer Phone"
-  //       value={selectedCustomer?.phone || ""}
-  //       fullWidth
-  //       sx={{ marginBottom: "2vh" }}
-  //       disabled
-  //     />
-
-  //     <FormControl fullWidth sx={{ marginBottom: "2vh" }}>
-  //       <Autocomplete
-  //         options={users?.filter((user) => user.userType === "agent") || []}
-  //         getOptionLabel={(option) => option.name}
-  //         onChange={(event, newValue) => setSelectedAgent(newValue)}
-  //         renderInput={(params) => <TextField {...params} label="Assign To" />}
-  //       />
-  //     </FormControl>
-
-  //     <ThemeProvider theme={thematic}>
-  //       <Button
-  //         type="submit"
-  //         variant="contained"
-  //         color="primary"
-  //         fullWidth={isTab}
-  //         onClick={handleSubmit}
-  //       >
-  //         Submit
-  //       </Button>
-  //     </ThemeProvider>
-  //   </Box>
-  // );
+  
 };
 
 export default AddAppointments;

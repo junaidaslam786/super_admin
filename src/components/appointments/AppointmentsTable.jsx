@@ -12,13 +12,7 @@ import {
   Avatar,
   Button,
   createTheme,
-  ThemeProvider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  List,
-  ListItem,
-  ListItemText,
+  ThemeProvider
 } from "@mui/material";
 import moment from "moment";
 import DetailModal from "./DetailModal";
