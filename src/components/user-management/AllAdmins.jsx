@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAllAdmins } from "../../redux/selectors/userSelectors"; // Update with the correct selector
 import { CircularProgress, Box } from "@mui/material";
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
@@ -23,9 +23,8 @@ import DataGrid, {
 import { toast } from "react-toastify";
 
 const AllAdmins = () => {
-  
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ const AllAdmins = () => {
         justifyContent="center"
         alignItems="center"
         height="100%"
-        width='100%'
+        width="100%"
       >
         <CircularProgress />
       </Box>
@@ -65,14 +64,15 @@ const AllAdmins = () => {
 
   return (
     <Box
-      width="100%"
+      maxWidth="100%"
       sx={{
         marginTop: "10vmin",
         marginLeft: isMobile ? "0" : "10vw",
+        overflowX: isMobile ? "auto" : "hidden", // Enable horizontal scrolling on mobile
         ".dx-datagrid": {
-          width: "100%",
-          overflowX: isMobile ? "auto" : "hidden",
-          maxHeight:'none'
+          width: isMobile ? "100vw" : "100%",
+          maxWidth: isMobile ? "none" : "100%", // Ensure DataGrid does not exceed viewport width on mobile
+          maxHeight: "none",
         },
       }}
     >

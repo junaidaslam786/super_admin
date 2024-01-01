@@ -21,11 +21,25 @@ export const appointmentsApi = createApi({
       },
       providesTags: ["AppointmentsApi"],
     }),
+    addAppointments: builder.mutation({
+      query: (body) => {
+        const token = localStorage.getItem("token");
+        return {
+          url: "/superadmin/appointment/add",
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: body,
+        };
+      },
+      invalidatesTags: ["AppointmentsApi"],
+    }),
   }),
 });
 
-const {
-  useListAppointmentsQuery,
-} = appointmentsApi;
+const { useListAppointmentsQuery } = appointmentsApi;
 
 export { useListAppointmentsQuery };

@@ -386,7 +386,7 @@ export default function MiniDrawer() {
           }}
           sx={{
             padding: open ? "0 1vw" : "0 0",
-            height: "4vmin",
+            height: isMobile ? "6vh" : "4vh",
             borderRadius: "1vmin",
             marginTop: "5vh",
             backgroundColor: "#171B2A",

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 import { selectAllAgents } from "../../redux/selectors/userSelectors"; 
-import { CircularProgress, Box, Button } from "@mui/material";
+import { CircularProgress, Box, Button, useTheme, useMediaQuery } from "@mui/material";
 import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
@@ -31,6 +31,10 @@ import DataGrid, {
 import { toast } from "react-toastify";
 
 const TradersData = () => {
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -96,7 +100,13 @@ const TradersData = () => {
       width="100%"
       sx={{
         marginTop: "10vmin",
-        marginLeft: "10vw",
+        marginLeft: isMobile ? "0" : "10vw",
+        overflowX: isMobile ? "auto" : "hidden", // Enable horizontal scrolling on mobile
+        ".dx-datagrid": {
+          width: isMobile ? "100vw" : "100%",
+          maxWidth: isMobile ? "none" : "100%", // Ensure DataGrid does not exceed viewport width on mobile
+          maxHeight: "none",
+        },
       }}
     >
       <DataGrid
@@ -181,11 +191,11 @@ const TradersData = () => {
         <FilterRow visible={true} />
         <GroupPanel visible={true} />
         <Grouping autoExpandAll={false} />
-        <Export
+        {/* <Export
           enabled={true}
           fileName="Traders"
           allowExportSelectedData={true}
-        />
+        /> */}
 
         <Editing
           mode="popup"

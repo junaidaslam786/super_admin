@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { useSelector } from "react-redux";
 import { selectAllCustomers } from "../../redux/selectors/userSelectors"; // Assuming the selectors are in this file
-import { CircularProgress, Box } from "@mui/material";
+import { CircularProgress, Box, useTheme, useMediaQuery } from "@mui/material";
 import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
@@ -21,6 +21,10 @@ import DataGrid, {
 import { toast } from "react-toastify";
 
 const CustomerData = () => {
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const dispatch = useDispatch();
 
   const customers = useSelector(selectAllCustomers);
@@ -51,7 +55,13 @@ const CustomerData = () => {
       width="100%"
       sx={{
         marginTop: "10vmin",
-        marginLeft: "10vw",
+        marginLeft: isMobile ? "0" : "10vw",
+        overflowX: isMobile ? "auto" : "hidden", // Enable horizontal scrolling on mobile
+        ".dx-datagrid": {
+          width: isMobile ? "100vw" : "100%",
+          maxWidth: isMobile ? "none" : "100%", // Ensure DataGrid does not exceed viewport width on mobile
+          maxHeight: "none",
+        },
       }}
     >
       <DataGrid

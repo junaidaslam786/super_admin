@@ -126,6 +126,13 @@ const navigationConfig = [
         icon: <Icon.Circle size={12} />,
         navLink: "/appointments-list"
       },
+      {
+        id: "add-appointments",
+        title: "Add Appointments",
+        type: "item",
+        icon: <Icon.Circle size={12} />,
+        navLink: "/add-appointments"
+      },
       
     ]
   },

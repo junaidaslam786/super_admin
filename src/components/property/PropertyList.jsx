@@ -7,7 +7,7 @@ import {
 } from "../../redux/api/propertyManagementApi";
 // import { userManagementApi } from "../../redux/api/userManagementApi";
 import { useNavigate } from "react-router-dom";
-import { CircularProgress, Typography, Box } from "@mui/material";
+import { CircularProgress, Typography, Box,useTheme, useMediaQuery } from "@mui/material";
 import { setProperties } from "../../redux/features/propertyManagementSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -28,6 +28,10 @@ import { toast } from "react-toastify";
 const userCache = {};
 
 const PropertyList = () => {
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const [updatedProperties, setUpdatedProperties] = useState([]);
   const [selectedPropertyId, setSelectedPropertyId] = useState();
 
@@ -91,7 +95,13 @@ const PropertyList = () => {
       width="100%"
       sx={{
         marginTop: "10vmin",
-        marginLeft: "10vw",
+        marginLeft: isMobile ? "0" : "10vw",
+        overflowX: isMobile ? "auto" : "hidden", // Enable horizontal scrolling on mobile
+        ".dx-datagrid": {
+          width: isMobile ? "100vw" : "100%",
+          maxWidth: isMobile ? "none" : "100%", // Ensure DataGrid does not exceed viewport width on mobile
+          maxHeight: "none",
+        },
       }}
     >
       <DataGrid

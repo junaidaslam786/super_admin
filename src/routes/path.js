@@ -31,6 +31,7 @@ import AllCommunityPostsPage from "../pages/community/AllCommunityPostsPage";
 import AddBlogPage from "../pages/blog/AddBlogPage";
 import ListAppointmentsPage from "../pages/appointments/ListAppointmentsPage";
 import ListBlogs from "../pages/blog/ListBlogs";
+import AddAppointmentsPage from "../pages/appointments/AddAppointmentsPage";
 // Add other required imports here ...
 
 const RoutesContent = () => {
@@ -115,6 +116,9 @@ const RoutesContent = () => {
       </Route>
       <Route path="/appointments-list" element={<ProtectedRoute />}>
         <Route index element={<ListAppointmentsPage />} />
+      </Route>
+      <Route path="/add-appointments" element={<ProtectedRoute />}>
+        <Route index element={<AddAppointmentsPage />} />
       </Route>
       <Route path="/analytics" element={<AnalyticsPage />} />
       <Route path="/reports" element={<ReportsPage />} />

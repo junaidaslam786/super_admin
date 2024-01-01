@@ -4,7 +4,7 @@ import {
   useDeleteUserMutation,
   useUpdateUserMutation,
 } from "../../redux/api/userManagementApi";
-import { Box } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setUsers } from "../../redux/features/userManagementSlice";
 
@@ -19,6 +19,10 @@ import DataGrid, {
 import { toast } from "react-toastify";
 
 const AllUsers = () => {
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const dispatch = useDispatch();
 
   const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
@@ -36,7 +40,13 @@ const AllUsers = () => {
       width="100%"
       sx={{
         marginTop: "10vmin",
-        marginLeft: "10vw",
+        marginLeft: isMobile ? "0" : "10vw",
+        overflowX: isMobile ? "auto" : "hidden", // Enable horizontal scrolling on mobile
+        ".dx-datagrid": {
+          width: isMobile ? "100vw" : "100%",
+          maxWidth: isMobile ? "none" : "100%", // Ensure DataGrid does not exceed viewport width on mobile
+          maxHeight: "none",
+        },
       }}
     >
       <DataGrid
