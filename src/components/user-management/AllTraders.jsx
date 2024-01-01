@@ -33,6 +33,8 @@ import DataGrid, {
   Export,
   Summary,
   MasterDetail,
+  Form,
+  Item,
 } from "devextreme-react/data-grid";
 import { toast } from "react-toastify";
 
@@ -191,6 +193,7 @@ const TradersData = () => {
         <Column
           caption="Actions"
           width={200}
+          allowEditing={false}
           cellRender={(cellData) => {
             return (
               <Box>
@@ -242,7 +245,21 @@ const TradersData = () => {
             width: 700,
             height: 525,
           }}
-        />
+        >
+          {/* Specify the form items to exclude the fields you don't want to show */}
+          <Form>
+            <Item itemType="group" colCount={2} colSpan={2}>
+              <Item dataField="firstName" />
+              <Item dataField="lastName" />
+              <Item dataField="phoneNumber" />
+              <Item dataField="cityName" />
+              <Item dataField="email" />
+              <Item dataField="userType" />
+              <Item dataField="active" />
+              {/* Ensure you do not have an Item for "actions" or any undefined dataField */}
+            </Item>
+          </Form>
+        </Editing>
       </DataGrid>
     </Box>
   );

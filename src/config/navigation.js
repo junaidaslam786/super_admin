@@ -8,6 +8,7 @@ import {ReactComponent as News} from '../assets/news.svg'
 import {ReactComponent as Traders} from "../assets/traders.svg"
 import {ReactComponent as Subs} from '../assets/subs.svg'
 import {ReactComponent as Property} from "../assets/Property.svg"
+import {ReactComponent as BarChart2} from "../assets/bar-chart-2.svg"
 import {ReactComponent as Appointments} from '../assets/Appointments.svg'
 import {ReactComponent as Blog} from '../assets/Blog.svg'
 import {ReactComponent as Community} from '../assets/Community.svg'
@@ -206,7 +207,7 @@ const navigationConfig = [
     id: "analytics",
     title: "Analytics & Reports",
     type: "item",
-    icon: <Community className={styles.icon} />,
+    icon: <BarChart2 className={styles.icon}  />,
     navLink: "/analytics"
   },
 ]

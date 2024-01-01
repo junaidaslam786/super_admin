@@ -85,13 +85,34 @@ const TradersView = () => {
             Email: {selectedUser?.user.email}
           </Typography>
           <Typography variant="subtitle1">
-            Location: {selectedUser?.companyAddress}
+            City Name: {selectedUser?.user.cityName}
+          </Typography>
+          <Typography variant="subtitle1">
+            TimeZone: {selectedUser?.user.timezone}
           </Typography>
           <Typography variant="subtitle1">
             Company Name: {selectedUser?.companyName}
           </Typography>
           <Typography variant="subtitle1">
+            Company Position: {selectedUser?.companyPosition}
+          </Typography>
+          <Typography variant="subtitle1">
+            Mortgage Advisor Email: {selectedUser?.mortgageAdvisorEmail}
+          </Typography>
+          <Typography variant="subtitle1">
+            Job Title: {selectedUser?.jobTitle}
+          </Typography>
+          <Typography variant="subtitle1">
+            License Number: {selectedUser?.licenseNo}
+          </Typography>
+          <Typography variant="subtitle1">
             Status: {selectedUser?.user.active ? "Active" : "Inactive"}
+          </Typography>
+          <Typography variant="subtitle1">
+            Created At: {selectedUser?.createdAt}
+          </Typography>
+          <Typography variant="subtitle1">
+            Updated At: {selectedUser?.updatedAt}
           </Typography>
         </CardContent>
       </Card>
