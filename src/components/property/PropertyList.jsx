@@ -5,10 +5,9 @@ import {
   useUpdatePropertyMutation,
   useGetPropertyByIdQuery,
 } from "../../redux/api/propertyManagementApi";
-// import { userManagementApi } from "../../redux/api/userManagementApi";
+// import { useGetUserByIdQuery  } from "../../redux/api/userManagementApi";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress, Typography, Box,useTheme, useMediaQuery } from "@mui/material";
-import { setProperties } from "../../redux/features/propertyManagementSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -51,6 +50,12 @@ const PropertyList = () => {
       skip: !selectedPropertyId,
     }
   );
+
+   // Function to fetch user name
+  //  const fetchUserName = async (userId) => {
+  //   const { data: user } = useGetUserByIdQuery(userId);
+  //   return user?.name || "Unknown User";
+  // };
 
   const userIdToNameMap = useSelector(selectUserIdToNameMap);
 

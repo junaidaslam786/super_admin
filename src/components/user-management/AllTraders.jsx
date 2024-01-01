@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
-import { selectAllAgents } from "../../redux/selectors/userSelectors"; 
-import { CircularProgress, Box, Button, useTheme, useMediaQuery } from "@mui/material";
+import { selectAllAgents } from "../../redux/selectors/userSelectors";
+import {
+  CircularProgress,
+  Box,
+  Button,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import {
   useGetAllUsersExceptSuperAdminQuery,
   useDeleteUserMutation,
@@ -31,7 +37,6 @@ import DataGrid, {
 import { toast } from "react-toastify";
 
 const TradersData = () => {
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -42,6 +47,8 @@ const TradersData = () => {
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [selectedUserId, setSelectedUserId] = useState();
+
+  const [blockedUsers, setBlockedUsers] = useState(new Set());
 
   const { data: users, refetch } = useGetAllUsersExceptSuperAdminQuery();
 
@@ -63,16 +70,49 @@ const TradersData = () => {
   const [blockTraderById, { isLoading, isError }] =
     useBlockTradersByIdMutation();
 
+  // const handleBlockTrader = async (traderId) => {
+  //   try {
+  //     await blockTraderById(traderId).unwrap();
+  //     toast.success("Trader successfully blocked!", "success");
+  //     refetch();
+  //   } catch (error) {
+  //     toast.error("Error blocking trader. Please try again.", "error");
+  //     console.error(error);
+  //   }
+  // };
+
   const handleBlockTrader = async (traderId) => {
     try {
       await blockTraderById(traderId).unwrap();
-      toast.success("Trader successfully blocked!", "success");
+
+      setBlockedUsers((prev) => {
+        const updated = new Set(prev);
+        if (updated.has(traderId)) {
+          updated.delete(traderId);
+        } else {
+          updated.add(traderId);
+        }
+        return updated;
+      });
+
+      toast.success(
+        `Trader successfully ${
+          blockedUsers.has(traderId) ? "unblocked" : "blocked"
+        }!`,
+        "success"
+      );
       refetch();
     } catch (error) {
-      toast.error("Error blocking trader. Please try again.", "error");
+      toast.error(
+        `Error ${
+          blockedUsers.has(traderId) ? "unblocking" : "blocking"
+        } trader. Please try again.`,
+        "error"
+      );
       console.error(error);
     }
   };
+
   const handleViewClick = (userId) => {
     navigate("/trader", { state: { selectedUserId: userId } });
   };
@@ -145,15 +185,7 @@ const TradersData = () => {
         <Column dataField="cityName" caption="City Name" />
         <Column dataField="email" caption="Email" />
         <Column dataField="userType" caption="User Type" />
-        <Column
-          dataField="status"
-          caption="Status"
-          calculateCellValue={(data) => (data.status ? "active" : "not active")}
-          calculateDisplayValue={(data) =>
-            data.status ? "active" : "not active"
-          }
-          cellRender={(cellData) => cellData.value}
-        />
+
         <Column dataField="active" caption="Active" />
 
         <Column
@@ -162,8 +194,11 @@ const TradersData = () => {
           cellRender={(cellData) => {
             return (
               <Box>
-                <Button onClick={() => handleBlockTrader(cellData.data.id)}>
+                {/* <Button onClick={() => handleBlockTrader(cellData.data.id)}>
                   Block
+                </Button> */}
+                <Button onClick={() => handleBlockTrader(cellData.data.id)}>
+                  {blockedUsers.has(cellData.data.id) ? "Unblock" : "Block"}
                 </Button>
                 <Button
                   onClick={() => handleApproveTrader(cellData.data)}
