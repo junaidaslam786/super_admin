@@ -32,11 +32,11 @@ const DetailModal = ({ selectedAppointment, propertyData, onClose }) => {
             <List>
               <ListItem>
                 <ListItemAvatar>
-                  <Avatar src={selectedAppointment.customerUser.profileImage} />
+                  <Avatar src={selectedAppointment.customerUser?.profileImage} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={`${selectedAppointment.customerUser.firstName} ${selectedAppointment.customerUser.lastName}`}
-                  secondary={selectedAppointment.customerUser.email}
+                  primary={`${selectedAppointment.customerUser?.firstName ?? ''} ${selectedAppointment.customerUser?.lastName ?? ''}`}
+                  secondary={selectedAppointment.customerUser?.email ?? ''}
                 />
               </ListItem>
             </List>
@@ -49,12 +49,12 @@ const DetailModal = ({ selectedAppointment, propertyData, onClose }) => {
               <ListItem>
                 <ListItemAvatar>
                   <Avatar
-                    src={selectedAppointment.allotedAgentUser.profileImage}
+                    src={selectedAppointment.allotedAgentUser?.profileImage}
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={`${selectedAppointment.allotedAgentUser.firstName} ${selectedAppointment.allotedAgentUser.lastName}`}
-                  secondary={selectedAppointment.allotedAgentUser.email}
+                  primary={`${selectedAppointment.allotedAgentUser?.firstName ?? ''} ${selectedAppointment.allotedAgentUser?.lastName ?? ''}`}
+                  secondary={selectedAppointment.allotedAgentUser?.email ?? ''}
                 />
               </ListItem>
             </List>
